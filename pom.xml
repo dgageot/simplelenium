@@ -4,7 +4,7 @@
 
   <groupId>net.code-story</groupId>
   <artifactId>simplelemium</artifactId>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Simplelenium</name>
@@ -22,7 +22,7 @@
     <connection>scm:git:git@github.com:dgageot/simplelenium.git</connection>
     <url>scm:git:git@github.com:dgageot/simplelenium.git</url>
     <developerConnection>scm:git:git@github.com:dgageot/simplelenium.git</developerConnection>
-    <tag>simplelemium-1.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <licenses>
