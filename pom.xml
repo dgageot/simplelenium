@@ -7,6 +7,34 @@
   <groupId>net.code-story</groupId>
   <artifactId>simplelemium</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Simplelenium</name>
+  <description>A simple and robust layer on top of Selenium and PhantomJS.</description>
+  <url>https://github.com/dgageot/simplelenium</url>
+
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>9</version>
+    <relativePath/>
+  </parent>
+
+  <scm>
+    <connection>scm:git:git@github.com:dgageot/simplelenium.git</connection>
+    <url>scm:git:git@github.com:dgageot/simplelenium.git</url>
+    <developerConnection>scm:git:git@github.com:dgageot/simplelenium.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
 
   <prerequisites>
     <maven>3</maven>
@@ -17,6 +45,156 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.3</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.17</version>
+        </plugin>
+        <plugin>
+          <!-- this plugin is used to list the licenses of all the dependencies :
+          mvn org.codehaus.mojo:license-maven-plugin:aggregate-add-third-party
+          -->
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.0-beta-3</version>
+          <configuration>
+            <groupByLicense>true</groupByLicense>
+            <excludedScopes>test</excludedScopes>
+            <excludedGroups>${project.groupId}</excludedGroups>
+            <licenseMerges>
+              <licenseMerge>The Apache Software License, Version 2.0|The Apache License, Version 2.0|Apache 2|Apache
+                2.0|Apache License 2.0|Apache
+                License|Apache License Version 2.0|Apache License, Version 2.0|ASF 2.0|Apache License|apache2|APLv2.0
+              </licenseMerge>
+              <licenseMerge>GNU Lesser General Public License, Version 2.1|GNU Lesser General Public License (LGPL),
+                Version 2.1|GNU Lesser General Public License, Version 2.1|Lesser Gnu Public License (LGPL), Version
+                2.1|LGPL, version 2.1|GNU Lesser General Public License (LGPL), Version 2.1
+              </licenseMerge>
+              <licenseMerge>The BSD License|BSD|BSD License</licenseMerge>
+              <licenseMerge>Eclipse Public License, Version 1.0|Eclipse Public License (EPL)</licenseMerge>
+              <licenseMerge>The MIT License|MIT License</licenseMerge>
+            </licenseMerges>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <releaseProfiles>release</releaseProfiles>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemProperties>
+            <java.awt.headless>true</java.awt.headless>
+          </systemProperties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <inherited>false</inherited>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <version>1.9.0</version>
+        <configuration>
+          <header>${project.basedir}/LICENSE</header>
+          <failIfMissing>true</failIfMissing>
+          <strictCheck>true</strictCheck>
+          <aggregate>true</aggregate>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+          <mapping>
+            <java>JAVADOC_STYLE</java>
+          </mapping>
+        </configuration>
+        <executions>
+          <execution>
+            <id>enforce-license-headers</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
   <dependencies>
     <dependency>
