@@ -21,14 +21,13 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.zip.*;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.phantomjs.*;
 import org.openqa.selenium.remote.*;
-
-import com.google.common.io.*;
 
 public class PhantomJsDownloader {
   private final boolean isWindows;
@@ -137,8 +136,9 @@ public class PhantomJsDownloader {
 
     File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
     zipTemp.getParentFile().mkdirs();
-    try {
-      Resources.asByteSource(URI.create(url).toURL()).copyTo(Files.asByteSink(zipTemp));
+
+    try (InputStream input = URI.create(url).toURL().openStream()) {
+      Files.copy(input, zipTemp.toPath());
     } catch (IOException e) {
       throw new IllegalStateException("Unable to download phantomjs from " + url, e);
     }
@@ -166,12 +166,9 @@ public class PhantomJsDownloader {
           }
         }
 
-        new ByteSource() {
-          @Override
-          public InputStream openStream() throws IOException {
-            return zipFile.getInputStream(entry);
-          }
-        }.copyTo(Files.asByteSink(to));
+        try (InputStream input = zipFile.getInputStream(entry)) {
+          Files.copy(input, to.toPath());
+        }
       }
     }
   }

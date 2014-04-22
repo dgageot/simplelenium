@@ -20,9 +20,7 @@ import net.codestory.http.*;
 import org.junit.*;
 
 public class SimpleTest extends SeleniumTest {
-  private WebServer webServer = new WebServer(routes -> routes.
-      get("/", () -> "<h1>Hello World</h1>")
-  ).startOnRandomPort();
+  private final WebServer webServer = new WebServer(routes -> routes.get("/", "<h1>Hello World</h1>")).startOnRandomPort();
 
   public String getDefaultBaseUrl() {
     return "http://localhost:" + webServer.port();
