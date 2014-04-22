@@ -15,12 +15,39 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.http.*;
+import static org.simpleframework.http.Status.*;
+
+import java.io.*;
+
+import net.codestory.simplelenium.misc.*;
 
 import org.junit.*;
 
 public class SimpleTest extends SeleniumTest {
-  private final WebServer webServer = new WebServer(routes -> routes.get("/", "<h1>Hello World</h1>")).startOnRandomPort();
+  private WebServer webServer;
+
+  @Before
+  public void startWebServer() throws IOException {
+    webServer = new WebServer((req, resp) -> {
+      try {
+        if ("/".equals(req.getPath().getPath())) {
+          resp.setStatus(OK);
+          resp.getPrintStream().print("<h1>Hello World</h1>");
+        } else {
+          resp.setStatus(NOT_FOUND);
+          resp.getPrintStream().print("<h1>Page not found</h1>");
+        }
+        resp.close();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }).startOnRandomPort();
+  }
+
+  @After
+  public void stopWebServer() throws IOException {
+    webServer.stop();
+  }
 
   public String getDefaultBaseUrl() {
     return "http://localhost:" + webServer.port();
