@@ -1,5 +1,6 @@
 package net.codestory.simplelenium;
 
+import static java.lang.String.*;
 import static java.util.stream.Stream.*;
 
 import java.util.*;
@@ -20,27 +21,23 @@ public class Should {
   }
 
   public void contain(String... texts) {
-    verify(
-        "contains(" + String.join(";", texts) + ")",
-        () -> find(),
-        element -> of(texts).allMatch(expected -> element.getText().contains(expected))
-    );
+    verify("contains(" + join(";", texts) + ")", this::find, element -> of(texts).allMatch(expected -> element.getText().contains(expected)));
   }
 
   public void notContain(String text) {
-    verify(
-        "does not contain (" + text + ")",
-        () -> find(),
-        element -> !element.getText().contains(text)
-    );
+    verify("does not contain (" + text + ")", this::find, element -> !element.getText().contains(text));
   }
 
   public void haveNoMoreItemsThan(int maxCount) {
-    verify(
-        "has at most " + maxCount + " items",
-        () -> findMultiple(),
-        elements -> elements.size() <= maxCount
-    );
+    verify("has at most " + maxCount + " items", this::findMultiple, elements -> elements.size() <= maxCount);
+  }
+
+  public void haveSize(int size) {
+    verify("has size " + size, this::findMultiple, elements -> elements.size() == size);
+  }
+
+  public void beEmpty() {
+    verify("is empty", this::findMultiple, elements -> elements.isEmpty());
   }
 
   private <T> void verify(String message, Supplier<T> target, Predicate<T> predicate) {

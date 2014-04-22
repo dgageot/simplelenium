@@ -1,5 +1,8 @@
 package net.codestory.simplelenium;
 
+import static org.junit.rules.RuleChain.*;
+import static org.openqa.selenium.OutputType.*;
+
 import java.io.*;
 
 import org.junit.*;
@@ -12,15 +15,13 @@ import com.google.common.io.*;
 public abstract class SeleniumTest {
   private static final PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
 
-  private WebDriver driver;
+  private final WebDriver driver = createWebDriver();
 
-  public TestWatcher initWebDriver = new TestWatcher() {
-    @Override
-    protected void starting(Description desc) {
-      driver = phantomJsDownloader.getDriverForThread();
-      driver.manage().window().setSize(new Dimension(2048, 768));
-    }
-  };
+  private WebDriver createWebDriver() {
+    WebDriver driver = phantomJsDownloader.getDriverForThread();
+    driver.manage().window().setSize(new Dimension(2048, 768));
+    return driver;
+  }
 
   public TestWatcher printTestName = new TestWatcher() {
     @Override
@@ -39,7 +40,7 @@ public abstract class SeleniumTest {
       }
 
       try {
-        byte[] snapshotData = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        byte[] snapshotData = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
         File snapshot = new File("snapshots", desc.getTestClass().getSimpleName() + "_" + desc.getMethodName() + ".png");
         snapshot.getParentFile().mkdirs();
         Files.write(snapshotData, snapshot);
@@ -50,7 +51,7 @@ public abstract class SeleniumTest {
   };
 
   @Rule
-  public RuleChain ruleChain = RuleChain.outerRule(initWebDriver).around(printTestName).around(takeSnapshot);
+  public RuleChain ruleChain = outerRule(printTestName).around(takeSnapshot);
 
   public abstract String getDefaultBaseUrl();
 
