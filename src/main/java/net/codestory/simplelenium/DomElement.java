@@ -21,6 +21,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.*;
 
 public class DomElement {
   private final WebDriver driver;
@@ -61,7 +62,11 @@ public class DomElement {
   }
 
   public void click() {
-    execute("click", (element) -> element.click());
+    execute("click", element -> element.click());
+  }
+
+  public void select(String text) {
+    execute("select(" + text + ")", element -> new Select(element).selectByVisibleText(text));
   }
 
   private void execute(String message, Consumer<WebElement> action) {
