@@ -43,6 +43,26 @@ public class Should {
     verify("does not contain (" + text + ")", this::find, element -> !element.getText().contains(text));
   }
 
+  public void beEnabled() {
+    verify("is enabled", this::find, element -> element.isEnabled());
+  }
+
+  public void beDisabled() {
+    verify("is disabled", this::find, element -> !element.isEnabled());
+  }
+
+  public void beDisplayed() {
+    verify("is displayed", this::find, element -> element.isDisplayed());
+  }
+
+  public void beHidden() {
+    verify("is hidden", this::find, element -> !element.isDisplayed());
+  }
+
+  public void beSelected() {
+    verify("is selected", this::find, element -> element.isSelected());
+  }
+
   public void haveNoMoreItemsThan(int maxCount) {
     verify("has at most " + maxCount + " items", this::findMultiple, elements -> elements.size() <= maxCount);
   }
