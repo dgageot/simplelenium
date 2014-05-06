@@ -28,11 +28,21 @@ public class Should {
   private final WebDriver driver;
   private final String selector;
   private final Retry retry;
+  private final boolean not;
 
   Should(WebDriver driver, String selector, long duration, TimeUnit timeUnit) {
+    this(driver, selector, new Retry(duration, timeUnit), false);
+  }
+
+  private Should(WebDriver driver, String selector, Retry retry, boolean not) {
     this.driver = driver;
     this.selector = selector;
-    this.retry = new Retry(duration, timeUnit);
+    this.retry = retry;
+    this.not = not;
+  }
+
+  public Should not() {
+    return new Should(driver, selector, retry, !not);
   }
 
   public void contain(String... texts) {
@@ -80,7 +90,7 @@ public class Should {
 
     System.out.println("   -> " + verification);
 
-    if (!retry.verify(target, predicate)) {
+    if (retry.verify(target, predicate) == not) {
       throw new AssertionError("Failed to " + verification);
     }
   }
