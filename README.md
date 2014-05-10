@@ -4,7 +4,7 @@ A simple and robust layer on top of Selenium and PhantomJS.
 
 # Build status
 
-[![Build Status](https://api.travis-ci.org/dgageot/simplelenium.png)](https://api.travis-ci.org/dgageot/simplelenium.png)
+[![Build Status](https://api.travis-ci.org/dgageot/simplelenium.png)](https://api.travis-ci.org/dgageot/simplelenium)
 
 ## Maven
 
