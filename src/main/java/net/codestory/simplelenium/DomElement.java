@@ -57,8 +57,8 @@ public class DomElement {
     execute("fill(" + text + ")", element -> element.sendKeys(text));
   }
 
-  public void clear(CharSequence text) {
-    execute("clear(" + text + ")", element -> element.clear());
+  public void clear() {
+    execute("clear()", element -> element.clear());
   }
 
   public void submit() {
