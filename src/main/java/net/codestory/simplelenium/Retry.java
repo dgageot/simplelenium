@@ -43,18 +43,22 @@ class Retry {
     throw lastError;
   }
 
-  <T> boolean verify(Supplier<T> targetSupplier, Predicate<T> predicate) {
+  <T> Verification verify(Supplier<T> targetSupplier, Predicate<T> predicate) {
+    Verification result = Verification.KO;
+
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
         if (predicate.test(targetSupplier.get())) {
-          return true;
+          return Verification.OK;
         }
-      } catch (WebDriverException e) {
-        // Ignore
+
+        result = Verification.KO;
+      } catch (NotFoundException e) {
+        result = Verification.NOT_FOUND;
       }
     }
 
-    return false;
+    return result;
   }
 }

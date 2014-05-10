@@ -17,6 +17,7 @@ package net.codestory.simplelenium;
 
 import static java.lang.String.*;
 import static java.util.stream.Stream.*;
+import static net.codestory.simplelenium.Verification.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -90,7 +91,12 @@ public class Should {
 
     System.out.println("   -> " + verification);
 
-    if (retry.verify(target, predicate) == not) {
+    Verification result = retry.verify(target, predicate);
+    if (result == NOT_FOUND) {
+      throw new AssertionError("Element not found. Failed to " + verification);
+    }
+
+    if ((not && (result != KO)) || (!not && (result != OK))) {
       throw new AssertionError("Failed to " + verification);
     }
   }
