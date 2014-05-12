@@ -25,10 +25,10 @@ import org.openqa.selenium.support.ui.*;
 
 public class DomElement {
   private final WebDriver driver;
-  private final String selector;
+  private final By selector;
   private final Retry retry;
 
-  DomElement(WebDriver driver, String selector) {
+  DomElement(WebDriver driver, By selector) {
     this.driver = driver;
     this.selector = selector;
     this.retry = new Retry(30, SECONDS);
@@ -87,6 +87,6 @@ public class DomElement {
   }
 
   private WebElement find() {
-    return driver.findElement(By.cssSelector(selector));
+    return driver.findElement(selector);
   }
 }

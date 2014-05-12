@@ -89,6 +89,10 @@ public abstract class SeleniumTest {
   }
 
   public DomElement find(String selector) {
+    return find(By.cssSelector(selector));
+  }
+
+  public DomElement find(By selector) {
     return new DomElement(driver, selector);
   }
 }

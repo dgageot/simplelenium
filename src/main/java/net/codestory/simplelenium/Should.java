@@ -27,15 +27,15 @@ import org.openqa.selenium.*;
 
 public class Should {
   private final WebDriver driver;
-  private final String selector;
+  private final By selector;
   private final Retry retry;
   private final boolean not;
 
-  Should(WebDriver driver, String selector, long duration, TimeUnit timeUnit) {
+  Should(WebDriver driver, By selector, long duration, TimeUnit timeUnit) {
     this(driver, selector, new Retry(duration, timeUnit), false);
   }
 
-  private Should(WebDriver driver, String selector, Retry retry, boolean not) {
+  private Should(WebDriver driver, By selector, Retry retry, boolean not) {
     this.driver = driver;
     this.selector = selector;
     this.retry = retry;
@@ -87,7 +87,7 @@ public class Should {
   }
 
   private <T> void verify(String message, Supplier<T> target, Predicate<T> predicate) {
-    String verification = "verify that " + selector + " " + message;
+    String verification = "verify that " + toString(selector) + " " + message;
 
     System.out.println("   -> " + verification);
 
@@ -101,11 +101,15 @@ public class Should {
     }
   }
 
+  private static String toString(By selector) {
+    return selector.toString().replace("By.selector: ", "");
+  }
+
   private WebElement find() {
-    return driver.findElement(By.cssSelector(selector));
+    return driver.findElement(selector);
   }
 
   private List<WebElement> findMultiple() {
-    return driver.findElements(By.cssSelector(selector));
+    return driver.findElements(selector);
   }
 }
