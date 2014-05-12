@@ -57,6 +57,14 @@ public class DomElement {
     execute("fill(" + text + ")", element -> element.sendKeys(text));
   }
 
+  public void pressReturn() {
+    execute("pressReturn()", element -> element.sendKeys(Keys.RETURN));
+  }
+
+  public void sendKeys(CharSequence... keysToSend) {
+    execute("sendKeys()", element -> element.sendKeys(keysToSend));
+  }
+
   public void clear() {
     execute("clear()", element -> element.clear());
   }
