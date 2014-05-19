@@ -43,19 +43,40 @@ class Retry {
     throw lastError;
   }
 
-  <T> Verification verify(Supplier<T> targetSupplier, Predicate<T> predicate) {
-    Verification result = Verification.KO;
+  <T> Verification verify(Supplier<T> targetSupplier, Check<T> check) {
+    Verification result = Verification.ko();
 
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
-        if (predicate.test(targetSupplier.get())) {
-          return Verification.OK;
+        Check.Result checkResult = check.execute(targetSupplier.get());
+        if (checkResult.isOk()) {
+          return Verification.ok();
         }
 
-        result = Verification.KO;
+        result = Verification.ko(checkResult.message);
       } catch (NotFoundException e) {
-        result = Verification.NOT_FOUND;
+        result = Verification.notFound();
+      }
+    }
+
+    return result;
+  }
+
+  <T> Verification verify(Supplier<T> targetSupplier, Predicate<T> predicate) {
+    Verification result = Verification.ko();
+
+    long start = System.currentTimeMillis();
+    while ((System.currentTimeMillis() - start) < timeoutInMs) {
+      try {
+        T target = targetSupplier.get();
+        if (predicate.test(target)) {
+          return Verification.ok();
+        }
+
+        result = Verification.ko();
+      } catch (NotFoundException e) {
+        result = Verification.notFound();
       }
     }
 

@@ -17,7 +17,6 @@ package net.codestory.simplelenium;
 
 import static java.lang.String.*;
 import static java.util.stream.Stream.*;
-import static net.codestory.simplelenium.Verification.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -28,6 +27,7 @@ import org.openqa.selenium.*;
 public class Should {
   private final WebDriver driver;
   private final By selector;
+  private final String selectorDesc;
   private final Retry retry;
   private final boolean not;
 
@@ -40,6 +40,7 @@ public class Should {
     this.selector = selector;
     this.retry = retry;
     this.not = not;
+    this.selectorDesc = toString(selector);
   }
 
   public Should not() {
@@ -47,7 +48,23 @@ public class Should {
   }
 
   public void contain(String... texts) {
-    verify("contains(" + join(";", texts) + ")", this::find, element -> of(texts).allMatch(expected -> element.getText().contains(expected)));
+    String textsDesc = join(";", texts);
+
+    verify(
+        this::find,
+        new Check<WebElement>(selectorDesc + " contains(" + textsDesc + ")", selectorDesc + " does not contain(" + textsDesc + ")") {
+          @Override
+          protected Result execute(WebElement element) {
+            String elementText = element.getText();
+            String actualState = selectorDesc + " hasText(" + elementText + ")";
+
+            if (of(texts).allMatch(expected -> elementText.contains(expected))) {
+              return ok(actualState);
+            }
+            return ko(actualState);
+          }
+        }
+    );
   }
 
   public void notContain(String text) {
@@ -86,17 +103,34 @@ public class Should {
     verify("is empty", this::findMultiple, elements -> elements.isEmpty());
   }
 
+  private <T> void verify(Supplier<T> target, Check<T> check) {
+    if (not) {
+      check = check.negate();
+    }
+
+    String verificationDesc = check.getDescription();
+
+    System.out.println("   -> verify that " + verificationDesc);
+
+    Verification result = retry.verify(target, check);
+    if (result.isOk()) {
+      return; // success
+    }
+
+    throw new AssertionError(result.description(verificationDesc));
+  }
+
   private <T> void verify(String message, Supplier<T> target, Predicate<T> predicate) {
     String verification = "verify that " + toString(selector) + " " + message;
 
     System.out.println("   -> " + verification);
 
     Verification result = retry.verify(target, predicate);
-    if (result == NOT_FOUND) {
+    if (result.isNotFound()) {
       throw new AssertionError("Element not found. Failed to " + verification);
     }
 
-    if ((not && (result != KO)) || (!not && (result != OK))) {
+    if ((not && result.isOk()) || (!not && !result.isOk())) {
       throw new AssertionError("Failed to " + verification);
     }
   }
