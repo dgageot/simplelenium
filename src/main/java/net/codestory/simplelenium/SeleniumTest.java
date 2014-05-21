@@ -76,6 +76,10 @@ public abstract class SeleniumTest {
     System.out.println(" - current url " + driver.getCurrentUrl());
   }
 
+  public WebDriver getDriver() {
+    return driver;
+  }
+
   public String currentUrl() {
     return driver.getCurrentUrl();
   }
