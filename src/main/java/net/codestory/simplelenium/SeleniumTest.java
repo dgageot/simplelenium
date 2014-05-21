@@ -32,7 +32,7 @@ public abstract class SeleniumTest {
 
   private final WebDriver driver = createWebDriver();
 
-  private WebDriver createWebDriver() {
+  protected WebDriver createWebDriver() {
     WebDriver driver = phantomJsDownloader.getDriverForThread();
     driver.manage().window().setSize(new Dimension(2048, 768));
     return driver;
