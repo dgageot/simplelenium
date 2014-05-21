@@ -15,6 +15,53 @@
  */
 package net.codestory.simplelenium;
 
-enum Verification {
-  NOT_FOUND, OK, KO
+class Verification {
+  private static final Verification NOT_FOUND = new Verification(null);
+  private static final Verification OK = new Verification(null);
+
+  static Verification ko() {
+    return ko(null);
+  }
+
+  static Verification ko(String clue) {
+    return new Verification(clue);
+  }
+
+  static Verification ok() {
+    return OK;
+  }
+
+  static Verification notFound() {
+    return NOT_FOUND;
+  }
+
+  private final String clue;
+
+  private Verification(String clue) {
+    this.clue = clue;
+  }
+
+  public boolean isOk() {
+    return this == OK;
+  }
+
+  public boolean isNotFound() {
+    return this == NOT_FOUND;
+  }
+
+  public String description(String verificationDesc) {
+    final String message;
+    if (isOk()) {
+      message = "Verified that " + verificationDesc;
+    } else if (isNotFound()) {
+      message = "Element not found. Failed to verify that " + verificationDesc;
+    } else {
+      message = "Failed to verify that " + verificationDesc;
+    }
+
+    if (clue == null) {
+      return message;
+    }
+    return message + ". " + clue;
+  }
 }

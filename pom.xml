@@ -213,5 +213,13 @@
       <version>5.1.6</version>
       <optional>true</optional>
     </dependency>
+
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>1.6.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
