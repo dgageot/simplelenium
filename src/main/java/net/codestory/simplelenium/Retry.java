@@ -15,10 +15,14 @@
  */
 package net.codestory.simplelenium;
 
-import java.util.concurrent.*;
-import java.util.function.*;
+import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriverException;
 
-import org.openqa.selenium.*;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 class Retry {
   private long timeoutInMs;
@@ -56,6 +60,8 @@ class Retry {
         result = Verification.KO;
       } catch (NotFoundException e) {
         result = Verification.NOT_FOUND;
+      } catch (StaleElementReferenceException e) {
+        // ignore
       }
     }
 
