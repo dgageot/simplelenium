@@ -15,17 +15,21 @@
  */
 package net.codestory.simplelenium;
 
-import static org.junit.rules.RuleChain.*;
-import static org.openqa.selenium.OutputType.*;
+import com.google.common.io.Files;
+import org.junit.Rule;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
-import org.junit.*;
-import org.junit.rules.*;
-import org.junit.runner.*;
-import org.openqa.selenium.*;
-
-import com.google.common.io.*;
+import static org.junit.rules.RuleChain.outerRule;
+import static org.openqa.selenium.OutputType.BYTES;
 
 public abstract class SeleniumTest {
   private static final PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();

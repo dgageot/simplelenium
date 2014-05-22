@@ -15,13 +15,15 @@
  */
 package net.codestory.simplelenium;
 
-import static org.simpleframework.http.Status.*;
+import net.codestory.simplelenium.misc.WebServer;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.io.*;
+import java.io.IOException;
 
-import net.codestory.simplelenium.misc.*;
-
-import org.junit.*;
+import static org.simpleframework.http.Status.NOT_FOUND;
+import static org.simpleframework.http.Status.OK;
 
 public class SimpleTest extends SeleniumTest {
   private WebServer webServer;

@@ -15,13 +15,16 @@
  */
 package net.codestory.simplelenium;
 
-import static java.util.concurrent.TimeUnit.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
-import java.util.concurrent.*;
-import java.util.function.*;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class DomElement {
   private final WebDriver driver;

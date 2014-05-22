@@ -15,15 +15,18 @@
  */
 package net.codestory.simplelenium;
 
-import static java.lang.String.*;
-import static java.util.stream.Stream.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+import static java.lang.String.join;
+import static java.util.stream.Stream.of;
 import static net.codestory.simplelenium.Verification.*;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-
-import org.openqa.selenium.*;
 
 public class Should {
   private final WebDriver driver;

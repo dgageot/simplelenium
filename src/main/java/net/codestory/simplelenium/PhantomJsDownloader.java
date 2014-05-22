@@ -15,19 +15,25 @@
  */
 package net.codestory.simplelenium;
 
-import static org.openqa.selenium.phantomjs.PhantomJSDriverService.*;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.*;
-import java.lang.reflect.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
-import java.net.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.zip.*;
+import java.net.URI;
+import java.nio.file.Files;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.phantomjs.*;
-import org.openqa.selenium.remote.*;
+import static org.openqa.selenium.phantomjs.PhantomJSDriverService.Builder;
 
 public class PhantomJsDownloader {
   private final boolean isWindows;
@@ -55,9 +61,9 @@ public class PhantomJsDownloader {
     File phantomJsExe = downloadAndExtract();
 
     PhantomJSDriverService service = new Builder()
-        .usingPhantomJSExecutable(phantomJsExe)
-        .withLogFile(new File("target/phantomjs.log"))
-        .build();
+      .usingPhantomJSExecutable(phantomJsExe)
+      .withLogFile(new File("target/phantomjs.log"))
+      .build();
 
     PhantomJSDriver driver = new PhantomJSDriver(service, new DesiredCapabilities());
 

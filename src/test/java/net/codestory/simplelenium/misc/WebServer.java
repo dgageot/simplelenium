@@ -15,12 +15,13 @@
  */
 package net.codestory.simplelenium.misc;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import org.simpleframework.http.core.Container;
+import org.simpleframework.http.core.ContainerServer;
+import org.simpleframework.transport.connect.SocketConnection;
 
-import org.simpleframework.http.core.*;
-import org.simpleframework.transport.connect.*;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.Random;
 
 public class WebServer {
   private final Container container;
