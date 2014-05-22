@@ -12,7 +12,7 @@ A simple and robust layer on top of Selenium and PhantomJS.
 <dependency>
   <groupId>net.code-story</groupId>
   <artifactId>simplelenium</artifactId>
-  <version>1.3</version>
+  <version>1.5</version>
 </dependency>
 ```
 
