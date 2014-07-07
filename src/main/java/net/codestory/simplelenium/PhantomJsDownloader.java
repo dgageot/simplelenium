@@ -91,13 +91,13 @@ public class PhantomJsDownloader {
     String url;
     File phantomJsExe;
     if (isWindows) {
-      url = "http://cdn.bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-windows.zip";
+      url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-windows.zip";
       phantomJsExe = new File(installDir, "phantomjs-1.9.7-windows/phantomjs.exe");
     } else if (isMac) {
-      url = "http://cdn.bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-macosx.zip";
+      url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-macosx.zip";
       phantomJsExe = new File(installDir, "phantomjs-1.9.7-macosx/bin/phantomjs");
     } else {
-      url = "http://cdn.bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2";
+      url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2";
       phantomJsExe = new File(installDir, "phantomjs-1.9.7-linux-x86_64/bin/phantomjs");
     }
 
