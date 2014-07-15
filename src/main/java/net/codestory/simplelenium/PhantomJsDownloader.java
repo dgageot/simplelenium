@@ -21,6 +21,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +34,12 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.openqa.selenium.phantomjs.PhantomJSDriverService.Builder;
 
 public class PhantomJsDownloader {
+  private static final int RETRY = 4;
+
   private final boolean isWindows;
   private final boolean isMac;
 
@@ -60,6 +64,23 @@ public class PhantomJsDownloader {
 
     File phantomJsExe = downloadAndExtract();
 
+    UnreachableBrowserException error = null;
+    for (int i = RETRY; i >= 0; i--) {
+      try {
+        return createNewPhantomJsDriver(phantomJsExe);
+      } catch (UnreachableBrowserException e) {
+        error = e;
+        if (i != 0) {
+          System.err.println("Unable to start PhantomJS " + error);
+          pause(5);
+        }
+      }
+    }
+
+    throw new IllegalStateException("Unable to start PhantomJS", error);
+  }
+
+  private WebDriver createNewPhantomJsDriver(File phantomJsExe) {
     PhantomJSDriverService service = new Builder()
       .usingPhantomJSExecutable(phantomJsExe)
       .withLogFile(new File("target/phantomjs.log"))
@@ -83,6 +104,14 @@ public class PhantomJsDownloader {
         throw e.getCause();
       }
     });
+  }
+
+  private static void pause(long timeout) {
+    try {
+      SECONDS.sleep(timeout);
+    } catch (InterruptedException ie) {
+      // Ignore
+    }
   }
 
   private synchronized File downloadAndExtract() {
