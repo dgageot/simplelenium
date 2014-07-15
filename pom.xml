@@ -211,7 +211,7 @@
       <groupId>org.simpleframework</groupId>
       <artifactId>simple</artifactId>
       <version>5.1.6</version>
-      <optional>true</optional>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
