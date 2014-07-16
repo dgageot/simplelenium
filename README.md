@@ -16,6 +16,14 @@ A simple and robust layer on top of Selenium and PhantomJS.
 </dependency>
 ```
 
+## Release
+
+```bash
+mvn release:clean release:prepare release:perform
+cd target/checkout
+mvn nexus-staging:release
+```
+
 ## Samples
 
 ```java
