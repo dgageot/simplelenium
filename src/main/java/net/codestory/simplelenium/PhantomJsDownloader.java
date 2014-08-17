@@ -39,8 +39,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.openqa.selenium.phantomjs.PhantomJSDriverService.Builder;
 
 public class PhantomJsDownloader {
-  private static final int RETRY = 4;
+  private static final int DEFAULT_RETRY = 4;
 
+  private final int retry;
   private final boolean isWindows;
   private final boolean isMac;
 
@@ -52,21 +53,30 @@ public class PhantomJsDownloader {
   };
 
   public PhantomJsDownloader() {
-    isWindows = System.getProperty("os.name").startsWith("Windows");
-    isMac = System.getProperty("os.name").startsWith("Mac OS X");
+    this(DEFAULT_RETRY);
+  }
+
+  protected PhantomJsDownloader(int retry) {
+    this(retry, System.getProperty("os.name").startsWith("Windows"), System.getProperty("os.name").startsWith("Mac OS X"));
+  }
+
+  protected PhantomJsDownloader(int retry, boolean isWindows, boolean isMac) {
+    this.retry = retry;
+    this.isWindows = isWindows;
+    this.isMac = isMac;
   }
 
   public WebDriver getDriverForThread() {
     return perThreadDriver.get();
   }
 
-  private WebDriver createNewDriver() {
+  protected WebDriver createNewDriver() {
     System.out.println("Create a new PhantomJSDriver");
 
     File phantomJsExe = downloadAndExtract();
 
     UnreachableBrowserException error = null;
-    for (int i = RETRY; i >= 0; i--) {
+    for (int i = retry; i >= 0; i--) {
       try {
         return createNewPhantomJsDriver(phantomJsExe);
       } catch (UnreachableBrowserException e) {
@@ -81,7 +91,7 @@ public class PhantomJsDownloader {
     throw new IllegalStateException("Unable to start PhantomJS", error);
   }
 
-  private WebDriver createNewPhantomJsDriver(File phantomJsExe) {
+  protected WebDriver createNewPhantomJsDriver(File phantomJsExe) {
     PhantomJSDriverService service = new Builder()
       .usingPhantomJSExecutable(phantomJsExe)
       .withLogFile(new File("target/phantomjs.log"))
@@ -92,7 +102,7 @@ public class PhantomJsDownloader {
     return disableQuit(driver);
   }
 
-  private WebDriver disableQuit(PhantomJSDriver driver) {
+  protected WebDriver disableQuit(PhantomJSDriver driver) {
     Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
 
     return (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(), findInterfaces(driver.getClass()), (proxy, method, args) -> {
@@ -107,7 +117,7 @@ public class PhantomJsDownloader {
     });
   }
 
-  private static Class[] findInterfaces(Class<?> type) {
+  protected Class[] findInterfaces(Class<?> type) {
     Set<Class<?>> interfaces = new LinkedHashSet<>();
 
     for (Class<?> parent = type; parent != null; ) {
@@ -118,7 +128,7 @@ public class PhantomJsDownloader {
     return interfaces.toArray(new Class[interfaces.size()]);
   }
 
-  private static void pause(long timeout) {
+  private void pause(long timeout) {
     try {
       SECONDS.sleep(timeout);
     } catch (InterruptedException ie) {
@@ -126,7 +136,7 @@ public class PhantomJsDownloader {
     }
   }
 
-  private synchronized File downloadAndExtract() {
+  protected synchronized File downloadAndExtract() {
     File installDir = new File(new File(System.getProperty("user.home")), ".phantomjstest");
 
     String url;
@@ -149,7 +159,7 @@ public class PhantomJsDownloader {
     return phantomJsExe;
   }
 
-  private void extractExe(String url, File phantomInstallDir, File phantomJsExe) {
+  protected void extractExe(String url, File phantomInstallDir, File phantomJsExe) {
     if (phantomJsExe.exists()) {
       return;
     }
@@ -170,7 +180,7 @@ public class PhantomJsDownloader {
     }
   }
 
-  private void downloadZip(String url, File targetZip) {
+  protected void downloadZip(String url, File targetZip) {
     if (targetZip.exists()) {
       if (targetZip.length() == 0) {
         targetZip.delete();
@@ -195,7 +205,7 @@ public class PhantomJsDownloader {
     }
   }
 
-  private static void unzip(File zip, File toDir) throws IOException {
+  protected void unzip(File zip, File toDir) throws IOException {
     try (ZipFile zipFile = new ZipFile(zip)) {
       Enumeration<? extends ZipEntry> entries = zipFile.entries();
       while (entries.hasMoreElements()) {
@@ -220,7 +230,7 @@ public class PhantomJsDownloader {
     }
   }
 
-  private static void executeNative(File workingDir, String... commands) throws IOException, InterruptedException {
+  protected void executeNative(File workingDir, String... commands) throws IOException, InterruptedException {
     new ProcessBuilder().command(commands).directory(workingDir).start().waitFor();
   }
 }
