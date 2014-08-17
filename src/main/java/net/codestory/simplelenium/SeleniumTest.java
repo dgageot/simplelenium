@@ -60,7 +60,7 @@ public abstract class SeleniumTest {
 
       try {
         byte[] snapshotData = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
-        File snapshot = new File("snapshots", desc.getTestClass().getSimpleName() + "_" + desc.getMethodName() + ".png");
+        File snapshot = snapshotPath(desc);
         snapshot.getParentFile().mkdirs();
         Files.write(snapshotData, snapshot);
       } catch (IOException ioe) {
@@ -68,6 +68,10 @@ public abstract class SeleniumTest {
       }
     }
   };
+
+  protected File snapshotPath(Description desc) {
+    return new File("snapshots", desc.getTestClass().getSimpleName() + "_" + desc.getMethodName() + ".png");
+  }
 
   @Rule
   public RuleChain ruleChain = outerRule(printTestName).around(takeSnapshot);
