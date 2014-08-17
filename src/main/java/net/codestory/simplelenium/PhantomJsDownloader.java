@@ -15,8 +15,6 @@
  */
 package net.codestory.simplelenium;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
@@ -31,9 +29,12 @@ import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static java.util.Collections.addAll;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.openqa.selenium.phantomjs.PhantomJSDriverService.Builder;
 
@@ -94,7 +95,7 @@ public class PhantomJsDownloader {
   private WebDriver disableQuit(PhantomJSDriver driver) {
     Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
 
-    return (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{WebDriver.class, TakesScreenshot.class, JavascriptExecutor.class}, (proxy, method, args) -> {
+    return (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(), findInterfaces(driver.getClass()), (proxy, method, args) -> {
       if (method.getName().equals("quit")) {
         return null; // We don't want anybody to quit() our (per thread) driver
       }
@@ -104,6 +105,17 @@ public class PhantomJsDownloader {
         throw e.getCause();
       }
     });
+  }
+
+  private static Class[] findInterfaces(Class<?> type) {
+    Set<Class<?>> interfaces = new LinkedHashSet<>();
+
+    for (Class<?> parent = type; parent != null; ) {
+      addAll(interfaces, parent.getInterfaces());
+      parent = parent.getSuperclass();
+    }
+
+    return interfaces.toArray(new Class[interfaces.size()]);
   }
 
   private static void pause(long timeout) {
