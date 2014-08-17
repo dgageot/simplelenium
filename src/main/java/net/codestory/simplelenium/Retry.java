@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 class Retry {
-  private long timeoutInMs;
+  private final long timeoutInMs;
 
   Retry(long duration, TimeUnit timeUnit) {
     this.timeoutInMs = timeUnit.toMillis(duration);
