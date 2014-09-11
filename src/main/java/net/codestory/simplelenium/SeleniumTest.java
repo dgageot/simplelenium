@@ -63,6 +63,7 @@ public abstract class SeleniumTest {
         File snapshot = snapshotPath(desc);
         snapshot.getParentFile().mkdirs();
         Files.write(snapshotData, snapshot);
+        System.err.println("   !! A snapshot was taken here [" + snapshot.getAbsoluteFile() + "] to help you debug");
       } catch (IOException ioe) {
         throw new RuntimeException("Unable to take snapshot", ioe);
       }
