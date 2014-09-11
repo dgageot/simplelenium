@@ -15,44 +15,37 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.misc.WebServer;
-import org.junit.After;
-import org.junit.Before;
+import net.codestory.http.WebServer;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
-
-import static org.simpleframework.http.Status.NOT_FOUND;
-import static org.simpleframework.http.Status.OK;
-
 public class SimpleTest extends SeleniumTest {
-  private WebServer webServer;
+  private static WebServer webServer;
 
-  @Before
-  public void startWebServer() throws IOException {
-    webServer = new WebServer((req, resp) -> {
-      try {
-        if ("/".equals(req.getPath().getPath())) {
-          resp.setStatus(OK);
-          resp.getPrintStream().print("<h1>Hello World</h1>");
-        } else {
-          resp.setStatus(NOT_FOUND);
-          resp.getPrintStream().print("<h1>Page not found</h1>");
-        }
-        resp.close();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }).startOnRandomPort();
+  @BeforeClass
+  public static void startWebServer() {
+    webServer = new WebServer(routes -> routes
+      .get("/",
+        "<h1>Hello World</h1>" +
+          "<div id='name'>Bob</div>" +
+          "<div class='age'>42</div>" +
+          "<ul><li><em>italic</em></li></ul>")
+      .get("/list",
+        "<ul class='names'>" +
+          "<li>Bob Morane</li>" +
+          "<li>Joe l'Indien</li>" +
+          "</ul>"))
+      .startOnRandomPort();
   }
 
-  @After
-  public void stopWebServer() throws IOException {
-    webServer.stop();
-  }
-
-  public String getDefaultBaseUrl() {
+  protected String getDefaultBaseUrl() {
     return "http://localhost:" + webServer.port();
+  }
+
+  @AfterClass
+  public static void stopWebServer() {
+    webServer.stop();
   }
 
   @Test
@@ -67,5 +60,15 @@ public class SimpleTest extends SeleniumTest {
     goTo("/");
 
     find("h1").should().contain("Hello World");
+    find("#name").should().contain("Bob");
+    find(".age").should().contain("42");
+    find("ul li em").should().contain("italic");
+  }
+
+  @Test
+  public void list() {
+    goTo("/list");
+
+    find(".names").should().contain("Bob Morane", "Joe l'Indien");
   }
 }

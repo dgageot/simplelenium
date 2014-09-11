@@ -76,7 +76,7 @@ public abstract class SeleniumTest {
   @Rule
   public RuleChain ruleChain = outerRule(printTestName).around(takeSnapshot);
 
-  public abstract String getDefaultBaseUrl();
+  protected abstract String getDefaultBaseUrl();
 
   public void goTo(String url) {
     System.out.println("goTo " + url);
