@@ -24,6 +24,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import static net.codestory.simplelenium.Verification.*;
+
 class Retry {
   private final long timeoutInMs;
 
@@ -48,18 +50,18 @@ class Retry {
   }
 
   <T> Verification verify(Supplier<T> targetSupplier, Predicate<T> predicate) {
-    Verification result = Verification.KO;
+    Verification result = KO;
 
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
         if (predicate.test(targetSupplier.get())) {
-          return Verification.OK;
+          return OK;
         }
 
-        result = Verification.KO;
+        result = KO;
       } catch (NotFoundException e) {
-        result = Verification.NOT_FOUND;
+        result = NOT_FOUND;
       } catch (StaleElementReferenceException e) {
         // ignore
       }
