@@ -49,13 +49,13 @@ class Retry {
     throw lastError;
   }
 
-  <T> Verification verify(Supplier<T> targetSupplier, Predicate<T> predicate) {
+  <T> Verification verify(Supplier<T> target, Predicate<T> predicate) {
     Verification result = KO;
 
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
-        if (predicate.test(targetSupplier.get())) {
+        if (predicate.test(target.get())) {
           return OK;
         }
 
