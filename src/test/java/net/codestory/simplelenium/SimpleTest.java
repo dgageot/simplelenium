@@ -20,6 +20,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.regex.Pattern;
+
 public class SimpleTest extends SeleniumTest {
   private static WebServer webServer;
 
@@ -32,9 +34,9 @@ public class SimpleTest extends SeleniumTest {
           "<div class='age'>42</div>" +
           "<ul><li><em>italic</em></li></ul>")
       .get("/list",
-        "<ul class='names'>" +
-          "<li>Bob Morane</li>" +
-          "<li>Joe l'Indien</li>" +
+        "<ul>" +
+          "<li class='name'>Bob Morane</li>" +
+          "<li class='name'>Joe l'Indien</li>" +
           "</ul>"))
       .startOnRandomPort();
   }
@@ -69,6 +71,28 @@ public class SimpleTest extends SeleniumTest {
   public void list() {
     goTo("/list");
 
-    find(".names").should().contain("Bob Morane", "Joe l'Indien");
+    find(".name").should().contain("Bob Morane", "Joe l'Indien");
+    find(".name").should().beDisplayed();
+    find(".name").should().haveSize(2);
+    find(".name").should().haveLessItemsThan(3);
+    find(".name").should().haveMoreItemsThan(1);
+    find(".name").should().not().beEmpty();
+    find(".name").should().not().contain("Casper", "Zorro");
+    find(".name").should().match(Pattern.compile("([a-zA-Z ]+)"));
+  }
+
+  @Test
+  public void list_with_verification_chaining() {
+    goTo("/list");
+
+    find(".name").should()
+      .contain("Bob Morane", "Joe l'Indien")
+      .beDisplayed()
+      .haveSize(2)
+      .haveLessItemsThan(3)
+      .haveMoreItemsThan(1)
+      .not().beEmpty()
+      .not().contain("Casper", "Zorro")
+      .match(Pattern.compile("([a-zA-Z ]+)"));
   }
 }

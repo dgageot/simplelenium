@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import static java.lang.String.join;
 import static java.util.stream.Stream.of;
@@ -49,47 +50,63 @@ public class Should {
     return new Should(driver, selector, retry, !not);
   }
 
-  public void contain(String... texts) {
-    verify("contains(" + join(";", texts) + ")", this::find, element -> of(texts).allMatch(expected -> element.getText().contains(expected)));
+  public Should contain(String... texts) {
+    return verify("contains(" + join(";", texts) + ")", this::find, elements -> {
+      return of(texts).allMatch(expected -> {
+        return elements.stream().anyMatch(element -> element.getText().contains(expected));
+      });
+    });
   }
 
-  public void notContain(String text) {
-    verify("does not contain (" + text + ")", this::find, element -> !element.getText().contains(text));
+  public Should match(Pattern regexp) {
+    return verify("match(" + regexp.pattern() + ")", this::find, elements -> {
+      return elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches());
+    });
   }
 
-  public void beEnabled() {
-    verify("is enabled", this::find, element -> element.isEnabled());
+  public Should beEnabled() {
+    return verify("is enabled", this::find, elements -> {
+      return elements.stream().allMatch(element -> element.isEnabled());
+    });
   }
 
-  public void beDisabled() {
-    verify("is disabled", this::find, element -> !element.isEnabled());
+  public Should beDisplayed() {
+    return verify("is displayed", this::find, elements -> {
+      return elements.stream().allMatch(element -> element.isDisplayed());
+    });
   }
 
-  public void beDisplayed() {
-    verify("is displayed", this::find, element -> element.isDisplayed());
+  public Should beSelected() {
+    return verify("is selected", this::find, elements -> {
+      return elements.stream().allMatch(element -> element.isSelected());
+    });
   }
 
-  public void beHidden() {
-    verify("is hidden", this::find, element -> !element.isDisplayed());
+  public Should haveLessItemsThan(int maxCount) {
+    return verify("has less than " + maxCount + " items", this::find, elements -> {
+      return elements.size() < maxCount;
+    });
   }
 
-  public void beSelected() {
-    verify("is selected", this::find, element -> element.isSelected());
+  public Should haveSize(int size) {
+    return verify("has size " + size, this::find, elements -> {
+      return elements.size() == size;
+    });
   }
 
-  public void haveNoMoreItemsThan(int maxCount) {
-    verify("has at most " + maxCount + " items", this::findMultiple, elements -> elements.size() <= maxCount);
+  public Should haveMoreItemsThan(int maxCount) {
+    return verify("has more than " + maxCount + " items", this::find, elements -> {
+      return elements.size() > maxCount;
+    });
   }
 
-  public void haveSize(int size) {
-    verify("has size " + size, this::findMultiple, elements -> elements.size() == size);
+  public Should beEmpty() {
+    return verify("is empty", this::find, elements -> {
+      return elements.isEmpty();
+    });
   }
 
-  public void beEmpty() {
-    verify("is empty", this::findMultiple, elements -> elements.isEmpty());
-  }
-
-  private <T> void verify(String message, Supplier<T> target, Predicate<T> predicate) {
+  private <T> Should verify(String message, Supplier<T> target, Predicate<T> predicate) {
     String verification = "verify that " + toString(selector) + " " + message;
 
     System.out.println("   -> " + verification);
@@ -102,17 +119,15 @@ public class Should {
     if ((not && (result != KO)) || (!not && (result != OK))) {
       throw new AssertionError("Failed to " + verification);
     }
+
+    return new Should(driver, selector, retry, false);
   }
 
   private static String toString(By selector) {
     return selector.toString().replace("By.selector: ", "");
   }
 
-  private WebElement find() {
-    return driver.findElement(selector);
-  }
-
-  private List<WebElement> findMultiple() {
+  private List<WebElement> find() {
     return driver.findElements(selector);
   }
 }
