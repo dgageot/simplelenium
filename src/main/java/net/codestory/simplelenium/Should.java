@@ -106,7 +106,7 @@ public class Should {
     });
   }
 
-  private <T> Should verify(String message, Supplier<T> target, Predicate<T> predicate) {
+  private Should verify(String message, Supplier<List<WebElement>> target, Predicate<List<WebElement>> predicate) {
     String verification = "verify that " + toString(selector) + " " + message;
     System.out.println("   -> " + verification);
 
