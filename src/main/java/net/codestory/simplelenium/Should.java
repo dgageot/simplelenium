@@ -20,6 +20,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -27,8 +28,6 @@ import java.util.regex.Pattern;
 
 import static java.lang.String.join;
 import static java.util.stream.Stream.of;
-import static net.codestory.simplelenium.Verification.KO;
-import static net.codestory.simplelenium.Verification.NOT_FOUND;
 
 public class Should {
   private final WebDriver driver;
@@ -109,17 +108,17 @@ public class Should {
 
   private <T> Should verify(String message, Supplier<T> target, Predicate<T> predicate) {
     String verification = "verify that " + toString(selector) + " " + message;
-
     System.out.println("   -> " + verification);
 
-    Verification result = retry.verify(target, not ? predicate.negate() : predicate);
-    if (result == NOT_FOUND) {
+    try {
+      if (!retry.verify(target, not ? predicate.negate() : predicate)) {
+        throw new AssertionError("Failed to " + verification);
+      }
+    } catch (NoSuchElementException e) {
       throw new AssertionError("Element not found. Failed to " + verification);
     }
-    if (result == KO) {
-      throw new AssertionError("Failed to " + verification);
-    }
-    return new Should(driver, selector, retry, false);
+
+    return not ? not() : this;
   }
 
   private static String toString(By selector) {

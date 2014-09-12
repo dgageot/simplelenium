@@ -19,12 +19,14 @@ import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static net.codestory.simplelenium.Verification.*;
+import static net.codestory.simplelenium.Retry.Error.KO;
+import static net.codestory.simplelenium.Retry.Error.NOT_FOUND;
 
 class Retry {
   private final long timeoutInMs;
@@ -49,24 +51,31 @@ class Retry {
     throw lastError;
   }
 
-  <T> Verification verify(Supplier<T> target, Predicate<T> predicate) {
-    Verification result = KO;
+  <T> boolean verify(Supplier<T> targetSupplier, Predicate<T> predicate) throws NoSuchElementException {
+    Error error = KO;
 
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
-        if (predicate.test(target.get())) {
-          return OK;
+        if (predicate.test(targetSupplier.get())) {
+          return true;
         }
 
-        result = KO;
+        error = KO;
       } catch (NotFoundException e) {
-        result = NOT_FOUND;
+        error = NOT_FOUND;
       } catch (StaleElementReferenceException e) {
         // ignore
       }
     }
 
-    return result;
+    if (error == NOT_FOUND) {
+      throw new NoSuchElementException("Not found");
+    }
+    return false;
+  }
+
+  static enum Error {
+    NOT_FOUND, KO
   }
 }
