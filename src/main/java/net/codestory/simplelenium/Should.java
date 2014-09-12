@@ -27,7 +27,8 @@ import java.util.regex.Pattern;
 
 import static java.lang.String.join;
 import static java.util.stream.Stream.of;
-import static net.codestory.simplelenium.Verification.*;
+import static net.codestory.simplelenium.Verification.KO;
+import static net.codestory.simplelenium.Verification.NOT_FOUND;
 
 public class Should {
   private final WebDriver driver;
@@ -111,15 +112,13 @@ public class Should {
 
     System.out.println("   -> " + verification);
 
-    Verification result = retry.verify(target, predicate);
+    Verification result = retry.verify(target, not ? predicate.negate() : predicate);
     if (result == NOT_FOUND) {
       throw new AssertionError("Element not found. Failed to " + verification);
     }
-
-    if ((not && (result != KO)) || (!not && (result != OK))) {
+    if (result == KO) {
       throw new AssertionError("Failed to " + verification);
     }
-
     return new Should(driver, selector, retry, false);
   }
 
