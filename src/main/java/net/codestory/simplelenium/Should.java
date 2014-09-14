@@ -17,6 +17,7 @@ package net.codestory.simplelenium;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.of;
+import static net.codestory.simplelenium.text.Text.pluralize;
 
 public class Should {
   private final WebDriver driver;
@@ -178,29 +180,11 @@ public class Should {
   }
 
   private String doesOrNot(String verb) {
-    if (not) {
-      return "doesn't " + verb;
-    } else if (verb.endsWith("h")) {
-      return verb + "es ";
-    } else {
-      return verb + "s ";
-    }
+    return Text.doesOrNot(not, verb);
   }
 
   private String isOrIsNot(String state) {
-    if (not) {
-      return "is not " + state;
-    } else {
-      return "is " + state;
-    }
-  }
-
-  private static String pluralize(int n, String word) {
-    if (n <= 1) {
-      return n + " " + word;
-    } else {
-      return n + " " + word + "s";
-    }
+    return Text.isOrIsNot(not, state);
   }
 
   private static boolean isSelected(WebElement element) {
