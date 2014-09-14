@@ -18,9 +18,13 @@ package net.codestory.simplelenium;
 import net.codestory.http.WebServer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.regex.Pattern;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class SimpleTest extends SeleniumTest {
   private static WebServer webServer;
@@ -49,6 +53,9 @@ public class SimpleTest extends SeleniumTest {
   public static void stopWebServer() {
     webServer.stop();
   }
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none().handleAssertionErrors();
 
   @Test
   public void page_not_found() {
@@ -95,4 +102,69 @@ public class SimpleTest extends SeleniumTest {
       .not().contain("Casper", "Zorro")
       .match(Pattern.compile("([a-zA-Z ]+)"));
   }
+
+  @Test
+  public void fail_on_contains() {
+    goTo("/list");
+
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("Failed to verify that .name contains(Wrong name). It contains(Bob Morane;Joe l'Indien)");
+
+    find(".name").shouldWithin(1, MILLISECONDS).contain("Wrong name");
+  }
+
+  @Test
+  public void fail_on_matches() {
+    goTo("/list");
+
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("Failed to verify that .name matches(a*). It contains(Bob Morane;Joe l'Indien)");
+
+    find(".name").shouldWithin(1, MILLISECONDS).match(Pattern.compile("a*"));
+  }
+
+  @Test
+  public void fail_on_size() {
+    goTo("/list");
+
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("Failed to verify that .name contains 5 elements. It contains 2 elements");
+
+    find(".name").shouldWithin(1, MILLISECONDS).haveSize(5);
+  }
+
+  @Test
+  public void fail_on_size_less_than() {
+    goTo("/list");
+
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("Failed to verify that .name contains less than 0 elements. It contains 2 elements");
+
+    find(".name").shouldWithin(1, MILLISECONDS).haveLessItemsThan(0);
+  }
+
+  @Test
+  public void fail_on_size_more_than() {
+    goTo("/list");
+
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("Failed to verify that .name contains more than 10 elements. It contains 2 elements");
+
+    find(".name").shouldWithin(1, MILLISECONDS).haveMoreItemsThan(10);
+  }
+
+  @Test
+  public void fail_on_empty() {
+    goTo("/list");
+
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage("Failed to verify that .name is empty. It contains 2 elements");
+
+    find(".name").shouldWithin(1, MILLISECONDS).beEmpty();
+  }
+
+
+//  public Should beEnabled() {
+//  public Should beDisplayed() {
+//  public Should beSelected() {
 }

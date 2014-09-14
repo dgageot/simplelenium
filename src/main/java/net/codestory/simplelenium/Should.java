@@ -22,10 +22,12 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static java.lang.String.join;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.of;
 
 public class Should {
@@ -50,17 +52,27 @@ public class Should {
   }
 
   public Should contain(String... texts) {
-    return verify("contains(" + join(";", texts) + ")", elements -> {
-      return of(texts).allMatch(expected -> {
-        return elements.stream().anyMatch(element -> element.getText().contains(expected));
+    return verify(
+      "contains(" + join(";", texts) + ")",
+      elements -> {
+        return of(texts).allMatch(expected -> {
+          return elements.stream().anyMatch(element -> element.getText().contains(expected));
+        });
+      },
+      elements -> {
+        return "It contains(" + elements.stream().map(element -> element.getText()).collect(joining(";")) + ")";
       });
-    });
   }
 
   public Should match(Pattern regexp) {
-    return verify("matches(" + regexp.pattern() + ")", elements -> {
-      return elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches());
-    });
+    return verify(
+      "matches(" + regexp.pattern() + ")",
+      elements -> {
+        return elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches());
+      },
+      elements -> {
+        return "It contains(" + elements.stream().map(element -> element.getText()).collect(joining(";")) + ")";
+      });
   }
 
   public Should beEnabled() {
@@ -82,36 +94,56 @@ public class Should {
   }
 
   public Should haveLessItemsThan(int maxCount) {
-    return verify("has less than " + maxCount + " items", elements -> {
-      return elements.size() < maxCount;
-    });
+    return verify(
+      "contains less than " + maxCount + " elements",
+      elements -> {
+        return elements.size() < maxCount;
+      },
+      elements -> {
+        return "It contains " + elements.size() + " elements";
+      });
   }
 
   public Should haveSize(int size) {
-    return verify("has size " + size, elements -> {
-      return elements.size() == size;
-    });
+    return verify(
+      "contains " + size + " elements",
+      elements -> {
+        return elements.size() == size;
+      },
+      elements -> {
+        return "It contains " + elements.size() + " elements";
+      });
   }
 
-  public Should haveMoreItemsThan(int maxCount) {
-    return verify("has more than " + maxCount + " items", elements -> {
-      return elements.size() > maxCount;
-    });
+  public Should haveMoreItemsThan(int minCount) {
+    return verify(
+      "contains more than " + minCount + " elements",
+      elements -> {
+        return elements.size() > minCount;
+      },
+      elements -> {
+        return "It contains " + elements.size() + " elements";
+      });
   }
 
   public Should beEmpty() {
-    return verify("is empty", elements -> {
-      return elements.isEmpty();
-    });
+    return verify(
+      "is empty",
+      elements -> {
+        return elements.isEmpty();
+      },
+      elements -> {
+        return "It contains " + elements.size() + " elements";
+      });
   }
 
-  private Should verify(String message, Predicate<List<WebElement>> predicate) {
+  private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {
     String verification = "verify that " + toString(selector) + " " + message;
     System.out.println("   -> " + verification);
 
     try {
-      if (!retry.verify(() -> driver.findElements(selector), not ? predicate.negate() : predicate)) {
-        throw new AssertionError("Failed to " + verification);
+      if (!retry.verify(() -> findElements(), not ? predicate.negate() : predicate)) {
+        throw new AssertionError("Failed to " + verification + ". " + toErrorMessage.apply(findElements()));
       }
     } catch (NoSuchElementException e) {
       throw new AssertionError("Element not found. Failed to " + verification);
@@ -120,7 +152,15 @@ public class Should {
     return not ? not() : this;
   }
 
+  private Should verify(String message, Predicate<List<WebElement>> predicate) {
+    return verify(message, predicate, elements -> "");
+  }
+
   private static String toString(By selector) {
     return selector.toString().replace("By.selector: ", "");
+  }
+
+  private List<WebElement> findElements() {
+    return driver.findElements(selector);
   }
 }
