@@ -62,7 +62,7 @@ public class Should {
         });
       },
       elements -> {
-        return "It contains(" + elements.stream().map(element -> element.getText()).collect(joining(";")) + ")";
+        return "It contains" + statuses(elements, element -> element.getText());
       });
   }
 
@@ -73,7 +73,7 @@ public class Should {
         return elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches());
       },
       elements -> {
-        return "It contains(" + elements.stream().map(element -> element.getText()).collect(joining(";")) + ")";
+        return "It contains" + statuses(elements, element -> element.getText());
       });
   }
 
@@ -84,7 +84,7 @@ public class Should {
         return elements.stream().allMatch(element -> element.isEnabled());
       },
       elements -> {
-        return "It is (" + elements.stream().map(element -> enabledStatus(element)).collect(joining(";")) + ")";
+        return "It is " + statuses(elements, element -> enabledStatus(element));
       });
   }
 
@@ -95,7 +95,7 @@ public class Should {
         return elements.stream().allMatch(element -> element.isDisplayed());
       },
       elements -> {
-        return "It is (" + elements.stream().map(element -> displayedStatus(element)).collect(joining(";")) + ")";
+        return "It is " + statuses(elements, element -> displayedStatus(element));
       });
   }
 
@@ -106,40 +106,40 @@ public class Should {
         return elements.stream().allMatch(element -> isSelected(element));
       },
       elements -> {
-        return "It is (" + elements.stream().map(element -> selectedStatus(element)).collect(joining(";")) + ")";
+        return "It is " + statuses(elements, element -> selectedStatus(element));
       });
   }
 
   public Should haveLessItemsThan(int maxCount) {
     return verify(
-      "contains less than " + maxCount + pluralize(" element", maxCount),
+      "contains less than " + pluralize(maxCount, "element"),
       elements -> {
         return elements.size() < maxCount;
       },
       elements -> {
-        return "It contains " + elements.size() + pluralize(" element", elements.size());
+        return "It contains " + pluralize(elements.size(), "element");
       });
   }
 
   public Should haveSize(int size) {
     return verify(
-      "contains " + size + pluralize(" element", size),
+      "contains " + pluralize(size, "element"),
       elements -> {
         return elements.size() == size;
       },
       elements -> {
-        return "It contains " + elements.size() + pluralize(" element", elements.size());
+        return "It contains " + pluralize(elements.size(), "element");
       });
   }
 
   public Should haveMoreItemsThan(int minCount) {
     return verify(
-      "contains more than " + minCount + pluralize(" element", minCount),
+      "contains more than " + pluralize(minCount, "element"),
       elements -> {
         return elements.size() > minCount;
       },
       elements -> {
-        return "It contains " + elements.size() + pluralize(" element", elements.size());
+        return "It contains " + pluralize(elements.size(), "element");
       });
   }
 
@@ -150,7 +150,7 @@ public class Should {
         return elements.isEmpty();
       },
       elements -> {
-        return "It contains " + elements.size() + pluralize(" element", elements.size());
+        return "It contains " + pluralize(elements.size(), "element");
       });
   }
 
@@ -181,12 +181,20 @@ public class Should {
     return "is " + (not ? "not " : "") + state;
   }
 
-  private static String pluralize(String word, int n) {
-    return n <= 1 ? word : word + "s";
+  private static String pluralize(int n, String word) {
+    if (n <= 1) {
+      return n + " " + word;
+    } else {
+      return n + " " + word + "s";
+    }
   }
 
   private static boolean isSelected(WebElement element) {
     return ((element instanceof HtmlInput) || (element instanceof HtmlOption)) && element.isSelected();
+  }
+
+  private static String statuses(List<WebElement> elements, Function<WebElement, String> elementToStatus) {
+    return "(" + elements.stream().map(elementToStatus).collect(joining(";")) + ")";
   }
 
   private static String enabledStatus(WebElement element) {
