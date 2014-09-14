@@ -155,8 +155,8 @@ public class Should {
     return isSelectable(element) && element.isSelected();
   }
 
-  private static String statuses(List<WebElement> elements, Function<WebElement, String> elementToStatus) {
-    return elements.stream().map(elementToStatus).collect(joining(";", "(", ")"));
+  private static String statuses(List<WebElement> elements, Function<WebElement, String> toStatus) {
+    return elements.stream().map(toStatus).collect(joining(";", "(", ")"));
   }
 
   private static String enabledStatus(WebElement element) {
