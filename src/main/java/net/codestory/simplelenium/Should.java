@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.of;
-import static net.codestory.simplelenium.text.Text.pluralize;
+import static net.codestory.simplelenium.text.Text.plural;
 
 public class Should {
   private final WebDriver driver;
@@ -94,30 +94,30 @@ public class Should {
 
   public Should haveLessItemsThan(int maxCount) {
     return verify(
-      doesOrNot("contain") + "less than " + pluralize(maxCount, "element"),
+      doesOrNot("contain") + "less than " + plural(maxCount, "element"),
       elements -> elements.size() < maxCount,
-      elements -> "It contains " + pluralize(elements.size(), "element"));
+      elements -> "It contains " + plural(elements.size(), "element"));
   }
 
   public Should haveSize(int size) {
     return verify(
-      doesOrNot("contain") + pluralize(size, "element"),
+      doesOrNot("contain") + plural(size, "element"),
       elements -> elements.size() == size,
-      elements -> "It contains " + pluralize(elements.size(), "element"));
+      elements -> "It contains " + plural(elements.size(), "element"));
   }
 
   public Should haveMoreItemsThan(int minCount) {
     return verify(
-      doesOrNot("contain") + "more than " + pluralize(minCount, "element"),
+      doesOrNot("contain") + "more than " + plural(minCount, "element"),
       elements -> elements.size() > minCount,
-      elements -> "It contains " + pluralize(elements.size(), "element"));
+      elements -> "It contains " + plural(elements.size(), "element"));
   }
 
   public Should beEmpty() {
     return verify(
       isOrIsNot("empty"),
       elements -> elements.isEmpty(),
-      elements -> "It contains " + pluralize(elements.size(), "element"));
+      elements -> "It contains " + plural(elements.size(), "element"));
   }
 
   private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {

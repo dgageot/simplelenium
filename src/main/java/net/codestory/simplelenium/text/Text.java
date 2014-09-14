@@ -38,7 +38,7 @@ public abstract class Text {
     }
   }
 
-  public static String pluralize(int n, String word) {
+  public static String plural(int n, String word) {
     if (n <= 1) {
       return n + " " + word;
     } else {
