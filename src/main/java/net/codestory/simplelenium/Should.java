@@ -156,7 +156,7 @@ public class Should {
   }
 
   private static String statuses(List<WebElement> elements, Function<WebElement, String> elementToStatus) {
-    return "(" + elements.stream().map(elementToStatus).collect(joining(";")) + ")";
+    return elements.stream().map(elementToStatus).collect(joining(";", "(", ")"));
   }
 
   private static String enabledStatus(WebElement element) {
