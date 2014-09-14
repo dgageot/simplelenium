@@ -55,7 +55,7 @@ public class Should {
 
   public Should contain(String... texts) {
     return verify(
-      "contains(" + join(";", texts) + ")",
+      doesOrNot("contain") + "(" + join(";", texts) + ")",
       elements -> {
         return of(texts).allMatch(expected -> {
           return elements.stream().anyMatch(element -> element.getText().contains(expected));
@@ -68,7 +68,7 @@ public class Should {
 
   public Should match(Pattern regexp) {
     return verify(
-      "matches(" + regexp.pattern() + ")",
+      doesOrNot("match") + "(" + regexp.pattern() + ")",
       elements -> {
         return elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches());
       },
@@ -112,7 +112,7 @@ public class Should {
 
   public Should haveLessItemsThan(int maxCount) {
     return verify(
-      "contains less than " + pluralize(maxCount, "element"),
+      doesOrNot("contain") + "less than " + pluralize(maxCount, "element"),
       elements -> {
         return elements.size() < maxCount;
       },
@@ -123,7 +123,7 @@ public class Should {
 
   public Should haveSize(int size) {
     return verify(
-      "contains " + pluralize(size, "element"),
+      doesOrNot("contain") + pluralize(size, "element"),
       elements -> {
         return elements.size() == size;
       },
@@ -134,7 +134,7 @@ public class Should {
 
   public Should haveMoreItemsThan(int minCount) {
     return verify(
-      "contains more than " + pluralize(minCount, "element"),
+      doesOrNot("contain") + "more than " + pluralize(minCount, "element"),
       elements -> {
         return elements.size() > minCount;
       },
@@ -177,8 +177,22 @@ public class Should {
     return driver.findElements(selector);
   }
 
+  private String doesOrNot(String verb) {
+    if (not) {
+      return "doesn't " + verb;
+    } else if (verb.endsWith("h")) {
+      return verb + "es ";
+    } else {
+      return verb + "s ";
+    }
+  }
+
   private String isOrIsNot(String state) {
-    return "is " + (not ? "not " : "") + state;
+    if (not) {
+      return "is not " + state;
+    } else {
+      return "is " + state;
+    }
   }
 
   private static String pluralize(int n, String word) {
