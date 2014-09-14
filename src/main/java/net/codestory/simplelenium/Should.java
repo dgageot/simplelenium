@@ -58,102 +58,66 @@ public class Should {
   public Should contain(String... texts) {
     return verify(
       doesOrNot("contain") + "(" + join(";", texts) + ")",
-      elements -> {
-        return of(texts).allMatch(expected -> {
-          return elements.stream().anyMatch(element -> element.getText().contains(expected));
-        });
-      },
-      elements -> {
-        return "It contains" + statuses(elements, element -> element.getText());
-      });
+      elements -> of(texts).allMatch(expected -> {
+        return elements.stream().anyMatch(element -> element.getText().contains(expected));
+      }),
+      elements -> "It contains " + statuses(elements, element -> element.getText()));
   }
 
   public Should match(Pattern regexp) {
     return verify(
       doesOrNot("match") + "(" + regexp.pattern() + ")",
-      elements -> {
-        return elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches());
-      },
-      elements -> {
-        return "It contains" + statuses(elements, element -> element.getText());
-      });
+      elements -> elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches()),
+      elements -> "It contains " + statuses(elements, element -> element.getText()));
   }
 
   public Should beEnabled() {
     return verify(
       isOrIsNot("enabled"),
-      elements -> {
-        return elements.stream().allMatch(element -> element.isEnabled());
-      },
-      elements -> {
-        return "It is " + statuses(elements, element -> enabledStatus(element));
-      });
+      elements -> elements.stream().allMatch(element -> element.isEnabled()),
+      elements -> "It is " + statuses(elements, element -> enabledStatus(element)));
   }
 
   public Should beDisplayed() {
     return verify(
       isOrIsNot("displayed"),
-      elements -> {
-        return elements.stream().allMatch(element -> element.isDisplayed());
-      },
-      elements -> {
-        return "It is " + statuses(elements, element -> displayedStatus(element));
-      });
+      elements -> elements.stream().allMatch(element -> element.isDisplayed()),
+      elements -> "It is " + statuses(elements, element -> displayedStatus(element)));
   }
 
   public Should beSelected() {
     return verify(
       isOrIsNot("selected"),
-      elements -> {
-        return elements.stream().allMatch(element -> isSelected(element));
-      },
-      elements -> {
-        return "It is " + statuses(elements, element -> selectedStatus(element));
-      });
+      elements -> elements.stream().allMatch(element -> isSelected(element)),
+      elements -> "It is " + statuses(elements, element -> selectedStatus(element)));
   }
 
   public Should haveLessItemsThan(int maxCount) {
     return verify(
       doesOrNot("contain") + "less than " + pluralize(maxCount, "element"),
-      elements -> {
-        return elements.size() < maxCount;
-      },
-      elements -> {
-        return "It contains " + pluralize(elements.size(), "element");
-      });
+      elements -> elements.size() < maxCount,
+      elements -> "It contains " + pluralize(elements.size(), "element"));
   }
 
   public Should haveSize(int size) {
     return verify(
       doesOrNot("contain") + pluralize(size, "element"),
-      elements -> {
-        return elements.size() == size;
-      },
-      elements -> {
-        return "It contains " + pluralize(elements.size(), "element");
-      });
+      elements -> elements.size() == size,
+      elements -> "It contains " + pluralize(elements.size(), "element"));
   }
 
   public Should haveMoreItemsThan(int minCount) {
     return verify(
       doesOrNot("contain") + "more than " + pluralize(minCount, "element"),
-      elements -> {
-        return elements.size() > minCount;
-      },
-      elements -> {
-        return "It contains " + pluralize(elements.size(), "element");
-      });
+      elements -> elements.size() > minCount,
+      elements -> "It contains " + pluralize(elements.size(), "element"));
   }
 
   public Should beEmpty() {
     return verify(
       isOrIsNot("empty"),
-      elements -> {
-        return elements.isEmpty();
-      },
-      elements -> {
-        return "It contains " + pluralize(elements.size(), "element");
-      });
+      elements -> elements.isEmpty(),
+      elements -> "It contains " + pluralize(elements.size(), "element"));
   }
 
   private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {

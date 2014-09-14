@@ -107,7 +107,7 @@ public class SimpleTest extends SeleniumTest {
   public void fail_on_contains() {
     goTo("/list");
 
-    expectAssertionError("Failed to verify that .name contains(Wrong name). It contains(Bob Morane;Joe l'Indien)");
+    expectAssertionError("Failed to verify that .name contains (Wrong name). It contains (Bob Morane;Joe l'Indien)");
 
     find(".name").shouldWithin(1, MILLISECONDS).contain("Wrong name");
   }
@@ -116,7 +116,7 @@ public class SimpleTest extends SeleniumTest {
   public void fail_on_matches() {
     goTo("/list");
 
-    expectAssertionError("Failed to verify that .name matches(a*). It contains(Bob Morane;Joe l'Indien)");
+    expectAssertionError("Failed to verify that .name matches (a*). It contains (Bob Morane;Joe l'Indien)");
 
     find(".name").shouldWithin(1, MILLISECONDS).match(Pattern.compile("a*"));
   }
