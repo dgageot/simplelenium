@@ -58,7 +58,7 @@ public class Should {
   }
 
   public Should match(Pattern regexp) {
-    return verify("match(" + regexp.pattern() + ")", elements -> {
+    return verify("matches(" + regexp.pattern() + ")", elements -> {
       return elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches());
     });
   }
