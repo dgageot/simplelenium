@@ -152,7 +152,7 @@ public class Should {
   }
 
   private static boolean isSelected(WebElement element) {
-    return ((element instanceof HtmlInput) || (element instanceof HtmlOption)) && element.isSelected();
+    return isSelectable(element) && element.isSelected();
   }
 
   private static String statuses(List<WebElement> elements, Function<WebElement, String> elementToStatus) {
@@ -168,9 +168,10 @@ public class Should {
   }
 
   private static String selectedStatus(WebElement element) {
-    if ((element instanceof HtmlInput) || (element instanceof HtmlOption)) {
-      return element.isSelected() ? "selected" : "not selected";
-    }
-    return "not selectable";
+    return isSelectable(element) ? element.isSelected() ? "selected" : "not selected" : "not selectable";
+  }
+
+  private static boolean isSelectable(WebElement element) {
+    return ((element instanceof HtmlInput) || (element instanceof HtmlOption));
   }
 }
