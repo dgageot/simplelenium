@@ -55,7 +55,7 @@ public class SimpleTest extends SeleniumTest {
   }
 
   @Rule
-  public ExpectedException thrown = ExpectedException.none().handleAssertionErrors();
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void page_not_found() {
@@ -107,8 +107,7 @@ public class SimpleTest extends SeleniumTest {
   public void fail_on_contains() {
     goTo("/list");
 
-    thrown.expect(AssertionError.class);
-    thrown.expectMessage("Failed to verify that .name contains(Wrong name). It contains(Bob Morane;Joe l'Indien)");
+    expectAssertionError("Failed to verify that .name contains(Wrong name). It contains(Bob Morane;Joe l'Indien)");
 
     find(".name").shouldWithin(1, MILLISECONDS).contain("Wrong name");
   }
@@ -117,8 +116,7 @@ public class SimpleTest extends SeleniumTest {
   public void fail_on_matches() {
     goTo("/list");
 
-    thrown.expect(AssertionError.class);
-    thrown.expectMessage("Failed to verify that .name matches(a*). It contains(Bob Morane;Joe l'Indien)");
+    expectAssertionError("Failed to verify that .name matches(a*). It contains(Bob Morane;Joe l'Indien)");
 
     find(".name").shouldWithin(1, MILLISECONDS).match(Pattern.compile("a*"));
   }
@@ -127,18 +125,16 @@ public class SimpleTest extends SeleniumTest {
   public void fail_on_size() {
     goTo("/list");
 
-    thrown.expect(AssertionError.class);
-    thrown.expectMessage("Failed to verify that .name contains 5 elements. It contains 2 elements");
+    expectAssertionError("Failed to verify that .name contains 1 element. It contains 2 elements");
 
-    find(".name").shouldWithin(1, MILLISECONDS).haveSize(5);
+    find(".name").shouldWithin(1, MILLISECONDS).haveSize(1);
   }
 
   @Test
   public void fail_on_size_less_than() {
     goTo("/list");
 
-    thrown.expect(AssertionError.class);
-    thrown.expectMessage("Failed to verify that .name contains less than 0 elements. It contains 2 elements");
+    expectAssertionError("Failed to verify that .name contains less than 0 element. It contains 2 elements");
 
     find(".name").shouldWithin(1, MILLISECONDS).haveLessItemsThan(0);
   }
@@ -147,8 +143,7 @@ public class SimpleTest extends SeleniumTest {
   public void fail_on_size_more_than() {
     goTo("/list");
 
-    thrown.expect(AssertionError.class);
-    thrown.expectMessage("Failed to verify that .name contains more than 10 elements. It contains 2 elements");
+    expectAssertionError("Failed to verify that .name contains more than 10 elements. It contains 2 elements");
 
     find(".name").shouldWithin(1, MILLISECONDS).haveMoreItemsThan(10);
   }
@@ -157,10 +152,15 @@ public class SimpleTest extends SeleniumTest {
   public void fail_on_empty() {
     goTo("/list");
 
-    thrown.expect(AssertionError.class);
-    thrown.expectMessage("Failed to verify that .name is empty. It contains 2 elements");
+    expectAssertionError("Failed to verify that .name is empty. It contains 2 elements");
 
     find(".name").shouldWithin(1, MILLISECONDS).beEmpty();
+  }
+
+  private void expectAssertionError(String message) {
+    thrown.handleAssertionErrors();
+    thrown.expect(AssertionError.class);
+    thrown.expectMessage(message);
   }
 
 

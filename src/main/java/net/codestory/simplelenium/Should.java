@@ -95,34 +95,34 @@ public class Should {
 
   public Should haveLessItemsThan(int maxCount) {
     return verify(
-      "contains less than " + maxCount + " elements",
+      "contains less than " + maxCount + pluralize(" element", maxCount),
       elements -> {
         return elements.size() < maxCount;
       },
       elements -> {
-        return "It contains " + elements.size() + " elements";
+        return "It contains " + elements.size() + pluralize(" element", elements.size());
       });
   }
 
   public Should haveSize(int size) {
     return verify(
-      "contains " + size + " elements",
+      "contains " + size + pluralize(" element", size),
       elements -> {
         return elements.size() == size;
       },
       elements -> {
-        return "It contains " + elements.size() + " elements";
+        return "It contains " + elements.size() + pluralize(" element", elements.size());
       });
   }
 
   public Should haveMoreItemsThan(int minCount) {
     return verify(
-      "contains more than " + minCount + " elements",
+      "contains more than " + minCount + pluralize(" element", minCount),
       elements -> {
         return elements.size() > minCount;
       },
       elements -> {
-        return "It contains " + elements.size() + " elements";
+        return "It contains " + elements.size() + pluralize(" element", elements.size());
       });
   }
 
@@ -133,7 +133,7 @@ public class Should {
         return elements.isEmpty();
       },
       elements -> {
-        return "It contains " + elements.size() + " elements";
+        return "It contains " + elements.size() + pluralize(" element", elements.size());
       });
   }
 
@@ -162,5 +162,9 @@ public class Should {
 
   private List<WebElement> findElements() {
     return driver.findElements(selector);
+  }
+
+  private static String pluralize(String word, int n) {
+    return n <= 1 ? word : word + "s";
   }
 }
