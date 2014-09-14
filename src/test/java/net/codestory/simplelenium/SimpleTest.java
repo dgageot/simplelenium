@@ -157,14 +157,36 @@ public class SimpleTest extends SeleniumTest {
     find(".name").shouldWithin(1, MILLISECONDS).beEmpty();
   }
 
+  @Test
+  public void fail_on_enabled() {
+    goTo("/list");
+
+    expectAssertionError("Failed to verify that .name is not enabled. It is (enabled;enabled)");
+
+    find(".name").shouldWithin(1, MILLISECONDS).not().beEnabled();
+  }
+
+  @Test
+  public void fail_on_displayed() {
+    goTo("/list");
+
+    expectAssertionError("Failed to verify that .name is not displayed. It is (displayed;displayed)");
+
+    find(".name").shouldWithin(1, MILLISECONDS).not().beDisplayed();
+  }
+
+  @Test
+  public void fail_on_selected() {
+    goTo("/list");
+
+    expectAssertionError("Failed to verify that .name is selected. It is (not selectable;not selectable)");
+
+    find(".name").shouldWithin(1, MILLISECONDS).beSelected();
+  }
+
   private void expectAssertionError(String message) {
     thrown.handleAssertionErrors();
     thrown.expect(AssertionError.class);
     thrown.expectMessage(message);
   }
-
-
-//  public Should beEnabled() {
-//  public Should beDisplayed() {
-//  public Should beSelected() {
 }

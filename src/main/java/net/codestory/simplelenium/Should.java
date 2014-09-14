@@ -15,6 +15,8 @@
  */
 package net.codestory.simplelenium;
 
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -76,21 +78,36 @@ public class Should {
   }
 
   public Should beEnabled() {
-    return verify("is enabled", elements -> {
-      return elements.stream().allMatch(element -> element.isEnabled());
-    });
+    return verify(
+      isOrIsNot("enabled"),
+      elements -> {
+        return elements.stream().allMatch(element -> element.isEnabled());
+      },
+      elements -> {
+        return "It is (" + elements.stream().map(element -> enabledStatus(element)).collect(joining(";")) + ")";
+      });
   }
 
   public Should beDisplayed() {
-    return verify("is displayed", elements -> {
-      return elements.stream().allMatch(element -> element.isDisplayed());
-    });
+    return verify(
+      isOrIsNot("displayed"),
+      elements -> {
+        return elements.stream().allMatch(element -> element.isDisplayed());
+      },
+      elements -> {
+        return "It is (" + elements.stream().map(element -> displayedStatus(element)).collect(joining(";")) + ")";
+      });
   }
 
   public Should beSelected() {
-    return verify("is selected", elements -> {
-      return elements.stream().allMatch(element -> element.isSelected());
-    });
+    return verify(
+      isOrIsNot("selected"),
+      elements -> {
+        return elements.stream().allMatch(element -> isSelected(element));
+      },
+      elements -> {
+        return "It is (" + elements.stream().map(element -> selectedStatus(element)).collect(joining(";")) + ")";
+      });
   }
 
   public Should haveLessItemsThan(int maxCount) {
@@ -128,7 +145,7 @@ public class Should {
 
   public Should beEmpty() {
     return verify(
-      "is empty",
+      isOrIsNot("empty"),
       elements -> {
         return elements.isEmpty();
       },
@@ -152,10 +169,6 @@ public class Should {
     return not ? not() : this;
   }
 
-  private Should verify(String message, Predicate<List<WebElement>> predicate) {
-    return verify(message, predicate, elements -> "");
-  }
-
   private static String toString(By selector) {
     return selector.toString().replace("By.selector: ", "");
   }
@@ -164,7 +177,30 @@ public class Should {
     return driver.findElements(selector);
   }
 
+  private String isOrIsNot(String state) {
+    return "is " + (not ? "not " : "") + state;
+  }
+
   private static String pluralize(String word, int n) {
     return n <= 1 ? word : word + "s";
+  }
+
+  private static boolean isSelected(WebElement element) {
+    return ((element instanceof HtmlInput) || (element instanceof HtmlOption)) && element.isSelected();
+  }
+
+  private static String enabledStatus(WebElement element) {
+    return element.isEnabled() ? "enabled" : "disabled";
+  }
+
+  private static String displayedStatus(WebElement element) {
+    return element.isDisplayed() ? "displayed" : "hidden";
+  }
+
+  private static String selectedStatus(WebElement element) {
+    if ((element instanceof HtmlInput) || (element instanceof HtmlOption)) {
+      return element.isSelected() ? "selected" : "not selected";
+    }
+    return "not selectable";
   }
 }

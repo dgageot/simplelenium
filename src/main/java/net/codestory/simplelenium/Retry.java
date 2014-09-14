@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
@@ -61,6 +62,8 @@ class Retry {
           return true;
         }
 
+        error = KO;
+      } catch (InvalidElementStateException e) {
         error = KO;
       } catch (NotFoundException e) {
         error = NOT_FOUND;
