@@ -84,7 +84,11 @@ public class DomElement {
     execute("select(" + text + ")", element -> new Select(element).selectByVisibleText(text));
   }
 
-  private void execute(String message, Consumer<WebElement> action) {
+  public void execute(Consumer<? super WebElement> action) {
+    execute("execute(" + action + ")", action);
+  }
+
+  private void execute(String message, Consumer<? super WebElement> action) {
     System.out.println(" - " + selector + "." + message);
     retry.execute(() -> find(), action);
   }
