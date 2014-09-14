@@ -110,7 +110,7 @@ public class Should {
     System.out.println("   -> " + verification);
 
     try {
-      if (!retry.verify(this::find, not ? predicate.negate() : predicate)) {
+      if (!retry.verify(() -> driver.findElements(selector), not ? predicate.negate() : predicate)) {
         throw new AssertionError("Failed to " + verification);
       }
     } catch (NoSuchElementException e) {
@@ -122,9 +122,5 @@ public class Should {
 
   private static String toString(By selector) {
     return selector.toString().replace("By.selector: ", "");
-  }
-
-  private List<WebElement> find() {
-    return driver.findElements(selector);
   }
 }
