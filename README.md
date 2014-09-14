@@ -12,7 +12,7 @@ A simple and robust layer on top of Selenium and PhantomJS.
 <dependency>
   <groupId>net.code-story</groupId>
   <artifactId>simplelenium</artifactId>
-  <version>1.8</version>
+  <version>1.10</version>
 </dependency>
 ```
 
@@ -20,8 +20,6 @@ A simple and robust layer on top of Selenium and PhantomJS.
 
 ```bash
 mvn release:clean release:prepare release:perform
-cd target/checkout
-mvn nexus-staging:release
 ```
 
 ## Samples
