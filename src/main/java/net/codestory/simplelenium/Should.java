@@ -73,21 +73,21 @@ public class Should {
 
   public Should beEnabled() {
     return verify(
-      isOrIsNot("enabled"),
+      isOrNot("enabled"),
       elements -> elements.stream().allMatch(element -> element.isEnabled()),
       elements -> "It is " + statuses(elements, element -> enabledStatus(element)));
   }
 
   public Should beDisplayed() {
     return verify(
-      isOrIsNot("displayed"),
+      isOrNot("displayed"),
       elements -> elements.stream().allMatch(element -> element.isDisplayed()),
       elements -> "It is " + statuses(elements, element -> displayedStatus(element)));
   }
 
   public Should beSelected() {
     return verify(
-      isOrIsNot("selected"),
+      isOrNot("selected"),
       elements -> elements.stream().allMatch(element -> isSelected(element)),
       elements -> "It is " + statuses(elements, element -> selectedStatus(element)));
   }
@@ -115,7 +115,7 @@ public class Should {
 
   public Should beEmpty() {
     return verify(
-      isOrIsNot("empty"),
+      isOrNot("empty"),
       elements -> elements.isEmpty(),
       elements -> "It contains " + plural(elements.size(), "element"));
   }
@@ -147,8 +147,8 @@ public class Should {
     return Text.doesOrNot(not, verb);
   }
 
-  private String isOrIsNot(String state) {
-    return Text.isOrIsNot(not, state);
+  private String isOrNot(String state) {
+    return Text.isOrNot(not, state);
   }
 
   private static boolean isSelected(WebElement element) {

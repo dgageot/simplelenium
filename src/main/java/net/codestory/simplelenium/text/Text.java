@@ -30,7 +30,7 @@ public abstract class Text {
     }
   }
 
-  public static String isOrIsNot(boolean not, String state) {
+  public static String isOrNot(boolean not, String state) {
     if (not) {
       return "is not " + state;
     } else {
