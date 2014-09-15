@@ -21,20 +21,34 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class DomElement {
   private final WebDriver driver;
   private final By selector;
+  private final Predicate<WebElement> narrowSelection;
   private final Retry retry;
 
   DomElement(WebDriver driver, By selector) {
+    this(driver, selector, element -> true, new Retry(30, SECONDS));
+  }
+
+  DomElement(WebDriver driver, By selector, Predicate<WebElement> narrowSelection, Retry retry) {
     this.driver = driver;
     this.selector = selector;
-    this.retry = new Retry(30, SECONDS);
+    this.narrowSelection = narrowSelection;
+    this.retry = retry;
+  }
+
+  // Narrow find
+  //
+  public DomElement withText(String text) {
+    return new DomElement(driver, selector, element -> Objects.equals(element.getText(), text), retry);
   }
 
   // Assertions
@@ -45,13 +59,6 @@ public class DomElement {
 
   public Should shouldWithin(long duration, TimeUnit timeUnit) {
     return new Should(driver, selector, duration, timeUnit);
-  }
-
-  // Getters. We should find a way not to use those
-  //
-  public String getText() {
-    System.out.println(" - " + selector + "." + "getText()");
-    return find().getText();
   }
 
   // Actions
@@ -94,6 +101,10 @@ public class DomElement {
   }
 
   private WebElement find() {
-    return driver.findElement(selector);
+    WebElement element = driver.findElement(selector);
+    if (!narrowSelection.test(element)) {
+      return null;
+    }
+    return element;
   }
 }

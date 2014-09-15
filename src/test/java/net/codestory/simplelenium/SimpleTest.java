@@ -184,6 +184,13 @@ public class SimpleTest extends SeleniumTest {
     find(".name").shouldWithin(1, MILLISECONDS).beSelected();
   }
 
+  @Test
+  public void find_with_text() {
+    goTo("/list");
+
+    find("h1").withText("Page not found").should().beDisplayed();
+  }
+
   private void expectAssertionError(String message) {
     thrown.handleAssertionErrors();
     thrown.expect(AssertionError.class);

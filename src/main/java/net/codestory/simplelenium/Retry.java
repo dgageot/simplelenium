@@ -42,8 +42,11 @@ class Retry {
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
-        action.accept(target.get());
-        return;
+        T targetElement = target.get();
+        if (targetElement != null) {
+          action.accept(targetElement);
+          return;
+        }
       } catch (WebDriverException e) {
         lastError = e;
       }
