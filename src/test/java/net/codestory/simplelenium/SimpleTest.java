@@ -192,7 +192,6 @@ public class SimpleTest extends SeleniumTest {
   }
 
   private void expectAssertionError(String message) {
-    thrown.handleAssertionErrors();
     thrown.expect(AssertionError.class);
     thrown.expectMessage(message);
   }
