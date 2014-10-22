@@ -160,11 +160,11 @@ public class Should {
   }
 
   private static String enabledStatus(WebElement element) {
-    return element.isEnabled() ? "enabled" : "disabled";
+    return element.isEnabled() ? "enabled" : "not enabled";
   }
 
   private static String displayedStatus(WebElement element) {
-    return element.isDisplayed() ? "displayed" : "hidden";
+    return element.isDisplayed() ? "displayed" : "not displayed";
   }
 
   private static String selectedStatus(WebElement element) {
