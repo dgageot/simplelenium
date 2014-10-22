@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.*;
 
 import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
@@ -37,22 +38,24 @@ import static net.codestory.simplelenium.text.Text.plural;
 public class Should {
   private final WebDriver driver;
   private final By selector;
+  private final Predicate<WebElement> narrowSelection;
   private final Retry retry;
   private final boolean not;
 
-  Should(WebDriver driver, By selector, long duration, TimeUnit timeUnit) {
-    this(driver, selector, new Retry(duration, timeUnit), false);
+  Should(WebDriver driver, By selector, Predicate<WebElement> narrowSelection, long duration, TimeUnit timeUnit) {
+    this(driver, selector, narrowSelection, new Retry(duration, timeUnit), false);
   }
 
-  private Should(WebDriver driver, By selector, Retry retry, boolean not) {
+  private Should(WebDriver driver, By selector, Predicate<WebElement> narrowSelection, Retry retry, boolean not) {
     this.driver = driver;
     this.selector = selector;
+    this.narrowSelection = narrowSelection;
     this.retry = retry;
     this.not = not;
   }
 
   public Should not() {
-    return new Should(driver, selector, retry, !not);
+    return new Should(driver, selector, narrowSelection, retry, !not);
   }
 
   public Should contain(String... texts) {
@@ -147,7 +150,7 @@ public class Should {
   }
 
   private List<WebElement> findElements() {
-    return driver.findElements(selector);
+    return driver.findElements(selector).stream().filter(narrowSelection).collect(Collectors.toList());
   }
 
   private String doesOrNot(String verb) {

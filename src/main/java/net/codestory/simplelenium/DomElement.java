@@ -54,11 +54,11 @@ public class DomElement {
   // Assertions
   //
   public Should should() {
-    return new Should(driver, selector, 5, SECONDS);
+    return new Should(driver, selector, narrowSelection, 5, SECONDS);
   }
 
   public Should shouldWithin(long duration, TimeUnit timeUnit) {
-    return new Should(driver, selector, duration, timeUnit);
+    return new Should(driver, selector, narrowSelection, duration, timeUnit);
   }
 
   // Actions

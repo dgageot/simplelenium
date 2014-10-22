@@ -88,6 +88,9 @@ public class SimpleTest extends SeleniumTest {
     find(".name").should().not().beEmpty();
     find(".name").should().not().contain("Casper", "Zorro");
     find(".name").should().match(Pattern.compile("([a-zA-Z ]+)"));
+    find(".name").withText("Bob Morane").should().haveSize(1);
+    find(".name").withText("Bob Morane").should().exist();
+    find(".name").withText("John Doe").should().not().exist();
   }
 
   @Test
