@@ -57,7 +57,7 @@ public class Should {
 
   public Should contain(String... texts) {
     return verify(
-      doesOrNot("contain") + "(" + join(";", texts) + ")",
+      doesOrNot("contain") + " (" + join(";", texts) + ")",
       elements -> of(texts).allMatch(expected -> {
         return elements.stream().anyMatch(element -> element.getText().contains(expected));
       }),
@@ -66,7 +66,7 @@ public class Should {
 
   public Should match(Pattern regexp) {
     return verify(
-      doesOrNot("match") + "(" + regexp.pattern() + ")",
+      doesOrNot("match") + " (" + regexp.pattern() + ")",
       elements -> elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches()),
       elements -> "It contains " + statuses(elements, element -> element.getText()));
   }
@@ -94,21 +94,21 @@ public class Should {
 
   public Should haveLessItemsThan(int maxCount) {
     return verify(
-      doesOrNot("contain") + "less than " + plural(maxCount, "element"),
+      doesOrNot("contain") + " less than " + plural(maxCount, "element"),
       elements -> elements.size() < maxCount,
       elements -> "It contains " + plural(elements.size(), "element"));
   }
 
   public Should haveSize(int size) {
     return verify(
-      doesOrNot("contain") + plural(size, "element"),
+      doesOrNot("contain") + " " + plural(size, "element"),
       elements -> elements.size() == size,
       elements -> "It contains " + plural(elements.size(), "element"));
   }
 
   public Should haveMoreItemsThan(int minCount) {
     return verify(
-      doesOrNot("contain") + "more than " + plural(minCount, "element"),
+      doesOrNot("contain") + " more than " + plural(minCount, "element"),
       elements -> elements.size() > minCount,
       elements -> "It contains " + plural(elements.size(), "element"));
   }
@@ -117,6 +117,13 @@ public class Should {
     return verify(
       isOrNot("empty"),
       elements -> elements.isEmpty(),
+      elements -> "It contains " + plural(elements.size(), "element"));
+  }
+
+  public Should exist() {
+    return verify(
+      doesOrNot("exist"),
+      elements -> !elements.isEmpty(),
       elements -> "It contains " + plural(elements.size(), "element"));
   }
 

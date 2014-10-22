@@ -24,9 +24,9 @@ public abstract class Text {
     if (not) {
       return "doesn't " + verb;
     } else if (verb.endsWith("h")) {
-      return verb + "es ";
+      return verb + "es";
     } else {
-      return verb + "s ";
+      return verb + "s";
     }
   }
 

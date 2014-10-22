@@ -72,6 +72,8 @@ public class SimpleTest extends SeleniumTest {
     find("#name").should().contain("Bob");
     find(".age").should().contain("42");
     find("ul li em").should().contain("italic");
+    find("h1").should().exist();
+    find("h4").should().not().exist();
   }
 
   @Test
@@ -155,6 +157,24 @@ public class SimpleTest extends SeleniumTest {
     expectAssertionError("Failed to verify that .name is empty. It contains 2 elements");
 
     find(".name").shouldWithin(1, MILLISECONDS).beEmpty();
+  }
+
+  @Test
+  public void fail_on_not_exists() {
+    goTo("/list");
+
+    expectAssertionError("Failed to verify that .name doesn't exist. It contains 2 elements");
+
+    find(".name").shouldWithin(1, MILLISECONDS).not().exist();
+  }
+
+  @Test
+  public void fail_on_exists() {
+    goTo("/list");
+
+    expectAssertionError("Failed to verify that .unknown exists. It contains 0 element");
+
+    find(".unknown").shouldWithin(1, MILLISECONDS).exist();
   }
 
   @Test
