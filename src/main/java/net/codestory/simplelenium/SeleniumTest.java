@@ -93,6 +93,16 @@ public abstract class SeleniumTest {
     return driver.getCurrentUrl();
   }
 
+  public String path() {
+    String currentUrl = driver.getCurrentUrl();
+    String defaultBaseUrl = getDefaultBaseUrl();
+
+    if (currentUrl.startsWith(defaultBaseUrl)) {
+      return currentUrl.substring(defaultBaseUrl.length());
+    }
+    return currentUrl;
+  }
+
   public String title() {
     return driver.getTitle();
   }

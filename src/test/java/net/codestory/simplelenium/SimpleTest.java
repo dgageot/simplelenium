@@ -45,7 +45,8 @@ public class SimpleTest extends AbstractTest {
 
     find("a").click();
 
-    assertThat(currentUrl()).endsWith("/list");
+    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/list");
+    assertThat(path()).isEqualTo("/list");
   }
 
   @Test
@@ -54,6 +55,7 @@ public class SimpleTest extends AbstractTest {
 
     find("a").withText("Show list").click();
 
-    assertThat(currentUrl()).endsWith("/list");
+    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/list");
+    assertThat(path()).isEqualTo("/list");
   }
 }
