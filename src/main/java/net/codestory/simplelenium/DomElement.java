@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.filters.ElementFilter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -24,21 +25,20 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class DomElement {
   private final WebDriver driver;
   private final By selector;
-  private final Predicate<WebElement> narrowSelection;
+  private final ElementFilter narrowSelection;
   private final Retry retry;
 
   DomElement(WebDriver driver, By selector) {
-    this(driver, selector, element -> true, new Retry(30, SECONDS));
+    this(driver, selector, ElementFilter.ANY, new Retry(30, SECONDS));
   }
 
-  DomElement(WebDriver driver, By selector, Predicate<WebElement> narrowSelection, Retry retry) {
+  DomElement(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry) {
     this.driver = driver;
     this.selector = selector;
     this.narrowSelection = narrowSelection;
@@ -48,7 +48,7 @@ public class DomElement {
   // Narrow find
   //
   public DomElement withText(String text) {
-    return new DomElement(driver, selector, element -> Objects.equals(element.getText(), text), retry);
+    return new DomElement(driver, selector, new ElementFilter("", element -> Objects.equals(element.getText(), text)), retry);
   }
 
   // Assertions
