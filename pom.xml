@@ -159,6 +159,8 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <forkCount>2</forkCount>
+          <reuseForks>true</reuseForks>
           <systemProperties>
             <java.awt.headless>true</java.awt.headless>
           </systemProperties>
