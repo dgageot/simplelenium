@@ -17,23 +17,31 @@ package net.codestory.simplelenium;
 
 import org.junit.Test;
 
-public class SimpleTest extends AbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ClickTest extends AbstractTest {
   @Test
-  public void simple_page() {
+  public void click() {
     goTo("/");
 
-    find("h1").should().contain("Hello World");
-    find("#name").should().contain("Bob");
-    find(".age").should().contain("42");
-    find("ul li em").should().contain("italic");
-    find("h1").should().exist();
-    find("h4").should().not().exist();
+    find("a").click();
+
+    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/");
+    assertThat(path()).isEqualTo("/");
   }
 
   @Test
-  public void find_with_text() {
+  public void click_with_text() {
     goTo("/");
 
-    find("h1").withText("Hello World").should().beDisplayed();
+    find("a").withText("First Link").click();
+
+    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/");
+    assertThat(path()).isEqualTo("/");
+
+    find("a").withText("Second Link").click();
+
+    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/list");
+    assertThat(path()).isEqualTo("/list");
   }
 }

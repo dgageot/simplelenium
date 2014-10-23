@@ -99,10 +99,6 @@ public class DomElement {
   }
 
   private WebElement find() {
-    WebElement element = driver.findElement(selector);
-    if (!narrowSelection.test(element)) {
-      return null;
-    }
-    return element;
+    return driver.findElements(selector).stream().filter(narrowSelection).findFirst().orElse(null);
   }
 }

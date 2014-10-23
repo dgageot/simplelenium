@@ -36,11 +36,14 @@ public class TestWebServer {
           "<div id='name'>Bob</div>" +
           "<div class='age'>42</div>" +
           "<ul><li><em>italic</em></li></ul>" +
-          "<a href=\"/list\">Show list</a>")
+          "<a href=\"/\">First Link</a>" +
+          "<a href=\"/list\">Second Link</a>"
+      )
       .get("/list",
         "<ul>" +
           "   <li class='name'>Bob Morane</li>" +
           "   <li class='name'>Joe l'Indien</li>" +
-          "</ul>");
+          "</ul>"
+      );
   }
 }
