@@ -94,7 +94,7 @@ public class DomElement {
   }
 
   private void execute(String message, Consumer<? super WebElement> action) {
-    System.out.println(" - " + Text.toString(selector) + "." + message);
+    System.out.println(" - " + Text.toString(selector) + narrowSelection.getDescription() + "." + message);
     retry.execute(() -> find(), action);
   }
 
