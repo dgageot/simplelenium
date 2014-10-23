@@ -15,21 +15,11 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.http.routes.Routes;
 import org.junit.Test;
 
 import java.util.regex.Pattern;
 
 public class ListTest extends AbstractTest {
-  @Override
-  protected void configureTestServer(Routes routes) {
-    routes.get("/list",
-      "<ul>" +
-        "   <li class='name'>Bob Morane</li>" +
-        "   <li class='name'>Joe l'Indien</li>" +
-        "</ul>");
-  }
-
   @Test
   public void list() {
     goTo("/list");

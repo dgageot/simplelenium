@@ -15,14 +15,9 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.http.routes.Routes;
 import org.junit.Test;
 
 public class UnknownPageTest extends AbstractTest {
-  @Override
-  protected void configureTestServer(Routes routes) {
-  }
-
   @Test
   public void page_not_found() {
     goTo("/unknown");

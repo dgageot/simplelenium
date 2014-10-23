@@ -15,19 +15,9 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.http.routes.Routes;
 import org.junit.Test;
 
 public class SimpleTest extends AbstractTest {
-  @Override
-  protected void configureTestServer(Routes routes) {
-    routes.get("/",
-      "<h1>Hello World</h1>" +
-        "<div id='name'>Bob</div>" +
-        "<div class='age'>42</div>" +
-        "<ul><li><em>italic</em></li></ul>");
-  }
-
   @Test
   public void simple_page() {
     goTo("/");

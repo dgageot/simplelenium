@@ -15,21 +15,8 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.http.WebServer;
-import net.codestory.http.routes.Routes;
-import org.junit.After;
-
 public abstract class AbstractTest extends SeleniumTest {
-  private final WebServer webServer = new WebServer(this::configureTestServer).startOnRandomPort();
-
   protected String getDefaultBaseUrl() {
-    return "http://localhost:" + webServer.port();
-  }
-
-  protected abstract void configureTestServer(Routes routes);
-
-  @After
-  public void stopWebServer() {
-    webServer.stop();
+    return "http://localhost:" + new TestWebServer().port();
   }
 }
