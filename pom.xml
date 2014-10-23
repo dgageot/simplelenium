@@ -178,6 +178,7 @@
         </executions>
       </plugin>
       <plugin>
+        <!-- license:format -->
         <inherited>false</inherited>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
