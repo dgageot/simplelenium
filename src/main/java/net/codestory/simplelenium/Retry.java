@@ -26,10 +26,14 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static net.codestory.simplelenium.Retry.Error.KO;
 import static net.codestory.simplelenium.Retry.Error.NOT_FOUND;
 
 class Retry {
+  public static final Retry _5_SECONDS = new Retry(5, SECONDS);
+  public static final Retry _30_SECONDS = new Retry(30, SECONDS);
+
   private final long timeoutInMs;
 
   Retry(long duration, TimeUnit timeUnit) {

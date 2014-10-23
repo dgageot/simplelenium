@@ -25,7 +25,6 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -43,8 +42,8 @@ public class Should {
   private final Retry retry;
   private final boolean not;
 
-  Should(WebDriver driver, By selector, ElementFilter narrowSelection, long duration, TimeUnit timeUnit) {
-    this(driver, selector, narrowSelection, new Retry(duration, timeUnit), false);
+  Should(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry) {
+    this(driver, selector, narrowSelection, retry, false);
   }
 
   private Should(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry, boolean not) {

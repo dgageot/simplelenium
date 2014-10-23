@@ -25,8 +25,6 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 public class DomElement {
   private final WebDriver driver;
   private final By selector;
@@ -34,7 +32,7 @@ public class DomElement {
   private final Retry retry;
 
   DomElement(WebDriver driver, By selector) {
-    this(driver, selector, ElementFilter.any(), new Retry(30, SECONDS));
+    this(driver, selector, ElementFilter.any(), Retry._30_SECONDS);
   }
 
   DomElement(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry) {
@@ -53,11 +51,11 @@ public class DomElement {
   // Assertions
   //
   public Should should() {
-    return new Should(driver, selector, narrowSelection, 5, SECONDS);
+    return new Should(driver, selector, narrowSelection, Retry._5_SECONDS);
   }
 
   public Should shouldWithin(long duration, TimeUnit timeUnit) {
-    return new Should(driver, selector, narrowSelection, duration, timeUnit);
+    return new Should(driver, selector, narrowSelection, new Retry(duration, timeUnit));
   }
 
   // Actions
