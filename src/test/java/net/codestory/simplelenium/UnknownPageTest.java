@@ -18,32 +18,15 @@ package net.codestory.simplelenium;
 import net.codestory.http.routes.Routes;
 import org.junit.Test;
 
-public class SimpleTest extends AbstractTest {
+public class UnknownPageTest extends AbstractTest {
   @Override
   protected void configureTestServer(Routes routes) {
-    routes.get("/",
-      "<h1>Hello World</h1>" +
-        "<div id='name'>Bob</div>" +
-        "<div class='age'>42</div>" +
-        "<ul><li><em>italic</em></li></ul>");
   }
 
   @Test
-  public void simple_page() {
-    goTo("/");
+  public void page_not_found() {
+    goTo("/unknown");
 
-    find("h1").should().contain("Hello World");
-    find("#name").should().contain("Bob");
-    find(".age").should().contain("42");
-    find("ul li em").should().contain("italic");
-    find("h1").should().exist();
-    find("h4").should().not().exist();
-  }
-
-  @Test
-  public void find_with_text() {
-    goTo("/");
-
-    find("h1").withText("Hello World").should().beDisplayed();
+    find("h1").should().contain("Page not found");
   }
 }

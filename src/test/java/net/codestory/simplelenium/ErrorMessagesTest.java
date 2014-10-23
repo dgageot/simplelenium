@@ -15,9 +15,7 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.http.WebServer;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import net.codestory.http.routes.Routes;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -26,40 +24,22 @@ import java.util.regex.Pattern;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-public class ErrorMessagesTest extends SeleniumTest {
-  private static WebServer webServer;
-
-  @BeforeClass
-  public static void startWebServer() {
-    webServer = new WebServer(routes -> routes
-      .get("/",
-           "<h1>Hello World</h1>" +
-          "<div id='name'>Bob</div>" +
-          "<div class='age'>42</div>" +
-          "<ul><li><em>italic</em></li></ul>")
-      .get("/list",
-          "<ul>" +
-          "   <li class='name'>Bob Morane</li>" +
-          "   <li class='name'>Joe l'Indien</li>" +
-          "</ul>"))
-      .startOnRandomPort();
-  }
-
-  protected String getDefaultBaseUrl() {
-    return "http://localhost:" + webServer.port();
-  }
-
-  @AfterClass
-  public static void stopWebServer() {
-    webServer.stop();
-  }
-
+public class ErrorMessagesTest extends AbstractTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+  @Override
+  protected void configureTestServer(Routes routes) {
+    routes.get("/",
+      "<ul>" +
+        "   <li class='name'>Bob Morane</li>" +
+        "   <li class='name'>Joe l'Indien</li>" +
+        "</ul>");
+  }
+
   @Test
   public void fail_on_contains() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name contains (Wrong name). It contains (Bob Morane;Joe l'Indien)");
 
@@ -68,7 +48,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_matches() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name matches (a*). It contains (Bob Morane;Joe l'Indien)");
 
@@ -77,7 +57,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_size() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name contains 1 element. It contains 2 elements");
 
@@ -86,7 +66,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_size_less_than() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name contains less than 0 element. It contains 2 elements");
 
@@ -95,7 +75,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_size_more_than() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name contains more than 10 elements. It contains 2 elements");
 
@@ -104,7 +84,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_empty() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name is empty. It contains 2 elements");
 
@@ -113,7 +93,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_not_exists() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name doesn't exist. It contains 2 elements");
 
@@ -122,7 +102,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_exists() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .unknown exists. It contains 0 element");
 
@@ -131,7 +111,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_enabled() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name is not enabled. It is (enabled;enabled)");
 
@@ -140,7 +120,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_displayed() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name is not displayed. It is (displayed;displayed)");
 
@@ -149,7 +129,7 @@ public class ErrorMessagesTest extends SeleniumTest {
 
   @Test
   public void fail_on_selected() {
-    goTo("/list");
+    goTo("/");
 
     expectAssertionError("Failed to verify that .name is selected. It is (not selectable;not selectable)");
 
