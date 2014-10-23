@@ -20,7 +20,7 @@ import net.codestory.http.routes.Routes;
 import org.junit.After;
 
 public abstract class AbstractTest extends SeleniumTest {
-  private WebServer webServer = new WebServer(this::configureTestServer).startOnRandomPort();
+  private final WebServer webServer = new WebServer(this::configureTestServer).startOnRandomPort();
 
   protected String getDefaultBaseUrl() {
     return "http://localhost:" + webServer.port();

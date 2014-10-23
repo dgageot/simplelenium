@@ -42,9 +42,6 @@ public class ListTest extends AbstractTest {
     find(".name").should().not().beEmpty();
     find(".name").should().not().contain("Casper", "Zorro");
     find(".name").should().match(Pattern.compile("([a-zA-Z ]+)"));
-    find(".name").withText("Bob Morane").should().haveSize(1);
-    find(".name").withText("Bob Morane").should().exist();
-    find(".name").withText("John Doe").should().not().exist();
   }
 
   @Test
@@ -60,5 +57,14 @@ public class ListTest extends AbstractTest {
       .not().beEmpty()
       .not().contain("Casper", "Zorro")
       .match(Pattern.compile("([a-zA-Z ]+)"));
+  }
+
+  @Test
+  public void filter_with_text() {
+    goTo("/list");
+
+    find(".name").withText("Bob Morane").should().haveSize(1);
+    find(".name").withText("Bob Morane").should().exist();
+    find(".name").withText("John Doe").should().not().exist();
   }
 }
