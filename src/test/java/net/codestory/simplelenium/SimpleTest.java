@@ -17,6 +17,8 @@ package net.codestory.simplelenium;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class SimpleTest extends AbstractTest {
   @Test
   public void simple_page() {
@@ -35,5 +37,23 @@ public class SimpleTest extends AbstractTest {
     goTo("/");
 
     find("h1").withText("Hello World").should().beDisplayed();
+  }
+
+  @Test
+  public void click() {
+    goTo("/");
+
+    find("a").click();
+
+    assertThat(currentUrl()).endsWith("/list");
+  }
+
+  @Test
+  public void click_with_text() {
+    goTo("/");
+
+    find("a").withText("Show list").click();
+
+    assertThat(currentUrl()).endsWith("/list");
   }
 }

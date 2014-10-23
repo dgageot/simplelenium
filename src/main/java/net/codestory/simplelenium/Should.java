@@ -131,7 +131,7 @@ public class Should {
   }
 
   private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {
-    String verification = "verify that " + toString(selector) + narrowSelection.getDescription() + " " + message;
+    String verification = "verify that " + Text.toString(selector) + narrowSelection.getDescription() + " " + message;
     System.out.println("   -> " + verification);
 
     try {
@@ -143,10 +143,6 @@ public class Should {
     }
 
     return not ? not() : this;
-  }
-
-  private static String toString(By selector) {
-    return selector.toString().replace("By.selector: ", "");
   }
 
   private List<WebElement> findElements() {

@@ -16,6 +16,7 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.filters.ElementFilter;
+import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -93,7 +94,7 @@ public class DomElement {
   }
 
   private void execute(String message, Consumer<? super WebElement> action) {
-    System.out.println(" - " + selector + "." + message);
+    System.out.println(" - " + Text.toString(selector) + "." + message);
     retry.execute(() -> find(), action);
   }
 

@@ -15,6 +15,8 @@
  */
 package net.codestory.simplelenium.text;
 
+import org.openqa.selenium.By;
+
 public abstract class Text {
   private Text() {
     // Static utility class
@@ -44,5 +46,9 @@ public abstract class Text {
     } else {
       return n + " " + word + "s";
     }
+  }
+
+  public static String toString(By selector) {
+    return selector.toString().replace("By.selector: ", "");
   }
 }

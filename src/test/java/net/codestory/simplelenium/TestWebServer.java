@@ -35,7 +35,8 @@ public class TestWebServer {
         "<h1>Hello World</h1>" +
           "<div id='name'>Bob</div>" +
           "<div class='age'>42</div>" +
-          "<ul><li><em>italic</em></li></ul>")
+          "<ul><li><em>italic</em></li></ul>" +
+          "<a href=\"/list\">Show list</a>")
       .get("/list",
         "<ul>" +
           "   <li class='name'>Bob Morane</li>" +
