@@ -127,6 +127,15 @@ public class ErrorMessagesTest extends AbstractTest {
     find(".name").shouldWithin(1, MILLISECONDS).beSelected();
   }
 
+  @Test
+  public void fail_with_filter_on_text() {
+    goTo("/list");
+
+    expectError("Failed to verify that .name with text [Any Text] exists. It contains 0 element");
+
+    find(".name").withText("Any Text").shouldWithin(1, MILLISECONDS).exist();
+  }
+
   private void expectError(String message) {
     thrown.expect(AssertionError.class);
     thrown.expectMessage(message);

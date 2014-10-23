@@ -17,17 +17,26 @@ package net.codestory.simplelenium.filters;
 
 import org.openqa.selenium.WebElement;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ElementFilter implements Predicate<WebElement> {
-  public static final ElementFilter ANY = new ElementFilter("", element -> true);
+  private static final ElementFilter ANY = new ElementFilter("", element -> true);
 
   private final String description;
   private final Predicate<WebElement> predicate;
 
-  public ElementFilter(String description, Predicate<WebElement> predicate) {
+  private ElementFilter(String description, Predicate<WebElement> predicate) {
     this.description = description;
     this.predicate = predicate;
+  }
+
+  public static ElementFilter any() {
+    return ANY;
+  }
+
+  public static ElementFilter withText(String text) {
+    return new ElementFilter(" with text [" + text + "]", element -> Objects.equals(element.getText(), text));
   }
 
   public String getDescription() {

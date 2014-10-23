@@ -22,7 +22,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -35,7 +34,7 @@ public class DomElement {
   private final Retry retry;
 
   DomElement(WebDriver driver, By selector) {
-    this(driver, selector, ElementFilter.ANY, new Retry(30, SECONDS));
+    this(driver, selector, ElementFilter.any(), new Retry(30, SECONDS));
   }
 
   DomElement(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry) {
@@ -48,7 +47,7 @@ public class DomElement {
   // Narrow find
   //
   public DomElement withText(String text) {
-    return new DomElement(driver, selector, new ElementFilter("", element -> Objects.equals(element.getText(), text)), retry);
+    return new DomElement(driver, selector, ElementFilter.withText(text), retry);
   }
 
   // Assertions

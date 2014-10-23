@@ -132,7 +132,7 @@ public class Should {
   }
 
   private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {
-    String verification = "verify that " + toString(selector) + " " + message;
+    String verification = "verify that " + toString(selector) + narrowSelection.getDescription() + " " + message;
     System.out.println("   -> " + verification);
 
     try {
