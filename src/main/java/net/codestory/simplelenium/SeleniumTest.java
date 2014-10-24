@@ -89,7 +89,7 @@ public abstract class SeleniumTest {
     return driver;
   }
 
-  public String currentUrl() {
+  public String url() {
     return driver.getCurrentUrl();
   }
 

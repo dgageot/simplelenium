@@ -26,7 +26,7 @@ public class ClickTest extends AbstractTest {
 
     find("a").click();
 
-    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/");
+    assertThat(url()).isEqualTo(getDefaultBaseUrl() + "/");
     assertThat(path()).isEqualTo("/");
   }
 
@@ -36,12 +36,12 @@ public class ClickTest extends AbstractTest {
 
     find("a").withText("First Link").click();
 
-    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/");
+    assertThat(url()).isEqualTo(getDefaultBaseUrl() + "/");
     assertThat(path()).isEqualTo("/");
 
     find("a").withText("Second Link").click();
 
-    assertThat(currentUrl()).isEqualTo(getDefaultBaseUrl() + "/list");
+    assertThat(url()).isEqualTo(getDefaultBaseUrl() + "/list");
     assertThat(path()).isEqualTo("/list");
   }
 }
