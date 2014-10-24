@@ -17,28 +17,41 @@ package net.codestory.simplelenium;
 
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public class PageTest extends AbstractTest {
+  private final ThePage page = createPage(ThePage.class);
 
-public class PageObjectTest {
   @Test
-  public void create() throws Exception {
-    ThePage thePage = PageObject.create(ThePage.class);
+  public void simple_page() {
+    goTo(page);
 
-    assertThat(thePage.h1).isNotNull();
-    assertThat(thePage.h4).isNotNull();
-    assertThat(thePage.name).isNotNull();
-    assertThat(thePage.age).isNotNull();
+    page.verifyTitle();
+    page.verifySubTitle();
+    page.verifyBob("Bob", "42");
   }
 
   static class ThePage implements PageObject {
     DomElement h1;
     DomElement h4;
-    final DomElement name = find("#name");
-    final DomElement age = find(".age");
+    DomElement name = find("#name");
+    DomElement age = find(".age");
 
     @Override
     public String url() {
       return "/";
+    }
+
+    void verifyTitle() {
+      h1.should().contain("Hello World");
+      h1.should().exist();
+    }
+
+    void verifySubTitle() {
+      h4.should().not().exist();
+    }
+
+    void verifyBob(String expectedName, String expectedAge) {
+      name.should().contain(expectedName);
+      age.should().contain(expectedAge);
     }
   }
 }

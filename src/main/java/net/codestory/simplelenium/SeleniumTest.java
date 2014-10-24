@@ -112,11 +112,7 @@ public abstract class SeleniumTest implements DomElementFactory {
     return driver.getPageSource();
   }
 
-  public static <T extends PageObject> T createPage(Class<T> type) {
-    try {
-      return type.newInstance();
-    } catch (InstantiationException | IllegalAccessException e) {
-      throw new IllegalArgumentException("Unable to create Page Object of type " + type);
-    }
+  public <T extends PageObject> T createPage(Class<T> type) {
+    return PageObject.create(type);
   }
 }

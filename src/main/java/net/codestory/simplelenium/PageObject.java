@@ -15,7 +15,29 @@
  */
 package net.codestory.simplelenium;
 
+import org.openqa.selenium.By;
+
+import java.lang.reflect.Field;
+
 @FunctionalInterface
 public interface PageObject extends DomElementFactory {
   String url();
+
+  public static <T extends PageObject> T create(Class<T> type) {
+    try {
+      T pageObject = type.newInstance();
+
+      for (Field field : pageObject.getClass().getDeclaredFields()) {
+        if (field.getType().isAssignableFrom(DomElement.class)) {
+          if (field.get(pageObject) == null) {
+            field.set(pageObject, new DomElement(By.cssSelector(field.getName())));
+          }
+        }
+      }
+
+      return pageObject;
+    } catch (InstantiationException | IllegalAccessException e) {
+      throw new IllegalArgumentException("Unable to create Page Object of type " + type);
+    }
+  }
 }
