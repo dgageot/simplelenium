@@ -18,6 +18,7 @@ package net.codestory.simplelenium;
 import org.openqa.selenium.support.ByIdOrName;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 @FunctionalInterface
 public interface PageObject extends DomElementFactory {
@@ -27,17 +28,39 @@ public interface PageObject extends DomElementFactory {
     try {
       T pageObject = type.newInstance();
 
+      injectMissingElements(pageObject);
+
+      return pageObject;
+    } catch (InstantiationException | IllegalAccessException e) {
+      throw new IllegalArgumentException("Unable to create Page Object of type " + type, e);
+    }
+  }
+
+  public static void injectMissingPageObjects(Object instance) {
+    try {
+      for (Field field : instance.getClass().getDeclaredFields()) {
+        if (PageObject.class.isAssignableFrom(field.getType())) {
+          if (!Modifier.isFinal(field.getModifiers()) && field.get(instance) == null) {
+            field.set(instance, PageObject.create((Class<? extends PageObject>) field.getType()));
+          }
+        }
+      }
+    } catch (IllegalAccessException e) {
+      throw new IllegalArgumentException("Unable inject missing Page Objects in object of type " + instance.getClass(), e);
+    }
+  }
+
+  public static void injectMissingElements(PageObject pageObject) {
+    try {
       for (Field field : pageObject.getClass().getDeclaredFields()) {
-        if (field.getType().isAssignableFrom(DomElement.class)) {
-          if (field.get(pageObject) == null) {
+        if (DomElement.class.isAssignableFrom(field.getType())) {
+          if (!Modifier.isFinal(field.getModifiers()) && field.get(pageObject) == null) {
             field.set(pageObject, new DomElement(new ByIdOrName(field.getName())));
           }
         }
       }
-
-      return pageObject;
-    } catch (InstantiationException | IllegalAccessException e) {
-      throw new IllegalArgumentException("Unable to create Page Object of type " + type);
+    } catch (IllegalAccessException e) {
+      throw new IllegalArgumentException("Unable inject missing elements in Page Object of type " + pageObject.getClass(), e);
     }
   }
 }

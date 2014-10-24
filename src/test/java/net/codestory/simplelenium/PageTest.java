@@ -19,6 +19,7 @@ import org.junit.Test;
 
 public class PageTest extends AbstractTest {
   private final ThePage page = createPage(ThePage.class);
+  ThePage page2;
 
   @Test
   public void simple_page() {
@@ -27,6 +28,15 @@ public class PageTest extends AbstractTest {
     page.verifyTitle();
     page.verifySubTitle();
     page.verifyBob("Bob", "42");
+  }
+
+  @Test
+  public void on_auto_injected_page() {
+    goTo(page2);
+
+    page2.verifyTitle();
+    page2.verifySubTitle();
+    page2.verifyBob("Bob", "42");
   }
 
   static class ThePage implements PageObject {

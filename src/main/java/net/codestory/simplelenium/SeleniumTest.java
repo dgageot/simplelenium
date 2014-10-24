@@ -39,6 +39,13 @@ public abstract class SeleniumTest implements DomElementFactory {
     return driver;
   }
 
+  public TestWatcher injectMissingPageObjects = new TestWatcher() {
+    @Override
+    protected void starting(Description desc) {
+      PageObject.injectMissingPageObjects(SeleniumTest.this);
+    }
+  };
+
   public TestWatcher printTestName = new TestWatcher() {
     @Override
     protected void starting(Description desc) {
@@ -72,7 +79,7 @@ public abstract class SeleniumTest implements DomElementFactory {
   }
 
   @Rule
-  public RuleChain ruleChain = outerRule(printTestName).around(takeSnapshot);
+  public RuleChain ruleChain = outerRule(injectMissingPageObjects).around(printTestName).around(takeSnapshot);
 
   protected abstract String getDefaultBaseUrl();
 
