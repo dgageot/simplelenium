@@ -20,7 +20,6 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -31,7 +30,7 @@ import java.io.IOException;
 import static org.junit.rules.RuleChain.outerRule;
 import static org.openqa.selenium.OutputType.BYTES;
 
-public abstract class SeleniumTest {
+public abstract class SeleniumTest implements DomElementFactory {
   private final WebDriver driver = createWebDriver();
 
   protected WebDriver createWebDriver() {
@@ -83,6 +82,10 @@ public abstract class SeleniumTest {
     System.out.println(" - current url " + driver.getCurrentUrl());
   }
 
+  public void goTo(PageObject page) {
+    goTo(page.url());
+  }
+
   public WebDriver getDriver() {
     return driver;
   }
@@ -109,12 +112,11 @@ public abstract class SeleniumTest {
     return driver.getPageSource();
   }
 
-  public DomElement find(String selector) {
-    return find(By.cssSelector(selector));
-  }
-
-  public DomElement find(By selector) {
-    return new DomElement(selector);
-  }
+  public static <T extends PageObject> T createPage(Class<T> type) {
+    try {
+      return type.newInstance();
+    } catch (InstantiationException | IllegalAccessException e) {
+      throw new IllegalArgumentException("Unable to create Page Object of type " + type);
+    }
   }
 }

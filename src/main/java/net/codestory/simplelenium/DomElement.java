@@ -30,11 +30,11 @@ public class DomElement {
   private final ElementFilter narrowSelection;
   private final Retry retry;
 
-  DomElement(By selector) {
+  public DomElement(By selector) {
     this(selector, ElementFilter.any(), Retry._30_SECONDS);
   }
 
-  DomElement(By selector, ElementFilter narrowSelection, Retry retry) {
+  public DomElement(By selector, ElementFilter narrowSelection, Retry retry) {
     this.selector = selector;
     this.narrowSelection = narrowSelection;
     this.retry = retry;
