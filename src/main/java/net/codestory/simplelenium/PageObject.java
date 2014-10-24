@@ -15,7 +15,7 @@
  */
 package net.codestory.simplelenium;
 
-import org.openqa.selenium.By;
+import org.openqa.selenium.support.ByIdOrName;
 
 import java.lang.reflect.Field;
 
@@ -30,7 +30,7 @@ public interface PageObject extends DomElementFactory {
       for (Field field : pageObject.getClass().getDeclaredFields()) {
         if (field.getType().isAssignableFrom(DomElement.class)) {
           if (field.get(pageObject) == null) {
-            field.set(pageObject, new DomElement(By.cssSelector(field.getName())));
+            field.set(pageObject, new DomElement(new ByIdOrName(field.getName())));
           }
         }
       }

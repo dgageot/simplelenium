@@ -30,9 +30,9 @@ public class PageTest extends AbstractTest {
   }
 
   static class ThePage implements PageObject {
-    DomElement h1;
-    DomElement h4;
-    DomElement name = find("#name");
+    DomElement h1 = find("h1");
+    DomElement h4 = find("h4");
+    DomElement name;
     DomElement age = find(".age");
 
     @Override

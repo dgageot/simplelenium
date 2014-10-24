@@ -31,9 +31,9 @@ public class PageObjectTest {
   }
 
   static class ThePage implements PageObject {
-    DomElement h1;
-    DomElement h4;
-    final DomElement name = find("#name");
+    final DomElement h1 = find("h1");
+    final DomElement h4 = find("h4");
+    DomElement name;
     final DomElement age = find(".age");
 
     @Override
