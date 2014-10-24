@@ -29,7 +29,7 @@ public class PageObjectTest extends AbstractTest {
     page.verifyBob("Bob", "42");
   }
 
-  static class ThePage extends PageObject {
+  static class ThePage implements PageObject {
     DomElement h1 = find("h1");
     DomElement h4 = find("h4");
     DomElement name = find("#name");

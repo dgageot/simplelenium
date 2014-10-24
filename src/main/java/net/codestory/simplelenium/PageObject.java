@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
-public abstract class PageObject implements DomElementFactory {
-  public abstract String url();
+@FunctionalInterface
+public interface PageObject extends DomElementFactory {
+  String url();
 }
