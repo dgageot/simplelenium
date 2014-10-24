@@ -32,12 +32,10 @@ import static org.junit.rules.RuleChain.outerRule;
 import static org.openqa.selenium.OutputType.BYTES;
 
 public abstract class SeleniumTest {
-  private static final PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
-
   private final WebDriver driver = createWebDriver();
 
   protected WebDriver createWebDriver() {
-    WebDriver driver = phantomJsDownloader.getDriverForThread();
+    WebDriver driver = CurrentWebDriver.get();
     driver.manage().window().setSize(new Dimension(2048, 768));
     return driver;
   }
@@ -116,6 +114,7 @@ public abstract class SeleniumTest {
   }
 
   public DomElement find(By selector) {
-    return new DomElement(driver, selector);
+    return new DomElement(selector);
+  }
   }
 }

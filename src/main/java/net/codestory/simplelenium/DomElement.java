@@ -19,7 +19,6 @@ import net.codestory.simplelenium.filters.ElementFilter;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -27,17 +26,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class DomElement {
-  private final WebDriver driver;
   private final By selector;
   private final ElementFilter narrowSelection;
   private final Retry retry;
 
-  DomElement(WebDriver driver, By selector) {
-    this(driver, selector, ElementFilter.any(), Retry._30_SECONDS);
+  DomElement(By selector) {
+    this(selector, ElementFilter.any(), Retry._30_SECONDS);
   }
 
-  DomElement(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry) {
-    this.driver = driver;
+  DomElement(By selector, ElementFilter narrowSelection, Retry retry) {
     this.selector = selector;
     this.narrowSelection = narrowSelection;
     this.retry = retry;
@@ -46,17 +43,17 @@ public class DomElement {
   // Narrow find
   //
   public DomElement withText(String text) {
-    return new DomElement(driver, selector, ElementFilter.withText(text), retry);
+    return new DomElement(selector, ElementFilter.withText(text), retry);
   }
 
   // Assertions
   //
   public Should should() {
-    return new Should(driver, selector, narrowSelection, Retry._5_SECONDS);
+    return new Should(selector, narrowSelection, Retry._5_SECONDS);
   }
 
   public Should shouldWithin(long duration, TimeUnit timeUnit) {
-    return new Should(driver, selector, narrowSelection, new Retry(duration, timeUnit));
+    return new Should(selector, narrowSelection, new Retry(duration, timeUnit));
   }
 
   // Actions
@@ -99,6 +96,6 @@ public class DomElement {
   }
 
   private WebElement find() {
-    return driver.findElements(selector).stream().filter(narrowSelection).findFirst().orElse(null);
+    return CurrentWebDriver.get().findElements(selector).stream().filter(narrowSelection).findFirst().orElse(null);
   }
 }

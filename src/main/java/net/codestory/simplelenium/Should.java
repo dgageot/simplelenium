@@ -20,7 +20,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import net.codestory.simplelenium.filters.ElementFilter;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -36,18 +35,16 @@ import static java.util.stream.Stream.of;
 import static net.codestory.simplelenium.text.Text.plural;
 
 public class Should {
-  private final WebDriver driver;
   private final By selector;
   private final ElementFilter narrowSelection;
   private final Retry retry;
   private final boolean not;
 
-  Should(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry) {
-    this(driver, selector, narrowSelection, retry, false);
+  Should(By selector, ElementFilter narrowSelection, Retry retry) {
+    this(selector, narrowSelection, retry, false);
   }
 
-  private Should(WebDriver driver, By selector, ElementFilter narrowSelection, Retry retry, boolean not) {
-    this.driver = driver;
+  private Should(By selector, ElementFilter narrowSelection, Retry retry, boolean not) {
     this.selector = selector;
     this.narrowSelection = narrowSelection;
     this.retry = retry;
@@ -55,7 +52,7 @@ public class Should {
   }
 
   public Should not() {
-    return new Should(driver, selector, narrowSelection, retry, !not);
+    return new Should(selector, narrowSelection, retry, !not);
   }
 
   public Should contain(String... texts) {
@@ -146,7 +143,7 @@ public class Should {
   }
 
   private List<WebElement> findElements() {
-    return driver.findElements(selector).stream().filter(narrowSelection).collect(Collectors.toList());
+    return CurrentWebDriver.get().findElements(selector).stream().filter(narrowSelection).collect(Collectors.toList());
   }
 
   private String doesOrNot(String verb) {
