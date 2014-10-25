@@ -73,8 +73,6 @@ goTo(url);
 + should haveDimension(w,h)
 + fillWith(String...)
 + fillWith(Bean)
-+ submit(String...) = fillWith(String...).submit()
-+ submit(Bean) = fillWith(Bean).submit()
 + inject MyDomElement with constructor(Domelement)
 + inject MyDomElement with field(Domelement)
 + takeScreenShot()
