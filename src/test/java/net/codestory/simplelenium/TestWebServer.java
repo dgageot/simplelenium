@@ -35,7 +35,7 @@ public class TestWebServer {
         "<h1>Hello World</h1>" +
           "<div id='name'>Bob</div>" +
           "<div class='age'>42</div>" +
-          "<ul><li><em>italic</em></li></ul>" +
+          "<ul><li><em class=\"item\">italic</em></li></ul>" +
           "<a href=\"/\">First Link</a>" +
           "<a href=\"/list\">Second Link</a>"
       )

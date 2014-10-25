@@ -39,6 +39,10 @@ public class ElementFilter implements Predicate<WebElement> {
     return new ElementFilter(" with text [" + text + "]", element -> Objects.equals(element.getText(), text));
   }
 
+  public static ElementFilter withTagName(String name) {
+    return new ElementFilter(" with tag name [" + name + "]", element -> Objects.equals(element.getTagName(), name));
+  }
+
   public String getDescription() {
     return description;
   }

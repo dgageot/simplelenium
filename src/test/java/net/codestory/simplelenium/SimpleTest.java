@@ -34,6 +34,15 @@ public class SimpleTest extends AbstractTest {
   public void find_with_text() {
     goTo("/");
 
-    find("h1").withText("Hello World").should().beDisplayed();
+    find("h1").withText("Hello World").should().exist();
+    find("h1").withText("UNKNOWN").should().beEmpty();
+  }
+
+  @Test
+  public void find_with_tag_name() {
+    goTo("/");
+
+    find("ul li .item").withTagName("em").should().exist();
+    find("ul li .item").withTagName("object").should().beEmpty();
   }
 }

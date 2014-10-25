@@ -46,6 +46,10 @@ public class DomElement {
     return new DomElement(selector, ElementFilter.withText(text), retry);
   }
 
+  public DomElement withTagName(String name) {
+    return new DomElement(selector, ElementFilter.withTagName(name), retry);
+  }
+
   // Assertions
   //
   public Should should() {
@@ -92,10 +96,10 @@ public class DomElement {
 
   private void execute(String message, Consumer<? super WebElement> action) {
     System.out.println(" - " + Text.toString(selector) + narrowSelection.getDescription() + "." + message);
-    retry.execute(() -> find(), action);
+    retry.execute(() -> findOne(), action);
   }
 
-  private WebElement find() {
+  private WebElement findOne() {
     return CurrentWebDriver.get().findElements(selector).stream().filter(narrowSelection).findFirst().orElse(null);
   }
 }

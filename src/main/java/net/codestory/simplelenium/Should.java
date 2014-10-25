@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static net.codestory.simplelenium.text.Text.plural;
 
@@ -143,7 +144,7 @@ public class Should {
   }
 
   private List<WebElement> findElements() {
-    return CurrentWebDriver.get().findElements(selector).stream().filter(narrowSelection).collect(Collectors.toList());
+    return CurrentWebDriver.get().findElements(selector).stream().filter(narrowSelection).collect(toList());
   }
 
   private String doesOrNot(String verb) {
