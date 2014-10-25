@@ -57,4 +57,14 @@ public class ListTest extends AbstractTest {
     find(".name").withText("Bob Morane").should().exist();
     find(".name").withText("John Doe").should().not().exist();
   }
+
+  @Test
+  public void filter_with_id() {
+    goTo("/list");
+
+    find(".name").withId("joe").should().haveSize(1);
+    find(".name").withId().equalsTo("joe").should().haveSize(1);
+    find(".name").withId().equalsTo("joe").withText("Joe").should().haveSize(1);
+//    find(".name").withId().equalsTo("joe").withText("Bob").should().beEmpty();
+  }
 }
