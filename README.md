@@ -63,7 +63,6 @@ goTo(url);
 + find.withAttribute() ?
 + with.containsWord(word)
 + with.not().
-+ with.matches(regexp)
 + find.first()
 + find.second()
 + find.third()

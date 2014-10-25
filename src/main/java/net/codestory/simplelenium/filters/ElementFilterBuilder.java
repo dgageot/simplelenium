@@ -20,6 +20,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class ElementFilterBuilder {
   private final DomElement domElement;
@@ -48,6 +49,10 @@ public class ElementFilterBuilder {
 
   public DomElement endsWith(String text) {
     return build(" with " + description + " endsWith[" + text + "]", element -> toValue.apply(element).startsWith(text));
+  }
+
+  public DomElement matches(Pattern regex) {
+    return build(" with " + description + " matches[" + regex + "]", element -> regex.matcher(toValue.apply(element)).matches());
   }
 
   // Internal
