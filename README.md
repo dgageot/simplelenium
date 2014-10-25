@@ -65,7 +65,6 @@ goTo(url);
 + find.last()
 + find.limit(n)
 + find.nth(index)
-+ should haveDimension(w,h)
 + fillWith(String...)
 + fillWith(Bean)
 + inject MyDomElement with constructor(Domelement)

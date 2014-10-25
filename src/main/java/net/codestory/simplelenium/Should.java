@@ -20,6 +20,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import net.codestory.simplelenium.filters.ElementFilter;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -140,6 +142,20 @@ public class Should implements DomElementFactory {
       elements -> "It contains " + plural(elements.size(), "element"));
   }
 
+  public Should haveDimension(int width, int height) {
+    return verify(
+      hasOrNot("dimension"),
+      elements -> elements.stream().allMatch(element -> hasDimension(element, width, height)),
+      elements -> "It measures " + statuses(elements, element -> dimension(element)));
+  }
+
+  public Should beAtLocation(int x, int y) {
+    return verify(
+      isOrNot("at location"),
+      elements -> elements.stream().allMatch(element -> hasLocation(element, x, y)),
+      elements -> "It is at location " + statuses(elements, element -> location(element)));
+  }
+
   private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {
     String verification = "verify that " + Text.toString(selector) + narrowSelection.getDescription() + " " + message;
     System.out.println("   -> " + verification);
@@ -171,6 +187,16 @@ public class Should implements DomElementFactory {
     return Text.hasOrNot(not, what);
   }
 
+  private static boolean hasDimension(WebElement element, int width, int height) {
+    Dimension dimension = element.getSize();
+    return dimension.getWidth() == width && dimension.getHeight() == height;
+  }
+
+  private static boolean hasLocation(WebElement element, int x, int y) {
+    Point location = element.getLocation();
+    return location.getX() == x && location.getY() == y;
+  }
+
   private static boolean isSelected(WebElement element) {
     return isSelectable(element) && element.isSelected();
   }
@@ -185,6 +211,14 @@ public class Should implements DomElementFactory {
 
   private static String displayedStatus(WebElement element) {
     return element.isDisplayed() ? "displayed" : "not displayed";
+  }
+
+  private static String dimension(WebElement element) {
+    return element.getSize().toString();
+  }
+
+  private static String location(WebElement element) {
+    return element.getLocation().toString();
   }
 
   private static String selectedStatus(WebElement element) {
