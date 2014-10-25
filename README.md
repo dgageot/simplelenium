@@ -76,4 +76,3 @@ goTo(url);
 + iframes()
 + alerts()
 + windows()
-+ hamcrest matchers
