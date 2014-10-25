@@ -41,7 +41,7 @@ public class DomElement {
   }
 
   // Narrow find
-  //
+
   public DomElement withText(String text) {
     return new DomElement(selector, ElementFilter.withText(text), retry);
   }
@@ -51,13 +51,13 @@ public class DomElement {
   }
 
   // Assertions
-  //
+
   public Should should() {
     return new Should(selector, narrowSelection, Retry._5_SECONDS, false);
   }
 
   // Actions
-  //
+
   public void fill(CharSequence text) {
     execute("fill(" + text + ")", element -> element.sendKeys(text));
   }
@@ -98,9 +98,37 @@ public class DomElement {
     execute("release", element -> actions().release(element).perform());
   }
 
+  // Selection
+
   public void select(String text) {
-    execute("select(" + text + ")", element -> new Select(element).selectByVisibleText(text));
+    execute("select(" + text + ")", element -> selection(element).selectByVisibleText(text));
   }
+
+  public void deselect() {
+    execute("deselect()", element -> selection(element).deselectAll());
+  }
+
+  public void deselectByValue(String value) {
+    execute("deselectByValue(" + value + ")", element -> selection(element).deselectByValue(value));
+  }
+
+  public void deselectByVisibleText(String text) {
+    execute("deselectByVisibleText(" + text + ")", element -> selection(element).deselectByVisibleText(text));
+  }
+
+  public void deselectByIndex(int index) {
+    execute("deselectByIndex(" + index + ")", element -> selection(element).deselectByIndex(index));
+  }
+
+  public void selectByIndex(int index) {
+    execute("selectByIndex(" + index + ")", element -> selection(element).selectByIndex(index));
+  }
+
+  public void selectByValue(String value) {
+    execute("selectByValue(" + value + ")", element -> selection(element).selectByValue(value));
+  }
+
+  // Actions on low level elements
 
   public void execute(Consumer<? super WebElement> action) {
     execute("execute(" + action + ")", action);
@@ -115,7 +143,10 @@ public class DomElement {
   }
 
   // Internal
-  //
+
+  private Select selection(WebElement element) {
+    return new Select(element);
+  }
 
   private Actions actions() {
     return new Actions(CurrentWebDriver.get());
