@@ -43,19 +43,23 @@ public class DomElement {
   // Narrow find
 
   public DomElement withText(String text) {
-    return new DomElement(selector, ElementFilter.withText(text), retry);
+    return narrow(ElementFilter.withText(text));
   }
 
   public DomElement withTagName(String name) {
-    return new DomElement(selector, ElementFilter.withTagName(name), retry);
+    return narrow(ElementFilter.withTagName(name));
   }
 
   public DomElement withAttribute(String name, String value) {
-    return new DomElement(selector, ElementFilter.withAttribute(name, value), retry);
+    return narrow(ElementFilter.withAttribute(name, value));
   }
 
   public DomElement withCssValue(String name, String value) {
-    return new DomElement(selector, ElementFilter.withCssValue(name, value), retry);
+    return narrow(ElementFilter.withCssValue(name, value));
+  }
+
+  private DomElement narrow(ElementFilter filter) {
+    return new DomElement(selector, filter, retry);
   }
 
   // Assertions
