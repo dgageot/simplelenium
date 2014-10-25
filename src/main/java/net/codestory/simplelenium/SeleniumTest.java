@@ -18,6 +18,7 @@ package net.codestory.simplelenium;
 import com.google.common.io.Files;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
+import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Dimension;
@@ -27,60 +28,64 @@ import org.openqa.selenium.WebDriver;
 import java.io.File;
 import java.io.IOException;
 
+import static net.codestory.simplelenium.PageObject.injectMissingElements;
+import static net.codestory.simplelenium.PageObject.injectMissingPageObjects;
 import static org.junit.rules.RuleChain.outerRule;
 import static org.openqa.selenium.OutputType.BYTES;
 
 public abstract class SeleniumTest implements PageObjectSection {
   private final WebDriver driver = createWebDriver();
 
-  protected WebDriver createWebDriver() {
-    WebDriver driver = CurrentWebDriver.get();
-    driver.manage().window().setSize(new Dimension(2048, 768));
-    return driver;
-  }
+  public TestName testName = new TestName() {
+    @Override
+    protected void starting(Description d) {
+      super.starting(d);
+
+      System.out.println("-----------------------------------------");
+      System.out.println(getClass().getSimpleName() + "." + getMethodName());
+      System.out.println("-----------------------------------------");
+    }
+  };
 
   public TestWatcher injectMissingPageObjects = new TestWatcher() {
     @Override
     protected void starting(Description desc) {
-      PageObject.injectMissingPageObjects(SeleniumTest.this);
-      PageObject.injectMissingElements(SeleniumTest.this);
-    }
-  };
-
-  public TestWatcher printTestName = new TestWatcher() {
-    @Override
-    protected void starting(Description desc) {
-      System.out.println("-----------------------------------------");
-      System.out.println(desc.getTestClass().getSimpleName() + "." + desc.getMethodName());
-      System.out.println("-----------------------------------------");
+      injectMissingPageObjects(SeleniumTest.this);
+      injectMissingElements(SeleniumTest.this);
     }
   };
 
   public TestWatcher takeSnapshot = new TestWatcher() {
     @Override
     protected void failed(Throwable e, Description desc) {
-      if (driver == null) {
-        return;
-      }
-
-      try {
-        byte[] snapshotData = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
-        File snapshot = snapshotPath(desc);
-        snapshot.getParentFile().mkdirs();
-        Files.write(snapshotData, snapshot);
-        System.err.println("   !! A snapshot was taken here [" + snapshot.getAbsoluteFile() + "] to help you debug");
-      } catch (IOException ioe) {
-        throw new RuntimeException("Unable to take snapshot", ioe);
-      }
+      takeSnapshot("");
     }
   };
 
-  protected File snapshotPath(Description desc) {
-    return new File("snapshots", desc.getTestClass().getSimpleName() + "_" + desc.getMethodName() + ".png");
+  @Rule
+  public RuleChain ruleChain = outerRule(testName).around(injectMissingPageObjects).around(takeSnapshot);
+
+  public void takeSnapshot(String suffix) {
+    try {
+      byte[] snapshotData = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
+      File snapshot = snapshotPath(suffix);
+      snapshot.getParentFile().mkdirs();
+      Files.write(snapshotData, snapshot);
+      System.err.println("   !! A snapshot was taken here [" + snapshot.getAbsoluteFile() + "] to help you debug");
+    } catch (IOException ioe) {
+      throw new RuntimeException("Unable to take snapshot", ioe);
+    }
   }
 
-  @Rule
-  public RuleChain ruleChain = outerRule(injectMissingPageObjects).around(printTestName).around(takeSnapshot);
+  protected File snapshotPath(String suffix) {
+    return new File("snapshots", getClass().getSimpleName() + "_" + testName.getMethodName() + suffix + ".png");
+  }
+
+  protected WebDriver createWebDriver() {
+    WebDriver driver = CurrentWebDriver.get();
+    driver.manage().window().setSize(new Dimension(2048, 768));
+    return driver;
+  }
 
   protected abstract String getDefaultBaseUrl();
 

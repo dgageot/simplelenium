@@ -70,8 +70,6 @@ goTo(url);
 + fillWith(Bean)
 + inject MyDomElement with constructor(Domelement)
 + inject MyDomElement with field(Domelement)
-+ takeScreenShot()
-+ takeScreenShot(pathAndfileName)
 + iframes()
 + alerts()
 + windows()
