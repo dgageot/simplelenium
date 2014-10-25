@@ -17,50 +17,45 @@ package net.codestory.simplelenium;
 
 import org.openqa.selenium.support.ByIdOrName;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import static net.codestory.simplelenium.reflection.ReflectionUtil.forEachFieldOfType;
+import static net.codestory.simplelenium.reflection.ReflectionUtil.setIfNull;
 
 @FunctionalInterface
 public interface PageObject extends DomElementFactory {
   String url();
 
   public static <T extends PageObject> T create(Class<T> type) {
+    Constructor<T> constructor;
     try {
-      T pageObject = type.newInstance();
+      constructor = type.getDeclaredConstructor();
+      constructor.setAccessible(true);
+    } catch (NoSuchMethodException e) {
+      throw new IllegalArgumentException("Couldn't create Page Object. Missing 0 arg constructor on type " + type, e);
+    }
 
-      injectMissingElements(pageObject);
-
-      return pageObject;
-    } catch (InstantiationException | IllegalAccessException e) {
+    T pageObject;
+    try {
+      pageObject = constructor.newInstance();
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
       throw new IllegalArgumentException("Unable to create Page Object of type " + type, e);
     }
+
+    injectMissingElements(pageObject);
+    return pageObject;
   }
 
   public static void injectMissingPageObjects(Object instance) {
-    try {
-      for (Field field : instance.getClass().getDeclaredFields()) {
-        if (PageObject.class.isAssignableFrom(field.getType())) {
-          if (!Modifier.isFinal(field.getModifiers()) && field.get(instance) == null) {
-            field.set(instance, PageObject.create((Class<? extends PageObject>) field.getType()));
-          }
-        }
-      }
-    } catch (IllegalAccessException e) {
-      throw new IllegalArgumentException("Unable inject missing Page Objects in object of type " + instance.getClass(), e);
-    }
+    forEachFieldOfType(PageObject.class, instance, field -> {
+      setIfNull(field, instance, () -> PageObject.create((Class<? extends PageObject>) field.getType()));
+    });
   }
 
   public static void injectMissingElements(PageObject pageObject) {
-    try {
-      for (Field field : pageObject.getClass().getDeclaredFields()) {
-        if (DomElement.class.isAssignableFrom(field.getType())) {
-          if (!Modifier.isFinal(field.getModifiers()) && field.get(pageObject) == null) {
-            field.set(pageObject, new DomElement(new ByIdOrName(field.getName())));
-          }
-        }
-      }
-    } catch (IllegalAccessException e) {
-      throw new IllegalArgumentException("Unable inject missing elements in Page Object of type " + pageObject.getClass(), e);
-    }
+    forEachFieldOfType(DomElement.class, pageObject, field -> {
+      setIfNull(field, pageObject, () -> new DomElement(new ByIdOrName(field.getName())));
+    });
   }
 }
