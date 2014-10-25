@@ -45,7 +45,7 @@ public class DomElement {
   // Narrow find
 
   public DomElement with(ElementFilter filter) {
-    return new DomElement(selector, filter, retry);
+    return new DomElement(selector, narrowSelection.and(filter), retry);
   }
 
   public ElementFilterBuilder withText() {

@@ -60,10 +60,19 @@ public class ElementFilter implements Predicate<WebElement> {
   // Combination
 
   public ElementFilter and(ElementFilter other) {
+    if (ANY == this) {
+      return other;
+    }
+    if (ANY == other) {
+      return this;
+    }
     return new ElementFilter(getDescription() + " and" + other.getDescription(), predicate.and(other.predicate));
   }
 
   public ElementFilter or(ElementFilter other) {
+    if ((ANY == this) || (ANY == other)) {
+      return ANY;
+    }
     return new ElementFilter(getDescription() + " or" + other.getDescription(), predicate.or(other.predicate));
   }
 
