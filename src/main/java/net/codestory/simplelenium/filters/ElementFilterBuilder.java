@@ -36,36 +36,36 @@ public class ElementFilterBuilder {
   // Matchers
 
   public DomElement equalsTo(String text) {
-    return build(" with " + description + "=[" + text + "]", value -> value.equals(text));
+    return build("=[" + text + "]", value -> value.equals(text));
   }
 
   public DomElement contains(String text) {
-    return build(" with " + description + " contains[" + text + "]", value -> value.contains(text));
+    return build(" contains[" + text + "]", value -> value.contains(text));
   }
 
   public DomElement contains(Pattern regex) {
-    return build(" with " + description + " contains[" + regex + "]", value -> regex.matcher(value).find());
+    return build(" contains[" + regex + "]", value -> regex.matcher(value).find());
   }
 
   public DomElement containsWord(String word) {
     Pattern pattern = patternForWord(word);
-    return build(" with " + description + "has word[" + word + "]", value -> pattern.matcher(value).find());
+    return build(" has word[" + word + "]", value -> pattern.matcher(value).find());
   }
 
   public DomElement startsWith(String text) {
-    return build(" with " + description + " startsWith[" + text + "]", value -> value.startsWith(text));
+    return build(" startsWith[" + text + "]", value -> value.startsWith(text));
   }
 
   public DomElement endsWith(String text) {
-    return build(" with " + description + " endsWith[" + text + "]", value -> value.endsWith(text));
+    return build(" endsWith[" + text + "]", value -> value.endsWith(text));
   }
 
   public DomElement matches(Pattern regex) {
-    return build(" with " + description + " matches[" + regex + "]", value -> regex.matcher(value).matches());
+    return build(" matches[" + regex + "]", value -> regex.matcher(value).matches());
   }
 
   public DomElement matches(Predicate<String> predicate) {
-    return build(" with " + description + " matches[" + predicate + "]", predicate);
+    return build(" matches[" + predicate + "]", predicate);
   }
 
   // Internal
@@ -74,7 +74,7 @@ public class ElementFilterBuilder {
     return Pattern.compile("\\b(" + Pattern.quote(word) + ")\\b");
   }
 
-  private DomElement build(String description, Predicate<String> predicate) {
-    return domElement.with(new ElementFilter(description, element -> predicate.test(toValue.apply(element))));
+  private DomElement build(String details, Predicate<String> predicate) {
+    return domElement.with(new ElementFilter(" with " + description + details, element -> predicate.test(toValue.apply(element))));
   }
 }
