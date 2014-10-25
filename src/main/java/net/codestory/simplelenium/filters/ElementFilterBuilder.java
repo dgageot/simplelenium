@@ -18,7 +18,6 @@ package net.codestory.simplelenium.filters;
 import net.codestory.simplelenium.DomElement;
 import org.openqa.selenium.WebElement;
 
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -36,11 +35,19 @@ public class ElementFilterBuilder {
   // Matchers
 
   public DomElement equalsTo(String text) {
-    return build(" with " + description + "=[" + text + "]", element -> Objects.equals(toValue.apply(element), text));
+    return build(" with " + description + "=[" + text + "]", element -> toValue.apply(element).equals(text));
   }
 
   public DomElement contains(String text) {
     return build(" with " + description + " contains[" + text + "]", element -> toValue.apply(element).contains(text));
+  }
+
+  public DomElement startsWith(String text) {
+    return build(" with " + description + " startsWith[" + text + "]", element -> toValue.apply(element).startsWith(text));
+  }
+
+  public DomElement endsWith(String text) {
+    return build(" with " + description + " endsWith[" + text + "]", element -> toValue.apply(element).startsWith(text));
   }
 
   // Internal
