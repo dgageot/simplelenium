@@ -16,6 +16,7 @@
 package net.codestory.simplelenium;
 
 import com.google.common.io.Files;
+import net.codestory.simplelenium.driver.CurrentWebDriver;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestName;

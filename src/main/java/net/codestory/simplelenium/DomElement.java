@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.filters.ElementFilter;
 import net.codestory.simplelenium.filters.ElementFilterBuilder;
 import net.codestory.simplelenium.text.Text;

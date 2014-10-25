@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium;
+package net.codestory.simplelenium.driver;
 
 import org.openqa.selenium.WebDriver;
 

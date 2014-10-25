@@ -17,6 +17,7 @@ package net.codestory.simplelenium;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
+import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.filters.ElementFilter;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
