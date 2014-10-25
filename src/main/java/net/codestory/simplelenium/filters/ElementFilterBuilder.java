@@ -40,7 +40,16 @@ public class ElementFilterBuilder {
   }
 
   public DomElement contains(String text) {
-    return build(" with " + description + "[" + text + "]", element -> toValue.apply(element).contains(text));
+    return build(" with " + description + " contains[" + text + "]", element -> toValue.apply(element).contains(text));
+  }
+
+  public DomElement contains(Pattern regex) {
+    return build(" with " + description + " contains[" + regex + "]", element -> regex.matcher(toValue.apply(element)).find());
+  }
+
+  public DomElement containsWord(String word) {
+    Pattern pattern = patternForWord(word);
+    return build(" with " + description + "has word[" + word + "]", element -> pattern.matcher(toValue.apply(element)).find());
   }
 
   public DomElement startsWith(String text) {
@@ -56,6 +65,10 @@ public class ElementFilterBuilder {
   }
 
   // Internal
+
+  static Pattern patternForWord(String word) {
+    return Pattern.compile("\\b(" + Pattern.quote(word) + ")\\b");
+  }
 
   private DomElement build(String description, Predicate<WebElement> predicate) {
     return domElement.with(new ElementFilter(description, predicate));

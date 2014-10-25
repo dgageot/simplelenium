@@ -81,4 +81,13 @@ public class ListTest extends AbstractTest {
 
     find(".name").withName("theJoe").should().haveSize(1);
   }
+
+  @Test
+  public void filter_with_class() {
+    goTo("/list");
+
+    find(".name").withClass("man").should().haveSize(2);
+    find(".name").withClass("ma").should().beEmpty();
+    find(".name").withClass("cartoon").should().haveSize(1);
+  }
 }

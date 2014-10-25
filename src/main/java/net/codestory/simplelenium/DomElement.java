@@ -64,6 +64,10 @@ public class DomElement {
     return with("tag name", element -> element.getTagName());
   }
 
+  public ElementFilterBuilder withClass() {
+    return with("class", element -> element.getAttribute("class"));
+  }
+
   public ElementFilterBuilder withAttribute(String name) {
     return with("attribute[" + name + "]", element -> element.getAttribute(name));
   }
@@ -88,6 +92,10 @@ public class DomElement {
 
   public DomElement withName(String name) {
     return withName().equalsTo(name);
+  }
+
+  public DomElement withClass(String cssClass) {
+    return withClass().containsWord(cssClass);
   }
 
   public DomElement withTagName(String name) {

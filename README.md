@@ -57,8 +57,6 @@ goTo(url);
 
 ## TODO
 
-+ find.withClass()
-+ with.containsWord(word)
 + with.not().
 + find.first()
 + find.second()
