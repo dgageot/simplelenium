@@ -12,7 +12,7 @@ A simple and robust layer on top of Selenium and PhantomJS.
 <dependency>
   <groupId>net.code-story</groupId>
   <artifactId>simplelenium</artifactId>
-  <version>1.10</version>
+  <version>1.17</version>
 </dependency>
 ```
 
@@ -61,4 +61,3 @@ goTo(url);
 + Clean up dependencies
 + Support more actions
 + Support more assertions
-
