@@ -20,6 +20,7 @@ import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.function.Consumer;
@@ -81,6 +82,22 @@ public class DomElement {
     execute("click", element -> element.click());
   }
 
+  public void doubleClick() {
+    execute("doubleClick", element -> actions().doubleClick(element).perform());
+  }
+
+  public void clickAndHold() {
+    execute("clickAndHold", element -> actions().clickAndHold(element).perform());
+  }
+
+  public void contextClick() {
+    execute("contextClick", element -> actions().contextClick(element).perform());
+  }
+
+  public void release() {
+    execute("release", element -> actions().release(element).perform());
+  }
+
   public void select(String text) {
     execute("select(" + text + ")", element -> new Select(element).selectByVisibleText(text));
   }
@@ -89,8 +106,20 @@ public class DomElement {
     execute("execute(" + action + ")", action);
   }
 
+  public void executeActions(ActionsOnElement actionsOnElement) {
+    execute("execute actions", element -> {
+      Actions actions = actions();
+      actionsOnElement.act(actions, element);
+      actions.perform();
+    });
+  }
+
   // Internal
   //
+
+  private Actions actions() {
+    return new Actions(CurrentWebDriver.get());
+  }
 
   private void execute(String message, Consumer<? super WebElement> action) {
     System.out.println(" - " + Text.toString(selector) + narrowSelection.getDescription() + "." + message);
