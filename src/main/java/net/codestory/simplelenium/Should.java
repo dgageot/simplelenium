@@ -24,10 +24,10 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
@@ -52,9 +52,17 @@ public class Should {
     this.not = not;
   }
 
+  // Modifiers
+
   public Should not() {
     return new Should(selector, narrowSelection, retry, !not);
   }
+
+  public Should within(long duration, TimeUnit timeUnit) {
+    return new Should(selector, narrowSelection, new Retry(duration, timeUnit), not);
+  }
+
+  // Expectations
 
   public Should contain(String... texts) {
     return verify(

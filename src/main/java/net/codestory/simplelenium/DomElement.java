@@ -22,7 +22,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class DomElement {
@@ -54,10 +53,6 @@ public class DomElement {
   //
   public Should should() {
     return new Should(selector, narrowSelection, Retry._5_SECONDS);
-  }
-
-  public Should shouldWithin(long duration, TimeUnit timeUnit) {
-    return new Should(selector, narrowSelection, new Retry(duration, timeUnit));
   }
 
   // Actions

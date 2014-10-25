@@ -34,7 +34,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name contains (Wrong name). It contains (Bob Morane;Joe l'Indien)");
 
-    find(".name").shouldWithin(1, MILLISECONDS).contain("Wrong name");
+    find(".name").should().within(1, MILLISECONDS).contain("Wrong name");
   }
 
   @Test
@@ -43,7 +43,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name matches (a*). It contains (Bob Morane;Joe l'Indien)");
 
-    find(".name").shouldWithin(1, MILLISECONDS).match(Pattern.compile("a*"));
+    find(".name").should().within(1, MILLISECONDS).match(Pattern.compile("a*"));
   }
 
   @Test
@@ -52,7 +52,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name contains 1 element. It contains 2 elements");
 
-    find(".name").shouldWithin(1, MILLISECONDS).haveSize(1);
+    find(".name").should().within(1, MILLISECONDS).haveSize(1);
   }
 
   @Test
@@ -61,7 +61,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name contains less than 0 element. It contains 2 elements");
 
-    find(".name").shouldWithin(1, MILLISECONDS).haveLessItemsThan(0);
+    find(".name").should().within(1, MILLISECONDS).haveLessItemsThan(0);
   }
 
   @Test
@@ -70,7 +70,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name contains more than 10 elements. It contains 2 elements");
 
-    find(".name").shouldWithin(1, MILLISECONDS).haveMoreItemsThan(10);
+    find(".name").should().within(1, MILLISECONDS).haveMoreItemsThan(10);
   }
 
   @Test
@@ -79,7 +79,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name is empty. It contains 2 elements");
 
-    find(".name").shouldWithin(1, MILLISECONDS).beEmpty();
+    find(".name").should().within(1, MILLISECONDS).beEmpty();
   }
 
   @Test
@@ -88,7 +88,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name doesn't exist. It contains 2 elements");
 
-    find(".name").shouldWithin(1, MILLISECONDS).not().exist();
+    find(".name").should().within(1, MILLISECONDS).not().exist();
   }
 
   @Test
@@ -97,7 +97,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .unknown exists. It contains 0 element");
 
-    find(".unknown").shouldWithin(1, MILLISECONDS).exist();
+    find(".unknown").should().within(1, MILLISECONDS).exist();
   }
 
   @Test
@@ -106,7 +106,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name is not enabled. It is (enabled;enabled)");
 
-    find(".name").shouldWithin(1, MILLISECONDS).not().beEnabled();
+    find(".name").should().within(1, MILLISECONDS).not().beEnabled();
   }
 
   @Test
@@ -115,7 +115,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name is not displayed. It is (displayed;displayed)");
 
-    find(".name").shouldWithin(1, MILLISECONDS).not().beDisplayed();
+    find(".name").should().within(1, MILLISECONDS).not().beDisplayed();
   }
 
   @Test
@@ -124,7 +124,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name is selected. It is (not selectable;not selectable)");
 
-    find(".name").shouldWithin(1, MILLISECONDS).beSelected();
+    find(".name").should().within(1, MILLISECONDS).beSelected();
   }
 
   @Test
@@ -133,7 +133,7 @@ public class ErrorMessagesTest extends AbstractTest {
 
     expectError("Failed to verify that .name with text [Any Text] exists. It contains 0 element");
 
-    find(".name").withText("Any Text").shouldWithin(1, MILLISECONDS).exist();
+    find(".name").withText("Any Text").should().within(1, MILLISECONDS).exist();
   }
 
   private void expectError(String message) {
