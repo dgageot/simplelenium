@@ -173,6 +173,8 @@ public class Should implements Navigation {
     return not ? not() : this;
   }
 
+  // Internal
+
   private List<WebElement> findElements() {
     Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
     Stream<WebElement> filtered = filter.getFilter().apply(webElements);
