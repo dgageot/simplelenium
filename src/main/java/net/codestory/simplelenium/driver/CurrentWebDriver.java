@@ -19,12 +19,8 @@ import org.openqa.selenium.WebDriver;
 
 // Hack to avoid passing the WebDriver around
 //
-public class CurrentWebDriver {
-  private static final PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
-
-  private CurrentWebDriver() {
-    // Static class
-  }
+public interface CurrentWebDriver {
+  PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
 
   public static WebDriver get() {
     return phantomJsDownloader.getDriverForThread();
