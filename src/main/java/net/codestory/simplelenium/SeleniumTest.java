@@ -96,10 +96,6 @@ public abstract class SeleniumTest implements PageObjectSection {
     return this;
   }
 
-  public WebDriver getDriver() {
-    return driver;
-  }
-
   public String url() {
     return driver.getCurrentUrl();
   }
