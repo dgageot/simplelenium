@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
@@ -173,7 +174,9 @@ public class Should implements DomElementFactory {
   }
 
   private List<WebElement> findElements() {
-    return CurrentWebDriver.get().findElements(selector).stream().filter(narrowSelection).collect(toList());
+    Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
+    Stream<WebElement> filtered = narrowSelection.apply(webElements);
+    return filtered.collect(toList());
   }
 
   private String doesOrNot(String verb) {

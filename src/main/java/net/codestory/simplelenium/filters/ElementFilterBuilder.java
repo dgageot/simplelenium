@@ -20,7 +20,9 @@ import org.openqa.selenium.WebElement;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class ElementFilterBuilder {
   private final DomElement domElement;
@@ -83,6 +85,7 @@ public class ElementFilterBuilder {
   }
 
   private DomElement build(String details, Predicate<String> predicate) {
-    return domElement.with(new ElementFilter(" with " + description + details, element -> ok.test(predicate.test(toValue.apply(element)))));
+    UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> ok.test(predicate.test(toValue.apply(element))));
+    return domElement.with(new ElementFilter(" with " + description + details, filter));
   }
 }

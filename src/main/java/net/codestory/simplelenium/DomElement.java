@@ -27,6 +27,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class DomElement {
   private final By selector;
@@ -211,6 +212,8 @@ public class DomElement {
   }
 
   private WebElement findOne() {
-    return CurrentWebDriver.get().findElements(selector).stream().filter(narrowSelection).findFirst().orElse(null);
+    Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
+    Stream<WebElement> filtered = narrowSelection.apply(webElements);
+    return filtered.findFirst().orElse(null);
   }
 }

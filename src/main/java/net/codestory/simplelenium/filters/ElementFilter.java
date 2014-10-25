@@ -17,17 +17,18 @@ package net.codestory.simplelenium.filters;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
-public class ElementFilter implements Predicate<WebElement> {
-  private static final ElementFilter ANY = new ElementFilter("", element -> true);
+public class ElementFilter implements UnaryOperator<Stream<WebElement>> {
+  private static final ElementFilter ANY = new ElementFilter("", UnaryOperator.identity());
 
   private final String description;
-  private final Predicate<WebElement> predicate;
+  private final UnaryOperator<Stream<WebElement>> filter;
 
-  ElementFilter(String description, Predicate<WebElement> predicate) {
+  ElementFilter(String description, UnaryOperator<Stream<WebElement>> filter) {
     this.description = description;
-    this.predicate = predicate;
+    this.filter = filter;
   }
 
   public static ElementFilter any() {
@@ -41,14 +42,7 @@ public class ElementFilter implements Predicate<WebElement> {
     if (ANY == other) {
       return this;
     }
-    return new ElementFilter(getDescription() + " and" + other.getDescription(), predicate.and(other.predicate));
-  }
-
-  public ElementFilter or(ElementFilter other) {
-    if ((ANY == this) || (ANY == other)) {
-      return ANY;
-    }
-    return new ElementFilter(getDescription() + " or" + other.getDescription(), predicate.or(other.predicate));
+    return new ElementFilter(getDescription() + " and" + other.getDescription(), stream -> filter.compose(other.filter).apply(stream));
   }
 
   public String getDescription() {
@@ -56,7 +50,7 @@ public class ElementFilter implements Predicate<WebElement> {
   }
 
   @Override
-  public boolean test(WebElement element) {
-    return predicate.test(element);
+  public Stream<WebElement> apply(Stream<WebElement> webElements) {
+    return filter.apply(webElements);
   }
 }
