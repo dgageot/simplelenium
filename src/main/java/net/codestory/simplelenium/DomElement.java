@@ -25,6 +25,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -82,7 +83,7 @@ public class DomElement {
     return new ElementFilterBuilder(this, description, toValue, ok -> ok);
   }
 
-  // Limit result set
+  // Limit results
 
   public DomElement first() {
     return with(new ElementFilter(", first", stream -> stream.limit(1)));
@@ -106,6 +107,10 @@ public class DomElement {
 
   public DomElement skip(int count) {
     return with(new ElementFilter(", skip[" + count + "]", stream -> stream.skip(count)));
+  }
+
+  public DomElement last() {
+    return with(new ElementFilter(", last", stream -> last(stream)));
   }
 
   // Shortcuts
@@ -224,11 +229,20 @@ public class DomElement {
 
   // Internal
 
-  private Select selection(WebElement element) {
+  private static <T> Stream<T> last(Stream<T> stream) {
+    Iterator<T> iterator = stream.iterator();
+    T last = null;
+    while (iterator.hasNext()) {
+      last = iterator.next();
+    }
+    return (last == null) ? Stream.empty() : Stream.of(last);
+  }
+
+  private static Select selection(WebElement element) {
     return new Select(element);
   }
 
-  private Actions actions() {
+  private static Actions actions() {
     return new Actions(CurrentWebDriver.get());
   }
 

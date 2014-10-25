@@ -57,7 +57,6 @@ goTo(url);
 
 ## TODO
 
-+ find.last()
 + fillWith(String...)
 + fillWith(Bean)
 + inject MyDomElement with constructor(Domelement)
