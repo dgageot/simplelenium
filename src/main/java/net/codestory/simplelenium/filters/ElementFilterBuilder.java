@@ -71,7 +71,7 @@ public class ElementFilterBuilder {
   // Internal
 
   static Pattern patternForWord(String word) {
-    return Pattern.compile("\\b(" + Pattern.quote(word) + ")\\b");
+    return Pattern.compile("\\b(" + word + ")\\b");
   }
 
   private DomElement build(String details, Predicate<String> predicate) {
