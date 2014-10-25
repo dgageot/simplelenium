@@ -77,7 +77,6 @@ goTo(url);
 + submit(Bean) = fillWith(Bean).submit()
 + inject MyDomElement with constructor(Domelement)
 + inject MyDomElement with field(Domelement)
-+ inject PageObjects in PageObjects
 + takeScreenShot()
 + takeScreenShot(pathAndfileName)
 + new IsolatedTest()

@@ -17,43 +17,27 @@ package net.codestory.simplelenium;
 
 import org.openqa.selenium.support.ByIdOrName;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import static net.codestory.simplelenium.reflection.ReflectionUtil.*;
 
-import static net.codestory.simplelenium.reflection.ReflectionUtil.forEachFieldOfType;
-import static net.codestory.simplelenium.reflection.ReflectionUtil.setIfNull;
 
 @FunctionalInterface
-public interface PageObject extends DomElementFactory {
+public interface PageObject extends PageObjectSection {
   String url();
 
-  public static <T extends PageObject> T create(Class<T> type) {
-    Constructor<T> constructor;
-    try {
-      constructor = type.getDeclaredConstructor();
-      constructor.setAccessible(true);
-    } catch (NoSuchMethodException e) {
-      throw new IllegalArgumentException("Couldn't create Page Object. Missing 0 arg constructor on type " + type, e);
-    }
-
-    T pageObject;
-    try {
-      pageObject = constructor.newInstance();
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-      throw new IllegalArgumentException("Unable to create Page Object of type " + type, e);
-    }
-
+  public static <T extends PageObjectSection> T create(Class<T> type) {
+    T pageObject = newInstance(type);
     injectMissingElements(pageObject);
     return pageObject;
   }
 
   public static void injectMissingPageObjects(Object instance) {
-    forEachFieldOfType(PageObject.class, instance, field -> {
-      setIfNull(field, instance, () -> PageObject.create((Class<? extends PageObject>) field.getType()));
+    forEachFieldOfType(PageObjectSection.class, instance, field -> {
+      setIfNull(field, instance, () -> PageObject.create((Class<? extends PageObjectSection>) field.getType()));
     });
   }
 
-  public static void injectMissingElements(PageObject pageObject) {
+  public static void injectMissingElements(PageObjectSection pageObject) {
+    injectMissingPageObjects(pageObject);
     forEachFieldOfType(DomElement.class, pageObject, field -> {
       setIfNull(field, pageObject, () -> new DomElement(new ByIdOrName(field.getName())));
     });

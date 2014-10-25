@@ -15,7 +15,9 @@
  */
 package net.codestory.simplelenium.reflection;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -48,5 +50,24 @@ public class ReflectionUtil {
     } catch (IllegalAccessException e) {
       throw new IllegalStateException(format("Unable to set field [%s] on instance of type [%s]", field.getName(), target.getClass().getName()));
     }
+  }
+
+  public static <T> T newInstance(Class<T> type) {
+    Constructor<T> constructor;
+    try {
+      constructor = type.getDeclaredConstructor();
+      constructor.setAccessible(true);
+    } catch (NoSuchMethodException e) {
+      throw new IllegalArgumentException("Couldn't create Page Object. Missing 0 arg constructor on type " + type, e);
+    }
+
+    T instance;
+    try {
+      instance = constructor.newInstance();
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+      throw new IllegalArgumentException("Unable to create instance of type " + type, e);
+    }
+
+    return instance;
   }
 }

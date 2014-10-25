@@ -54,6 +54,19 @@ public class PageObjectTest {
     assertThat(theTest.privatePage).isNotNull();
   }
 
+  @Test
+  public void inject_sections() {
+    ThePage thePage = new ThePage();
+
+    PageObject.injectMissingElements(thePage);
+
+    assertThat(thePage.section).isNotNull();
+    assertThat(thePage.section.name).isNotNull();
+    assertThat(thePage.section.age).isNotNull();
+    assertThat(thePage.section.subSection).isNotNull();
+    assertThat(thePage.section.subSection.name).isNotNull();
+  }
+
   private static class TheTest {
     ThePage page;
     final ThePage anotherPage = new ThePage();
@@ -66,10 +79,21 @@ public class PageObjectTest {
     DomElement name;
     final DomElement age = find(".age");
     private DomElement privateElement;
+    Section section;
 
     @Override
     public String url() {
       return "/";
     }
+  }
+
+  private static class Section implements PageObjectSection {
+    DomElement name;
+    DomElement age = find(".age");
+    SubSection subSection;
+  }
+
+  private static class SubSection implements PageObjectSection {
+    DomElement name;
   }
 }
