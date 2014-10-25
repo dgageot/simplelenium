@@ -57,7 +57,6 @@ goTo(url);
 
 ## TODO
 
-+ with.not().
 + find.first()
 + find.second()
 + find.third()

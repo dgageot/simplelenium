@@ -26,11 +26,19 @@ public class ElementFilterBuilder {
   private final DomElement domElement;
   private final String description;
   private final Function<WebElement, String> toValue;
+  private final Predicate<Boolean> ok;
 
-  public ElementFilterBuilder(DomElement domElement, String description, Function<WebElement, String> toValue) {
+  public ElementFilterBuilder(DomElement domElement, String description, Function<WebElement, String> toValue, Predicate<Boolean> ok) {
     this.domElement = domElement;
     this.description = description;
     this.toValue = toValue;
+    this.ok = ok;
+  }
+
+  // Modifiers
+
+  public ElementFilterBuilder not() {
+    return new ElementFilterBuilder(domElement, description, toValue, ok.negate());
   }
 
   // Matchers
@@ -75,6 +83,6 @@ public class ElementFilterBuilder {
   }
 
   private DomElement build(String details, Predicate<String> predicate) {
-    return domElement.with(new ElementFilter(" with " + description + details, element -> predicate.test(toValue.apply(element))));
+    return domElement.with(new ElementFilter(" with " + description + details, element -> ok.test(predicate.test(toValue.apply(element)))));
   }
 }
