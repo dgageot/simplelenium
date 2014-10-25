@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.misc.LockFile;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
@@ -138,25 +139,30 @@ public class PhantomJsDownloader {
 
   protected synchronized File downloadAndExtract() {
     File installDir = new File(new File(System.getProperty("user.home")), ".phantomjstest");
+    installDir.mkdirs();
 
-    String url;
-    File phantomJsExe;
-    if (isWindows) {
-      url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-windows.zip";
-      phantomJsExe = new File(installDir, "phantomjs-1.9.7-windows/phantomjs.exe");
-    } else if (isMac) {
-      url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-macosx.zip";
-      phantomJsExe = new File(installDir, "phantomjs-1.9.7-macosx/bin/phantomjs");
-    } else {
-      url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2";
-      phantomJsExe = new File(installDir, "phantomjs-1.9.7-linux-x86_64/bin/phantomjs");
+    LockFile lock = new LockFile(new File(installDir, "lock"));
+    lock.waitLock();
+    try {
+      String url;
+      File phantomJsExe;
+      if (isWindows) {
+        url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-windows.zip";
+        phantomJsExe = new File(installDir, "phantomjs-1.9.7-windows/phantomjs.exe");
+      } else if (isMac) {
+        url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-macosx.zip";
+        phantomJsExe = new File(installDir, "phantomjs-1.9.7-macosx/bin/phantomjs");
+      } else {
+        url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2";
+        phantomJsExe = new File(installDir, "phantomjs-1.9.7-linux-x86_64/bin/phantomjs");
+      }
+
+      extractExe(url, installDir, phantomJsExe);
+
+      return phantomJsExe;
+    } finally {
+      lock.release();
     }
-
-    extractExe(url, installDir, phantomJsExe);
-
-    phantomJsExe.setExecutable(true);
-
-    return phantomJsExe;
   }
 
   protected void extractExe(String url, File phantomInstallDir, File phantomJsExe) {
@@ -178,6 +184,8 @@ public class PhantomJsDownloader {
     } catch (Exception e) {
       throw new IllegalStateException("Unable to unzip phantomjs from " + targetZip.getAbsolutePath(), e);
     }
+
+    phantomJsExe.setExecutable(true);
   }
 
   protected void downloadZip(String url, File targetZip) {
