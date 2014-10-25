@@ -22,14 +22,14 @@ public class TestWebServer {
   private final static WebServer serverStartedOnlyOnce;
 
   static {
-    serverStartedOnlyOnce = new WebServer(TestWebServer::configureTestServer).startOnRandomPort();
+    serverStartedOnlyOnce = new WebServer(TestWebServer::configure).startOnRandomPort();
   }
 
   public int port() {
     return serverStartedOnlyOnce.port();
   }
 
-  private static void configureTestServer(Routes routes) {
+  private static void configure(Routes routes) {
     routes
       .get("/",
         "<h1>Hello World</h1>" +
