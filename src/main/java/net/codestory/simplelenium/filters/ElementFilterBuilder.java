@@ -40,7 +40,7 @@ public class ElementFilterBuilder {
   }
 
   public DomElement contains(String text) {
-    return build(" with " + description + " contains[" + text + "]", element -> toValue.apply(element).contains(text));
+    return build(" with " + description + "[" + text + "]", element -> toValue.apply(element).contains(text));
   }
 
   public DomElement startsWith(String text) {

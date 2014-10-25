@@ -75,7 +75,7 @@ public class DomElement {
   // Shortcuts
 
   public DomElement withText(String text) {
-    return withText().equalsTo(text);
+    return withText().contains(text);
   }
 
   public DomElement withId(String id) {
