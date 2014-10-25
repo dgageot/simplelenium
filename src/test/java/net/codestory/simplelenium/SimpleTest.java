@@ -53,4 +53,24 @@ public class SimpleTest extends AbstractTest {
     find("ul li .item").withTagName().equalsTo("em").should().exist();
     find("ul li .item").withTagName().equalsTo("object").should().beEmpty();
   }
+
+  @Test
+  public void negation_should_apply_to_next_check_only() {
+    goTo("/");
+
+    find("h1").withText("Hello World")
+      .should().exist()
+      .and().should().not().beEmpty()
+      .and().should().not().beEmpty();
+
+    find("h1").withText("Hello World")
+      .should().exist()
+      .and().not().beEmpty()
+      .and().not().beEmpty();
+
+    find("h1").withText("Hello World").should()
+      .exist()
+      .not().beEmpty()
+      .not().beEmpty();
+  }
 }

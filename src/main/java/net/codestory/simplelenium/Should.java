@@ -55,7 +55,11 @@ public class Should implements DomElementFactory {
   }
 
   public Should and() {
-    return this;
+    return this; // For nicer fluent api
+  }
+
+  public Should should() {
+    return this; // For nicer fluent api
   }
 
   public Should within(long duration, TimeUnit timeUnit) {
