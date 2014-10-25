@@ -78,7 +78,6 @@ goTo(url);
 + inject MyDomElement with constructor(Domelement)
 + inject MyDomElement with field(Domelement)
 + inject PageObjects in PageObjects
-+ $() = find()
 + takeScreenShot()
 + takeScreenShot(pathAndfileName)
 + new IsolatedTest()

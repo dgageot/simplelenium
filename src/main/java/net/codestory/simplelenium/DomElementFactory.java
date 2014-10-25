@@ -25,4 +25,14 @@ public interface DomElementFactory {
   public default DomElement find(By selector) {
     return new DomElement(selector);
   }
+
+  // jquery syntax
+
+  public default DomElement $(String selector) {
+    return find(selector);
+  }
+
+  public default DomElement $(By selector) {
+    return find(selector);
+  }
 }
