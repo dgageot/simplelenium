@@ -18,6 +18,8 @@ package net.codestory.simplelenium;
 import org.openqa.selenium.By;
 
 public interface DomElementFactory {
+  // default syntax
+
   public default DomElement find(String selector) {
     return new DomElement(By.cssSelector(selector));
   }

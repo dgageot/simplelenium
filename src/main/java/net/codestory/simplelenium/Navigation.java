@@ -16,27 +16,32 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.CurrentWebDriver;
+import org.openqa.selenium.WebDriver;
 
-public interface PageObjectSection extends Navigation {
-  public default String path() {
-    String currentUrl = CurrentWebDriver.get().getCurrentUrl();
-    String defaultBaseUrl = Navigation.getBaseUrl();
+public interface Navigation extends DomElementFactory {
+  ThreadLocal<String> baseUrl = new ThreadLocal<>();
 
-    if (currentUrl.startsWith(defaultBaseUrl)) {
-      return currentUrl.substring(defaultBaseUrl.length());
-    }
-    return currentUrl;
+  public static String getBaseUrl() {
+    return baseUrl.get();
   }
 
-  public default String url() {
-    return CurrentWebDriver.get().getCurrentUrl();
+  public static void setBaseUrl(String url) {
+    baseUrl.set(url);
   }
 
-  public default String title() {
-    return CurrentWebDriver.get().getTitle();
+  public default Navigation goTo(String url) {
+    System.out.println("goTo " + url);
+
+    WebDriver webDriver = CurrentWebDriver.get();
+    webDriver.get(getBaseUrl() + url);
+
+    System.out.println(" - current url " + webDriver.getCurrentUrl());
+
+    return this;
   }
 
-  public default String pageSource() {
-    return CurrentWebDriver.get().getPageSource();
+  public default Navigation goTo(PageObject page) {
+    goTo(page.url());
+    return this;
   }
 }

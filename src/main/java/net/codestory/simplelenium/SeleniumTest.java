@@ -91,24 +91,8 @@ public abstract class SeleniumTest implements PageObjectSection {
   protected abstract String getDefaultBaseUrl();
 
   public SeleniumTest goTo(String url) {
-    System.out.println("goTo " + url);
-    driver.get(getDefaultBaseUrl() + url);
-    System.out.println(" - current url " + driver.getCurrentUrl());
+    Navigation.setBaseUrl(getDefaultBaseUrl());
+    PageObjectSection.super.goTo(url);
     return this;
-  }
-
-  public SeleniumTest goTo(PageObject page) {
-    goTo(page.url());
-    return this;
-  }
-
-  public String path() {
-    String currentUrl = driver.getCurrentUrl();
-    String defaultBaseUrl = getDefaultBaseUrl();
-
-    if (currentUrl.startsWith(defaultBaseUrl)) {
-      return currentUrl.substring(defaultBaseUrl.length());
-    }
-    return currentUrl;
   }
 }

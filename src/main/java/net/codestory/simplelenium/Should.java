@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static net.codestory.simplelenium.text.Text.plural;
 
-public class Should implements DomElementFactory {
+public class Should implements Navigation {
   private final By selector;
   private final ElementFilter filter;
   private final Retry retry;

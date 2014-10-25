@@ -29,7 +29,9 @@ public class FluentTestTest {
         .goTo(baseUrl)
         .find("h1").should().contain("Hello World").and().not().beEmpty()
         .find("h2").should().contain("SubTitle")
-        .find(".age").should().contain("42");
+        .find(".age").should().contain("42")
+        .goTo("/")
+        .find("h2").should().contain("SubTitle");
     });
   }
 

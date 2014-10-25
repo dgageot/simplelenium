@@ -57,7 +57,6 @@ goTo(url);
 
 ## TODO
 
-+ FluentTest.goTo()
 + find.last()
 + fillWith(String...)
 + fillWith(Bean)
