@@ -18,6 +18,8 @@ package net.codestory.simplelenium;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
 import org.openqa.selenium.WebDriver;
 
+import java.net.URI;
+
 public interface Navigation extends DomElementFactory {
   ThreadLocal<String> baseUrl = new ThreadLocal<>();
 
@@ -30,10 +32,15 @@ public interface Navigation extends DomElementFactory {
   }
 
   public default Navigation goTo(String url) {
+    URI uri = URI.create(url);
+    if (!uri.isAbsolute()) {
+      url = getBaseUrl() + url;
+    }
+
     System.out.println("goTo " + url);
 
     WebDriver webDriver = CurrentWebDriver.get();
-    webDriver.get(getBaseUrl() + url);
+    webDriver.get(url);
 
     System.out.println(" - current url " + webDriver.getCurrentUrl());
 
