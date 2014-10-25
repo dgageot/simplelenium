@@ -88,6 +88,26 @@ public class DomElement {
     return with(new ElementFilter(", first", stream -> stream.limit(1)));
   }
 
+  public DomElement second() {
+    return with(new ElementFilter(", second", stream -> stream.skip(1).limit(1)));
+  }
+
+  public DomElement third() {
+    return with(new ElementFilter(", third", stream -> stream.skip(2).limit(1)));
+  }
+
+  public DomElement nth(int index) {
+    return with(new ElementFilter(", nth[" + index + "]", stream -> stream.skip(index - 1).limit(1)));
+  }
+
+  public DomElement limit(int max) {
+    return with(new ElementFilter(", limit[" + max + "]", stream -> stream.limit(max)));
+  }
+
+  public DomElement skip(int count) {
+    return with(new ElementFilter(", skip[" + count + "]", stream -> stream.skip(count)));
+  }
+
   // Shortcuts
 
   public DomElement withText(String text) {

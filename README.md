@@ -58,13 +58,7 @@ goTo(url);
 ## TODO
 
 + FluentTest.goTo()
-+ find.first()
-+ find.second()
-+ find.third()
-+ find.fourth()
 + find.last()
-+ find.limit(n)
-+ find.nth(index)
 + fillWith(String...)
 + fillWith(Bean)
 + inject MyDomElement with constructor(Domelement)
