@@ -96,10 +96,6 @@ public abstract class SeleniumTest implements PageObjectSection {
     return this;
   }
 
-  public String url() {
-    return driver.getCurrentUrl();
-  }
-
   public String path() {
     String currentUrl = driver.getCurrentUrl();
     String defaultBaseUrl = getDefaultBaseUrl();
