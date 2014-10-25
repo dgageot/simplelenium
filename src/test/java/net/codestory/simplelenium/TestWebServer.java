@@ -32,6 +32,7 @@ public class TestWebServer {
   private static void configure(Routes routes) {
     routes.get("/",
       "<h1>Hello World</h1>" +
+        "<h2>SubTitle</h2>" +
         "<div id='name'>Bob</div>" +
         "<div class='age'>42</div>" +
         "<ul><li><em class='item'>italic</em></li></ul>" +

@@ -30,7 +30,7 @@ import java.io.IOException;
 import static org.junit.rules.RuleChain.outerRule;
 import static org.openqa.selenium.OutputType.BYTES;
 
-public abstract class SeleniumTest implements DomElementFactory {
+public abstract class SeleniumTest implements PageObjectSection {
   private final WebDriver driver = createWebDriver();
 
   protected WebDriver createWebDriver() {
@@ -43,6 +43,7 @@ public abstract class SeleniumTest implements DomElementFactory {
     @Override
     protected void starting(Description desc) {
       PageObject.injectMissingPageObjects(SeleniumTest.this);
+      PageObject.injectMissingElements(SeleniumTest.this);
     }
   };
 
@@ -83,14 +84,16 @@ public abstract class SeleniumTest implements DomElementFactory {
 
   protected abstract String getDefaultBaseUrl();
 
-  public void goTo(String url) {
+  public SeleniumTest goTo(String url) {
     System.out.println("goTo " + url);
     driver.get(getDefaultBaseUrl() + url);
     System.out.println(" - current url " + driver.getCurrentUrl());
+    return this;
   }
 
-  public void goTo(PageObject page) {
+  public SeleniumTest goTo(PageObject page) {
     goTo(page.url());
+    return this;
   }
 
   public WebDriver getDriver() {

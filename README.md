@@ -57,6 +57,7 @@ goTo(url);
 
 ## TODO
 
++ FluentTest.goTo()
 + find.first()
 + find.second()
 + find.third()
@@ -71,7 +72,6 @@ goTo(url);
 + inject MyDomElement with field(Domelement)
 + takeScreenShot()
 + takeScreenShot(pathAndfileName)
-+ new IsolatedTest()
 + iframes()
 + alerts()
 + windows()

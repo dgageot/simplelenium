@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static net.codestory.simplelenium.text.Text.plural;
 
-public class Should {
+public class Should implements DomElementFactory {
   private final By selector;
   private final ElementFilter narrowSelection;
   private final Retry retry;
@@ -52,6 +52,10 @@ public class Should {
 
   public Should not() {
     return new Should(selector, narrowSelection, retry, !not);
+  }
+
+  public Should and() {
+    return this;
   }
 
   public Should within(long duration, TimeUnit timeUnit) {
