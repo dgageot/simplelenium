@@ -17,7 +17,6 @@ package net.codestory.simplelenium.filters;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ElementFilter implements Predicate<WebElement> {
@@ -31,33 +30,9 @@ public class ElementFilter implements Predicate<WebElement> {
     this.predicate = predicate;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
-  // Creation
-
   public static ElementFilter any() {
     return ANY;
   }
-
-  public static ElementFilter text(String text) {
-    return new ElementFilter(" with text[" + text + "]", element -> Objects.equals(element.getText(), text));
-  }
-
-  public static ElementFilter tagName(String name) {
-    return new ElementFilter(" with tag name[" + name + "]", element -> Objects.equals(element.getTagName(), name));
-  }
-
-  public static ElementFilter attribute(String name, String value) {
-    return new ElementFilter(" with attribute[" + name + "=" + value + "]", element -> Objects.equals(element.getAttribute(name), value));
-  }
-
-  public static ElementFilter cssValue(String name, String value) {
-    return new ElementFilter(" with cssValue[" + name + "=" + value + "]", element -> Objects.equals(element.getCssValue(name), value));
-  }
-
-  // Combination
 
   public ElementFilter and(ElementFilter other) {
     if (ANY == this) {
@@ -74,6 +49,10 @@ public class ElementFilter implements Predicate<WebElement> {
       return ANY;
     }
     return new ElementFilter(getDescription() + " or" + other.getDescription(), predicate.or(other.predicate));
+  }
+
+  public String getDescription() {
+    return description;
   }
 
   @Override
