@@ -57,7 +57,33 @@ goTo(url);
 
 ## TODO
 
-+ Clean up code
-+ Clean up dependencies
-+ Support more actions
-+ Support more assertions
++ find.withName()
++ find.withClass()
++ find.withId()
++ find.withAttribute() ?
++ with.containsWord(word)
++ with.not().
++ with.matches(regexp)
++ find.first()
++ find.second()
++ find.third()
++ find.fourth()
++ find.last()
++ find.limit(n)
++ find.nth(index)
++ should haveDimension(w,h)
++ fillWith(String...)
++ fillWith(Bean)
++ submit(String...) = fillWith(String...).submit()
++ submit(Bean) = fillWith(Bean).submit()
++ inject MyDomElement with constructor(Domelement)
++ inject MyDomElement with field(Domelement)
++ inject PageObjects in PageObjects
++ $() = find()
++ takeScreenShot()
++ takeScreenShot(pathAndfileName)
++ new IsolatedTest()
++ iframes()
++ alerts()
++ windows()
++ hamcrest matchers
