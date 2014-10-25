@@ -64,6 +64,10 @@ public class ElementFilterBuilder {
     return build(" with " + description + " matches[" + regex + "]", element -> regex.matcher(toValue.apply(element)).matches());
   }
 
+  public DomElement matches(Predicate<String> predicate) {
+    return build(" with " + description + " matches[" + predicate + "]", element -> predicate.test(toValue.apply(element)));
+  }
+
   // Internal
 
   static Pattern patternForWord(String word) {
