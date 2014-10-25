@@ -40,6 +40,14 @@ public abstract class Text {
     }
   }
 
+  public static String hasOrNot(boolean not, String what) {
+    if (not) {
+      return "has " + what;
+    } else {
+      return "hasn't " + what;
+    }
+  }
+
   public static String plural(int n, String word) {
     if (n <= 1) {
       return n + " " + word;

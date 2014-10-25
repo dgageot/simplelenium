@@ -159,6 +159,10 @@ public class Should {
     return Text.isOrNot(not, state);
   }
 
+  private String hasOrNot(String what) {
+    return Text.hasOrNot(not, what);
+  }
+
   private static boolean isSelected(WebElement element) {
     return isSelectable(element) && element.isSelected();
   }
