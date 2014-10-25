@@ -26,10 +26,16 @@ public class ElementFilter implements Predicate<WebElement> {
   private final String description;
   private final Predicate<WebElement> predicate;
 
-  private ElementFilter(String description, Predicate<WebElement> predicate) {
+  ElementFilter(String description, Predicate<WebElement> predicate) {
     this.description = description;
     this.predicate = predicate;
   }
+
+  public String getDescription() {
+    return description;
+  }
+
+  // Creation
 
   public static ElementFilter any() {
     return ANY;
@@ -51,8 +57,14 @@ public class ElementFilter implements Predicate<WebElement> {
     return new ElementFilter(" with cssValue[" + name + "=" + value + "]", element -> Objects.equals(element.getCssValue(name), value));
   }
 
-  public String getDescription() {
-    return description;
+  // Combination
+
+  public ElementFilter and(ElementFilter other) {
+    return new ElementFilter(getDescription() + " and" + other.getDescription(), predicate.and(other.predicate));
+  }
+
+  public ElementFilter or(ElementFilter other) {
+    return new ElementFilter(getDescription() + " or" + other.getDescription(), predicate.or(other.predicate));
   }
 
   @Override

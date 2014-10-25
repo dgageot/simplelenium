@@ -16,6 +16,7 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.filters.ElementFilter;
+import net.codestory.simplelenium.filters.ElementFilterBuilder;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -24,8 +25,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.function.Consumer;
-
-import static net.codestory.simplelenium.filters.ElementFilter.*;
+import java.util.function.Function;
 
 public class DomElement {
   private final By selector;
@@ -44,24 +44,38 @@ public class DomElement {
 
   // Narrow find
 
+  public DomElement with(ElementFilter filter) {
+    return new DomElement(selector, filter, retry);
+  }
+
+  public ElementFilterBuilder withText() {
+    return with("text", element -> element.getText());
+  }
+
+  public ElementFilterBuilder withTagName() {
+    return with("tag name", element -> element.getTagName());
+  }
+
+  public ElementFilterBuilder withAttribute(String name) {
+    return with("attribute[" + name + "]", element -> element.getAttribute(name));
+  }
+
+  public ElementFilterBuilder withCssValue(String name) {
+    return with("cssValue[" + name + "]", element -> element.getCssValue(name));
+  }
+
+  private ElementFilterBuilder with(String description, Function<WebElement, String> toValue) {
+    return new ElementFilterBuilder(this, description, toValue);
+  }
+
+  // Shortcuts
+
   public DomElement withText(String text) {
-    return with(text(text));
+    return withText().equalsTo(text);
   }
 
   public DomElement withTagName(String name) {
-    return with(tagName(name));
-  }
-
-  public DomElement withAttribute(String name, String value) {
-    return with(attribute(name, value));
-  }
-
-  public DomElement withCssValue(String name, String value) {
-    return with(cssValue(name, value));
-  }
-
-  public DomElement with(ElementFilter filter) {
-    return new DomElement(selector, filter, retry);
+    return withTagName().equalsTo(name);
   }
 
   // Assertions

@@ -36,6 +36,9 @@ public class SimpleTest extends AbstractTest {
 
     find("h1").withText("Hello World").should().exist();
     find("h1").withText("UNKNOWN").should().beEmpty();
+
+    find("h1").withText().equalsTo("Hello World").should().exist();
+    find("h1").withText().equalsTo("UNKNOWN").should().beEmpty();
   }
 
   @Test
@@ -44,5 +47,8 @@ public class SimpleTest extends AbstractTest {
 
     find("ul li .item").withTagName("em").should().exist();
     find("ul li .item").withTagName("object").should().beEmpty();
+
+    find("ul li .item").withTagName().equalsTo("em").should().exist();
+    find("ul li .item").withTagName().equalsTo("object").should().beEmpty();
   }
 }
