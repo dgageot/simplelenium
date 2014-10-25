@@ -48,7 +48,7 @@ public class ElementFilterBuilder {
   }
 
   public DomElement endsWith(String text) {
-    return build(" with " + description + " endsWith[" + text + "]", element -> toValue.apply(element).startsWith(text));
+    return build(" with " + description + " endsWith[" + text + "]", element -> toValue.apply(element).endsWith(text));
   }
 
   public DomElement matches(Pattern regex) {

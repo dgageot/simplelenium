@@ -54,8 +54,15 @@ public class ListTest extends AbstractTest {
     goTo("/list");
 
     find(".name").withText("Bob Morane").should().haveSize(1);
+    find(".name").withText("Bob").should().haveSize(1);
     find(".name").withText("Bob Morane").should().exist();
     find(".name").withText("John Doe").should().not().exist();
+    find(".name").withText().equalsTo("Bob Morane").should().haveSize(1);
+    find(".name").withText().startsWith("B").should().haveSize(1);
+    find(".name").withText().endsWith("Morane").should().haveSize(1);
+    find(".name").withText().contains("ora").should().haveSize(1);
+    find(".name").withText().matches(Pattern.compile("[0-9]*")).should().beEmpty();
+    find(".name").withText().matches(Pattern.compile("[a-zA-Z ']*")).should().haveSize(2);
   }
 
   @Test
@@ -65,6 +72,13 @@ public class ListTest extends AbstractTest {
     find(".name").withId("joe").should().haveSize(1);
     find(".name").withId().equalsTo("joe").should().haveSize(1);
     find(".name").withId().equalsTo("joe").withText("Joe").should().haveSize(1);
-//    find(".name").withId().equalsTo("joe").withText("Bob").should().beEmpty();
+    find(".name").withId().equalsTo("joe").withText("Bob").should().beEmpty();
+  }
+
+  @Test
+  public void filter_with_name() {
+    goTo("/list");
+
+    find(".name").withName("theJoe").should().haveSize(1);
   }
 }

@@ -56,6 +56,10 @@ public class DomElement {
     return with("id", element -> element.getAttribute("id"));
   }
 
+  public ElementFilterBuilder withName() {
+    return with("id", element -> element.getAttribute("name"));
+  }
+
   public ElementFilterBuilder withTagName() {
     return with("tag name", element -> element.getTagName());
   }
@@ -80,6 +84,10 @@ public class DomElement {
 
   public DomElement withId(String id) {
     return withId().equalsTo(id);
+  }
+
+  public DomElement withName(String name) {
+    return withName().equalsTo(name);
   }
 
   public DomElement withTagName(String name) {
