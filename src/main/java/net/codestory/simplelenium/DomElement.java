@@ -52,7 +52,7 @@ public class DomElement {
   // Assertions
   //
   public Should should() {
-    return new Should(selector, narrowSelection, Retry._5_SECONDS);
+    return new Should(selector, narrowSelection, Retry._5_SECONDS, false);
   }
 
   // Actions

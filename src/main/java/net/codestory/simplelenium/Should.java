@@ -41,11 +41,7 @@ public class Should {
   private final Retry retry;
   private final boolean not;
 
-  Should(By selector, ElementFilter narrowSelection, Retry retry) {
-    this(selector, narrowSelection, retry, false);
-  }
-
-  private Should(By selector, ElementFilter narrowSelection, Retry retry, boolean not) {
+  Should(By selector, ElementFilter narrowSelection, Retry retry, boolean not) {
     this.selector = selector;
     this.narrowSelection = narrowSelection;
     this.retry = retry;
