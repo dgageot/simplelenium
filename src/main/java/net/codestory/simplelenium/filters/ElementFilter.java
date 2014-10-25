@@ -20,13 +20,13 @@ import org.openqa.selenium.WebElement;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public class ElementFilter implements UnaryOperator<Stream<WebElement>> {
+public class ElementFilter {
   private static final ElementFilter ANY = new ElementFilter("", UnaryOperator.identity());
 
   private final String description;
   private final UnaryOperator<Stream<WebElement>> filter;
 
-  ElementFilter(String description, UnaryOperator<Stream<WebElement>> filter) {
+  public ElementFilter(String description, UnaryOperator<Stream<WebElement>> filter) {
     this.description = description;
     this.filter = filter;
   }
@@ -35,22 +35,21 @@ public class ElementFilter implements UnaryOperator<Stream<WebElement>> {
     return ANY;
   }
 
-  public ElementFilter and(ElementFilter other) {
+  public ElementFilter and(ElementFilter second) {
     if (ANY == this) {
-      return other;
+      return second;
     }
-    if (ANY == other) {
+    if (ANY == second) {
       return this;
     }
-    return new ElementFilter(getDescription() + " and" + other.getDescription(), stream -> filter.compose(other.filter).apply(stream));
+    return new ElementFilter(getDescription() + "," + second.getDescription(), stream -> second.filter.apply(filter.apply(stream)));
   }
 
   public String getDescription() {
     return description;
   }
 
-  @Override
-  public Stream<WebElement> apply(Stream<WebElement> webElements) {
-    return filter.apply(webElements);
+  public UnaryOperator<Stream<WebElement>> getFilter() {
+    return filter;
   }
 }

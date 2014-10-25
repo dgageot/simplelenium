@@ -90,4 +90,12 @@ public class ListTest extends AbstractTest {
     find(".name").withClass("ma").should().beEmpty();
     find(".name").withClass("cartoon").should().haveSize(1);
   }
+
+  @Test
+  public void filter_first() {
+    goTo("/list");
+
+    find(".name").first().withText("Bob").should().haveSize(1);
+    find(".name").first().withText("Joe").should().beEmpty();
+  }
 }

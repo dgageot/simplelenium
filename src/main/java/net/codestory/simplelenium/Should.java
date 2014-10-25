@@ -41,21 +41,25 @@ import static net.codestory.simplelenium.text.Text.plural;
 
 public class Should implements DomElementFactory {
   private final By selector;
-  private final ElementFilter narrowSelection;
+  private final ElementFilter filter;
   private final Retry retry;
   private final boolean not;
 
-  Should(By selector, ElementFilter narrowSelection, Retry retry, boolean not) {
+  Should(By selector, ElementFilter filter, Retry retry, boolean not) {
     this.selector = selector;
-    this.narrowSelection = narrowSelection;
+    this.filter = filter;
     this.retry = retry;
     this.not = not;
   }
 
   // Modifiers
 
+  public Should within(long duration, TimeUnit timeUnit) {
+    return new Should(selector, filter, new Retry(duration, timeUnit), not);
+  }
+
   public Should not() {
-    return new Should(selector, narrowSelection, retry, !not);
+    return new Should(selector, filter, retry, !not);
   }
 
   public Should and() {
@@ -64,10 +68,6 @@ public class Should implements DomElementFactory {
 
   public Should should() {
     return this; // For nicer fluent api
-  }
-
-  public Should within(long duration, TimeUnit timeUnit) {
-    return new Should(selector, narrowSelection, new Retry(duration, timeUnit), not);
   }
 
   // Expectations
@@ -159,7 +159,7 @@ public class Should implements DomElementFactory {
   }
 
   private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {
-    String verification = "verify that " + Text.toString(selector) + narrowSelection.getDescription() + " " + message;
+    String verification = "verify that " + Text.toString(selector) + filter.getDescription() + " " + message;
     System.out.println("   -> " + verification);
 
     try {
@@ -175,7 +175,7 @@ public class Should implements DomElementFactory {
 
   private List<WebElement> findElements() {
     Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
-    Stream<WebElement> filtered = narrowSelection.apply(webElements);
+    Stream<WebElement> filtered = filter.getFilter().apply(webElements);
     return filtered.collect(toList());
   }
 

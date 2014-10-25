@@ -31,23 +31,23 @@ import java.util.stream.Stream;
 
 public class DomElement {
   private final By selector;
-  private final ElementFilter narrowSelection;
+  private final ElementFilter filter;
   private final Retry retry;
 
   public DomElement(By selector) {
     this(selector, ElementFilter.any(), Retry._30_SECONDS);
   }
 
-  private DomElement(By selector, ElementFilter narrowSelection, Retry retry) {
+  private DomElement(By selector, ElementFilter filter, Retry retry) {
     this.selector = selector;
-    this.narrowSelection = narrowSelection;
+    this.filter = filter;
     this.retry = retry;
   }
 
   // Narrow find
 
   public DomElement with(ElementFilter filter) {
-    return new DomElement(selector, narrowSelection.and(filter), retry);
+    return new DomElement(selector, this.filter.and(filter), retry);
   }
 
   public ElementFilterBuilder withText() {
@@ -82,6 +82,12 @@ public class DomElement {
     return new ElementFilterBuilder(this, description, toValue, ok -> ok);
   }
 
+  // Limit result set
+
+  public DomElement first() {
+    return with(new ElementFilter(", first", stream -> stream.limit(1)));
+  }
+
   // Shortcuts
 
   public DomElement withText(String text) {
@@ -107,7 +113,7 @@ public class DomElement {
   // Assertions
 
   public Should should() {
-    return new Should(selector, narrowSelection, Retry._5_SECONDS, false);
+    return new Should(selector, filter, Retry._5_SECONDS, false);
   }
 
   // Actions
@@ -207,13 +213,13 @@ public class DomElement {
   }
 
   private void execute(String message, Consumer<? super WebElement> action) {
-    System.out.println(" - " + Text.toString(selector) + narrowSelection.getDescription() + "." + message);
+    System.out.println(" - " + Text.toString(selector) + filter.getDescription() + "." + message);
     retry.execute(() -> findOne(), action);
   }
 
   private WebElement findOne() {
     Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
-    Stream<WebElement> filtered = narrowSelection.apply(webElements);
+    Stream<WebElement> filtered = filter.getFilter().apply(webElements);
     return filtered.findFirst().orElse(null);
   }
 }
