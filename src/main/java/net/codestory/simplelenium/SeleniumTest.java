@@ -109,16 +109,4 @@ public abstract class SeleniumTest implements PageObjectSection {
     }
     return currentUrl;
   }
-
-  public String title() {
-    return driver.getTitle();
-  }
-
-  public String pageSource() {
-    return driver.getPageSource();
-  }
-
-  public <T extends PageObject> T createPage(Class<T> type) {
-    return PageObject.create(type);
-  }
 }

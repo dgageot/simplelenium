@@ -16,4 +16,11 @@
 package net.codestory.simplelenium;
 
 public interface PageObjectSection extends DomElementFactory {
+  public default String title() {
+    return CurrentWebDriver.get().getTitle();
+  }
+
+  public default String pageSource() {
+    return CurrentWebDriver.get().getPageSource();
+  }
 }
