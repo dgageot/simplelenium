@@ -25,6 +25,8 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.function.Consumer;
 
+import static net.codestory.simplelenium.filters.ElementFilter.*;
+
 public class DomElement {
   private final By selector;
   private final ElementFilter narrowSelection;
@@ -43,22 +45,22 @@ public class DomElement {
   // Narrow find
 
   public DomElement withText(String text) {
-    return narrow(ElementFilter.withText(text));
+    return with(text(text));
   }
 
   public DomElement withTagName(String name) {
-    return narrow(ElementFilter.withTagName(name));
+    return with(tagName(name));
   }
 
   public DomElement withAttribute(String name, String value) {
-    return narrow(ElementFilter.withAttribute(name, value));
+    return with(attribute(name, value));
   }
 
   public DomElement withCssValue(String name, String value) {
-    return narrow(ElementFilter.withCssValue(name, value));
+    return with(cssValue(name, value));
   }
 
-  private DomElement narrow(ElementFilter filter) {
+  public DomElement with(ElementFilter filter) {
     return new DomElement(selector, filter, retry);
   }
 
