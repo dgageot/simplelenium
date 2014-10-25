@@ -36,11 +36,19 @@ public class ElementFilter implements Predicate<WebElement> {
   }
 
   public static ElementFilter withText(String text) {
-    return new ElementFilter(" with text [" + text + "]", element -> Objects.equals(element.getText(), text));
+    return new ElementFilter(" with text[" + text + "]", element -> Objects.equals(element.getText(), text));
   }
 
   public static ElementFilter withTagName(String name) {
-    return new ElementFilter(" with tag name [" + name + "]", element -> Objects.equals(element.getTagName(), name));
+    return new ElementFilter(" with tag name[" + name + "]", element -> Objects.equals(element.getTagName(), name));
+  }
+
+  public static ElementFilter withAttribute(String name, String value) {
+    return new ElementFilter(" with attribute[" + name + "=" + value + "]", element -> Objects.equals(element.getAttribute(name), value));
+  }
+
+  public static ElementFilter withCssValue(String name, String value) {
+    return new ElementFilter(" with cssValue[" + name + "=" + value + "]", element -> Objects.equals(element.getCssValue(name), value));
   }
 
   public String getDescription() {

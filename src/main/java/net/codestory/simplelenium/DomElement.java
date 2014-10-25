@@ -50,6 +50,14 @@ public class DomElement {
     return new DomElement(selector, ElementFilter.withTagName(name), retry);
   }
 
+  public DomElement withAttribute(String name, String value) {
+    return new DomElement(selector, ElementFilter.withAttribute(name, value), retry);
+  }
+
+  public DomElement withCssValue(String name, String value) {
+    return new DomElement(selector, ElementFilter.withCssValue(name, value), retry);
+  }
+
   // Assertions
 
   public Should should() {
