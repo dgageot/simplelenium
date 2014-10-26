@@ -66,13 +66,110 @@ times.
 
 ## Finders
 
-TODO
+Finding elements start with either a `find("cssSelector")` or a
+`find(org.openqa.selenium.By)`. There's no other choice. That's simple. You can
+use the full power of cssSelector, which should be enough most of the time, or
+use standard Selenium `org.openqa.selenium.By` sub-classes.
 
-## Actions
+Findings can then be narrowed by additional filters, like those:
 
-TODO
+```java
+find("...").withText().contains("text");
+find("...").withName().startWith("text");
+find("...").withId().equals("text");
+find("...").withAttribute("name").matches(Pattern.compile(".*value"));
+find("...").withTagName().equals("h1");
+find("...").withClass().containsWord("blue");
+find("...").withCssValue("color").not().endsWith("grey");
+find("...").withText().startsWith("Prefix").endsWith("Suffix");
+...
+```
+
+Also results can be filtered out this way:
+
+```java
+find("...").first();
+find("...").second();
+find("...").third();
+find("...").fourth();
+find("...").nth(5);
+find("...").limit(10);
+find("...").skip(3);
+find("...").skip(5).limit(20);
+find("...").last();
+```
+
+All the searches are not done until a verification is made on the elements.
+Simplelenium is both lazy and tolerant to slow pages and ongoing refreshes.
+You don't have to worry about it. Just write what the page should look like
+and it happens within a sound period of time, the next verification is made.
+
+We'll dig into more details in the last section.
 
 ## Verifications
+
+The most simple verification is to check that elements are found:
+
+```java
+find(".name").should().exist();
+```
+
+Of course more complex verifications are supported:
+
+```java
+find(".name").should().contain("a word", "anything");
+find(".name").should().match(Pattern.compile("regexp"));
+find(".name").should().beEnabled();
+find(".name").should().beDisplayed();
+find(".name").should().beSelected();
+find(".name").should().haveMoreItemsThan(min);
+find(".name").should().haveSize(10);
+find(".name").should().haveLessItemsThan(max);
+find(".name").should().beEmpty();
+find(".name").should().haveDimension(width, height);
+find(".name").should().beAtLocation(x, y);
+```
+
+All verifications can be inverted:
+
+```java
+find(".name").should().not().contain("a word");
+```
+
+And verifications can be chained:
+
+```java
+find(".name")
+  .should()
+  .contain("a word")
+  .contain("anything")
+  .beSelected()
+  .not().beDisplayed();
+```
+
+The way Simplelenium deals with timing issue is simple :
+
+ + It tries to make the search
+ + Then the verification
+ + If it passes, then we're cool
+ + If not, it tries again immediately with a new search to avoid Staled elements
+ + It does so for at least 5 seconds
+
+The "magic" comes from:
+
+ + Not searching until you need to check something
+ + Searching again if the check fails
+ + Doing a lot of retries as quickly as possible
+ + Using the fact that you tell what the page should look like and consider all
+   the failures as false negatives. That is until the maximum delay is reached.
+
+Default timeout can be set using this syntax:
+
+```java
+find(".name").should().within(1, MINUTE).contain("a word");
+```
+
+## Actions
 
 TODO
 
