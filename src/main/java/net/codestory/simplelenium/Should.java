@@ -158,6 +158,13 @@ public class Should implements Navigation {
       elements -> "It is at location " + statuses(elements, element -> location(element)));
   }
 
+  public Should match(Predicate<WebElement> condition) {
+    return verify(
+      doesOrNot("match") + " (" + condition + ")",
+      elements -> elements.stream().allMatch(condition),
+      elements -> "It is  " + statuses(elements, element -> Boolean.toString(condition.test(element))));
+  }
+
   private Should verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {
     String verification = "verify that " + Text.toString(selector) + filter.getDescription() + " " + message;
     System.out.println("   -> " + verification);

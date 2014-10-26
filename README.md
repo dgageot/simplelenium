@@ -287,46 +287,70 @@ If you make the additional effort to return `this` in Page Objects methods,
 you than have a nice fluent api.
 
 ```java
-public class QuickStartTest extends SeleniumTest {
-  ...
+@Test
+public void check_page() {
+  home
+    .goTo()
+    .shouldDisplayHello()
+    .shouldLinkToOtherPages();
+}
 
-  @Test
-  public void check_page() {
-    home
-      .goTo()
-      .shouldDisplayHello()
-      .shouldLinkToOtherPages();
+static class Home implements PageObject {
+  @Override
+  public String url() {
+    return "/home";
   }
 
-  static class Home implements PageObject {
-    DomElement title;
-    DomElement greeting;
-    DomElement links = find("a.sections");
+   Home goTo() {
+    goTo(url());
+    return this;
+  }
 
-    @Override
-    public String url() {
-      return "/home";
-    }
+   Home shouldDisplayHello() {
+    ...
+    return this;
+  }
 
-    Home shouldDisplayHello() {
-      title.should().contain("Home page");
-      greeting.should().contain("Hello");
-      return this;
-    }
-
-    Home shouldLinkToOtherPages() {
-      links.should().haveSize(5).and().contain("Section1", "Section5");
-      return this;
-    }
+   Home shouldLinkToOtherPages() {
+    ...
+    return this;
   }
 }
 ```
 
-Page Objects represent a Page with a url. For Page portions, you can
-implement `SectionObject` instead. It makes it easy 
+Page Objects represent a Page with a url. For sections of pages, you can
+implement `SectionObject` instead. It makes it easy to split a page into
+multiple reusable parts that carry their own finders and verifications.
 
+Sections are injected automatically into tests, page objects and other sections.
 
 ### Running tests in parallel
+
+## What Simplelenium doesn't do
+
+### Support anything else that PhantomJS
+
+It's not difficult to add but that's not done already. Pull request anyone?
+I rarely face the need to test on multiple browser. This need exists though.
+
+### Support alerts, iframes and windows
+
+Pull requests are you best friends.
+
+### Reading properties from web elements
+
+Sometimes, you want to read a property of a web element and use your own
+assertions framework to verify if it's ok. That's not how Simplelenium works.
+You should be able to expect what the element will look like and tell
+Simplelenium to check. Otherwise you might extract a value a bit too soon and
+there you are, back into timing hell, with false negative tests. You don't want
+that. Trust me.
+
+The Simplelenium way of doing this is using this syntax:
+
+```java
+find("...").should().match(element -> /* Test something on every element found /*);
+```
 
 ## Release
 
