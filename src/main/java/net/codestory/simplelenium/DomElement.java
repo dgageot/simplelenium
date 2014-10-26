@@ -18,6 +18,7 @@ package net.codestory.simplelenium;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.filters.ElementFilter;
 import net.codestory.simplelenium.filters.ElementFilterBuilder;
+import net.codestory.simplelenium.filters.StreamFilters;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -25,9 +26,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 public class DomElement {
@@ -52,65 +53,69 @@ public class DomElement {
   }
 
   public ElementFilterBuilder withText() {
-    return with("text", element -> element.getText());
+    return narrow("text", element -> element.getText());
   }
 
   public ElementFilterBuilder withId() {
-    return with("id", element -> element.getAttribute("id"));
+    return narrow("id", element -> element.getAttribute("id"));
   }
 
   public ElementFilterBuilder withName() {
-    return with("id", element -> element.getAttribute("name"));
+    return narrow("id", element -> element.getAttribute("name"));
   }
 
   public ElementFilterBuilder withTagName() {
-    return with("tag name", element -> element.getTagName());
+    return narrow("tag name", element -> element.getTagName());
   }
 
   public ElementFilterBuilder withClass() {
-    return with("class", element -> element.getAttribute("class"));
+    return narrow("class", element -> element.getAttribute("class"));
   }
 
   public ElementFilterBuilder withAttribute(String name) {
-    return with("attribute[" + name + "]", element -> element.getAttribute(name));
+    return narrow("attribute[" + name + "]", element -> element.getAttribute(name));
   }
 
   public ElementFilterBuilder withCssValue(String name) {
-    return with("cssValue[" + name + "]", element -> element.getCssValue(name));
+    return narrow("cssValue[" + name + "]", element -> element.getCssValue(name));
   }
 
-  private ElementFilterBuilder with(String description, Function<WebElement, String> toValue) {
+  private ElementFilterBuilder narrow(String description, Function<WebElement, String> toValue) {
     return new ElementFilterBuilder(this, description, toValue, true);
   }
 
   // Limit results
 
   public DomElement first() {
-    return with(new ElementFilter(", first", stream -> stream.limit(1)));
+    return filter("first", StreamFilters.first());
   }
 
   public DomElement second() {
-    return with(new ElementFilter(", second", stream -> stream.skip(1).limit(1)));
+    return filter("second", StreamFilters.second());
   }
 
   public DomElement third() {
-    return with(new ElementFilter(", third", stream -> stream.skip(2).limit(1)));
+    return filter("third", StreamFilters.third());
   }
 
   public DomElement nth(int index) {
-    return with(new ElementFilter(", nth[" + index + "]", stream -> stream.skip(index - 1).limit(1)));
+    return filter("nth[" + index + "]", StreamFilters.nth(index));
   }
 
   public DomElement limit(int max) {
-    return with(new ElementFilter(", limit[" + max + "]", stream -> stream.limit(max)));
+    return filter("limit[" + max + "]", StreamFilters.limit(max));
   }
 
   public DomElement skip(int count) {
-    return with(new ElementFilter(", skip[" + count + "]", stream -> stream.skip(count)));
+    return filter("skip[" + count + "]", StreamFilters.skip(count));
   }
 
   public DomElement last() {
-    return with(new ElementFilter(", last", stream -> last(stream)));
+    return filter("last", StreamFilters.last());
+  }
+
+  private DomElement filter(String description, UnaryOperator<Stream<WebElement>> filter) {
+    return with(new ElementFilter(", " + description, filter));
   }
 
   // Shortcuts
@@ -228,15 +233,6 @@ public class DomElement {
   }
 
   // Internal
-
-  private static <T> Stream<T> last(Stream<T> stream) {
-    Iterator<T> iterator = stream.iterator();
-    T last = null;
-    while (iterator.hasNext()) {
-      last = iterator.next();
-    }
-    return (last == null) ? Stream.empty() : Stream.of(last);
-  }
 
   private static Select selection(WebElement element) {
     return new Select(element);
