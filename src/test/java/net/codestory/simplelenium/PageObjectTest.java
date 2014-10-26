@@ -21,16 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PageObjectTest {
   @Test
-  public void create_page() {
-    ThePage thePage = PageObjectSection.create(ThePage.class);
-
-    assertThat(thePage.h1).isNotNull();
-    assertThat(thePage.h4).isNotNull();
-    assertThat(thePage.name).isNotNull();
-    assertThat(thePage.age).isNotNull();
-  }
-
-  @Test
   public void inject_elements() {
     ThePage thePage = new ThePage();
 

@@ -45,15 +45,13 @@ public interface PageObjectSection extends Navigation {
 
   // Injection
 
-  public static <T extends PageObjectSection> T create(Class<T> type) {
-    T pageObject = newInstance(type);
-    injectMissingElements(pageObject);
-    return pageObject;
-  }
-
   public static void injectMissingPageObjects(Object instance) {
     forEachFieldOfType(PageObjectSection.class, instance, field -> {
-      setIfNull(field, instance, () -> create((Class<? extends PageObjectSection>) field.getType()));
+      setIfNull(field, instance, () -> {
+        PageObjectSection pageObject = newInstance((Class<? extends PageObjectSection>) field.getType());
+        injectMissingElements(pageObject);
+        return pageObject;
+      });
     });
   }
 
