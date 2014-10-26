@@ -235,7 +235,96 @@ also removes a lot of boilerplate code and decreases code duplication.
 Let's take a look at a small example:
 
 ```java
+import net.codestory.simplelenium.DomElement;
+import net.codestory.simplelenium.PageObject;
+import net.codestory.simplelenium.SeleniumTest;
+import org.junit.Test;
+
+public class QuickStartTest extends SeleniumTest {
+  Home home;
+
+  @Override
+  protected String getDefaultBaseUrl() {
+    return "http://localhost:8080/base/";
+  }
+
+  @Test
+  public void check_page() {
+    goTo(home);
+
+    home.shouldDisplayHello();
+    home.shouldLinkToOtherPages();
+  }
+
+  static class Home implements PageObject {
+    DomElement title;
+    DomElement greeting;
+    DomElement links = find("a.sections");
+
+    @Override
+    public String url() {
+      return "/home";
+    }
+
+    void shouldDisplayHello() {
+      title.should().contain("Home page");
+      greeting.should().contain("Hello");
+    }
+
+    void shouldLinkToOtherPages() {
+      links.should().haveSize(5).and().contain("Section1", "Section5");
+    }
+  }
+}
 ```
+
+How cool is that? All you have to do is implement `PageObject`. Page Objects
+are automatically injected into tests. So are `DomElement`s present as fields
+into Page Objects. By default elements a searched by name or id but one can
+use standard `find(...)` methods to override this behaviour. Same as usual.
+
+If you make the additional effort to return `this` in Page Objects methods,
+you than have a nice fluent api.
+
+```java
+public class QuickStartTest extends SeleniumTest {
+  ...
+
+  @Test
+  public void check_page() {
+    home
+      .goTo()
+      .shouldDisplayHello()
+      .shouldLinkToOtherPages();
+  }
+
+  static class Home implements PageObject {
+    DomElement title;
+    DomElement greeting;
+    DomElement links = find("a.sections");
+
+    @Override
+    public String url() {
+      return "/home";
+    }
+
+    Home shouldDisplayHello() {
+      title.should().contain("Home page");
+      greeting.should().contain("Hello");
+      return this;
+    }
+
+    Home shouldLinkToOtherPages() {
+      links.should().haveSize(5).and().contain("Section1", "Section5");
+      return this;
+    }
+  }
+}
+```
+
+Page Objects represent a Page with a url. For Page portions, you can
+implement `SectionObject` instead. It makes it easy 
+
 
 ### Running tests in parallel
 
