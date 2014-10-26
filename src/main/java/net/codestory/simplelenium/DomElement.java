@@ -26,6 +26,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -173,49 +174,64 @@ public class DomElement {
   }
 
   public void doubleClick() {
-    execute("doubleClick", element -> actions().doubleClick(element).perform());
+    executeActions("doubleClick", (element, actions) -> actions.doubleClick(element));
   }
 
   public void clickAndHold() {
-    execute("clickAndHold", element -> actions().clickAndHold(element).perform());
+    executeActions("clickAndHold", (element, actions) -> actions.clickAndHold(element));
   }
 
   public void contextClick() {
-    execute("contextClick", element -> actions().contextClick(element).perform());
+    executeActions("contextClick", (element, actions) -> actions.contextClick(element));
   }
 
   public void release() {
-    execute("release", element -> actions().release(element).perform());
+    executeActions("release", (element, actions) -> actions.release(element));
+  }
+
+  private void executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement) {
+    execute(description, element -> {
+      Actions actions = new Actions(CurrentWebDriver.get());
+      actionsOnElement.accept(element, actions);
+      actions.perform();
+    });
   }
 
   // Selection
 
   public void select(String text) {
-    execute("select(" + text + ")", element -> selection(element).selectByVisibleText(text));
+    executeSelect("select(" + text + ")", select -> select.selectByVisibleText(text));
   }
 
   public void deselect() {
-    execute("deselect()", element -> selection(element).deselectAll());
+    executeSelect("deselect()", select -> select.deselectAll());
   }
 
   public void deselectByValue(String value) {
-    execute("deselectByValue(" + value + ")", element -> selection(element).deselectByValue(value));
+    executeSelect("deselectByValue(" + value + ")", select -> select.deselectByValue(value));
   }
 
   public void deselectByVisibleText(String text) {
-    execute("deselectByVisibleText(" + text + ")", element -> selection(element).deselectByVisibleText(text));
+    executeSelect("deselectByVisibleText(" + text + ")", select -> select.deselectByVisibleText(text));
   }
 
   public void deselectByIndex(int index) {
-    execute("deselectByIndex(" + index + ")", element -> selection(element).deselectByIndex(index));
+    executeSelect("deselectByIndex(" + index + ")", select -> select.deselectByIndex(index));
   }
 
   public void selectByIndex(int index) {
-    execute("selectByIndex(" + index + ")", element -> selection(element).selectByIndex(index));
+    executeSelect("selectByIndex(" + index + ")", select -> select.selectByIndex(index));
   }
 
   public void selectByValue(String value) {
-    execute("selectByValue(" + value + ")", element -> selection(element).selectByValue(value));
+    executeSelect("selectByValue(" + value + ")", select -> select.selectByValue(value));
+  }
+
+  private void executeSelect(String description, Consumer<Select> selectOnElement) {
+    execute(description, element -> {
+      Select select = new Select(element);
+      selectOnElement.accept(select);
+    });
   }
 
   // Actions on low level elements
@@ -224,26 +240,11 @@ public class DomElement {
     execute("execute(" + action + ")", action);
   }
 
-  public void executeActions(ActionsOnElement actionsOnElement) {
-    execute("execute actions", element -> {
-      Actions actions = actions();
-      actionsOnElement.act(actions, element);
-      actions.perform();
-    });
-  }
-
   // Internal
-
-  private static Select selection(WebElement element) {
-    return new Select(element);
-  }
-
-  private static Actions actions() {
-    return new Actions(CurrentWebDriver.get());
-  }
 
   private void execute(String message, Consumer<? super WebElement> action) {
     System.out.println(" - " + Text.toString(selector) + filter.getDescription() + "." + message);
+
     retry.execute(() -> findOne(), action);
   }
 
