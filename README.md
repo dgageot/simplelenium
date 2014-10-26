@@ -1,20 +1,35 @@
 # Simplelenium
 
-A simple and robust layer on top of Selenium and PhantomJS.
+A simple and robust layer on top of WebDriver and PhantomJS.
 
-# Build status
+## Goal
 
-[![Build Status](https://api.travis-ci.org/dgageot/simplelenium.png)](https://travis-ci.org/dgageot/simplelenium)
+Testing web pages with Selenium/WebDriver can prove difficult. I've seen a lot of projects with an unstable build
+because of Selenium. To be fair, it's more because of the way Selenium is used but experience showed me that using
+Selenium properly is harder that one might think.
 
-## Maven
+In fact I think that proper usage of Selenium must be left out of tester hands and baked into a small, effective
+library. Simplelenium is my attempt to so and it served me well.
+
+Simplelenium deals properly and out-of-the-box with timing issues and StaleElementReferenceExceptions. Give it a try
+and you'll be surprises how Selenium testing can be fun again (ever?).
+
+## Setup (Maven)
+
+Add Simplelenium as a test dependency to your project and you are all set to go.
 
 ```xml
 <dependency>
   <groupId>net.code-story</groupId>
   <artifactId>simplelenium</artifactId>
-  <version>1.17</version>
+  <version>1.18</version>
+  <scope>test</scope>
 </dependency>
 ```
+
+## Build status
+
+[![Build Status](https://api.travis-ci.org/dgageot/simplelenium.png)](https://travis-ci.org/dgageot/simplelenium)
 
 ## Samples
 
