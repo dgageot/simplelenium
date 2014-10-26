@@ -1,12 +1,14 @@
 # Simplelenium
 
-A simple and robust layer on top of WebDriver and PhantomJS.
+A simple and robust layer on top of
+[Selenium](http://docs.seleniumhq.org/projects/webdriver/) and
+[PhantomJS](http://phantomjs.org/).
 
 ## Goal
 
 Testing web pages with Selenium/WebDriver can prove difficult. I've seen a lot
 of projects with an unstable build because of Selenium. To be fair, it's more
-because of the way Selenium is used but experience showed me that using
+because of the way Selenium is used. Although experience showed me that using
 Selenium properly is harder that one might think.
 
 In fact I think that proper usage of Selenium must be left out of tester hands
@@ -15,12 +17,15 @@ it served me well.
 
 Simplelenium deals properly and out-of-the-box with timing issues and
 `StaleElementReferenceExceptions`. It supports running tests in parallel
-without you thinking about it. Give it a try and you'll be surprises how
-Selenium testing can be fun again (ever?).
+without you thinking about it. It doesn't open annoying windows since it's
+using [PhantomJS](http://phantomjs.org/), a headless browser.
+
+Give it a try and you'll be surprises how Selenium testing can be fun again
+(was it ever?).
 
 ## Setup (Maven)
 
-Add Simplelenium as a maventest dependency to your project and you are all
+Add Simplelenium as a maven test dependency to your project and you are all
 set to go. **Simplelenium requires java 8**.
 
 ```xml
@@ -31,6 +36,10 @@ set to go. **Simplelenium requires java 8**.
   <scope>test</scope>
 </dependency>
 ```
+
+The first time you run a test, it will download PhantomJS automatically for you
+so that nothing has to be installed on the machine. `mvn clean install` is all
+one should need!
 
 ## Build status
 
@@ -325,6 +334,48 @@ multiple reusable parts that carry their own finders and verifications.
 Sections are injected automatically into tests, page objects and other sections.
 
 ### Running tests in parallel
+
+Simplelenium is good at running tests in parallel. In fact without you doing
+anything on the code side, it should just work.
+
+Simplelenium keeps a distinct PhantomJS WebDriver for each thread. You don't
+have to think about it. Let's say you configure surefire to run tests in
+parallel at class or method level. Easy! You don't have to copy this
+configuration, with a different syntax, into your test framework. It will just
+work.
+
+Running tests in parallel with multiple vms also works well because we use a
+global lock when we download PhantomJS. I told you, you don't have to think
+about it.
+
+### Tests without JUnit
+
+Sometimes, running the tests with JUnit is not what you want. You'd like to
+do your own threading and own lifecycle. You can then use the `FluentTest`
+class this way:
+
+```java
+import org.junit.Test;
+
+import static java.util.stream.IntStream.range;
+
+public class FluentTestTest {
+  @Test
+  public void parallel() {
+    String baseUrl = ...;
+
+    range(0, 20).parallel().forEach(index -> {
+      new FluentTest(baseUrl)
+        .goTo("/")
+        .find("h1").should().contain("Hello World").and().not().beEmpty()
+        .find("h2").should().contain("SubTitle")
+        .find(".age").should().contain("42")
+        .goTo("/list")
+        .find("li").should().contain("Bob").and().contain("Joe");
+    });
+  }
+}
+```
 
 ## What Simplelenium doesn't do
 
