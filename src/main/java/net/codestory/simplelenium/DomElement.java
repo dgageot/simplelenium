@@ -190,7 +190,7 @@ public class DomElement {
     executeActions("release", (element, actions) -> actions.release(element));
   }
 
-  private void executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement) {
+  public void executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement) {
     execute(description, element -> {
       Actions actions = new Actions(CurrentWebDriver.get());
       actionsOnElement.accept(element, actions);
@@ -228,7 +228,7 @@ public class DomElement {
     executeSelect("selectByValue(" + value + ")", select -> select.selectByValue(value));
   }
 
-  private void executeSelect(String description, Consumer<Select> selectOnElement) {
+  public void executeSelect(String description, Consumer<Select> selectOnElement) {
     execute(description, element -> {
       Select select = new Select(element);
       selectOnElement.accept(select);

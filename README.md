@@ -19,7 +19,8 @@ Selenium testing can be fun again (ever?).
 
 ## Setup (Maven)
 
-Add Simplelenium as a test dependency to your project and you are all set to go.
+Add Simplelenium as a maventest dependency to your project and you are all
+set to go. **Simplelenium requires java 8**.
 
 ```xml
 <dependency>
@@ -171,7 +172,53 @@ find(".name").should().within(1, MINUTE).contain("a word");
 
 ## Actions
 
-TODO
+Often, you have to interact with the page, not just make verifications.
+Simplelenium supports a lot of actions. Here are some of them:
+
+```java
+find("...").fill("name");
+find("...").submit();
+find("...").click();
+find("...").pressReturn();
+find("...").sendKeys("A", "B", "C");
+find("...").clear();
+find("...").doubleClick();
+find("...").clickAndHold();
+find("...").contextClick();
+find("...").release();
+
+find("...").select("text");
+find("...").deselect();
+find("...").deselectByValue("value");
+find("...").deselectByVisibleText("text");
+find("...").deselectByIndex(index);
+find("...").selectByIndex(index);
+find("...").selectByValue("value");
+```
+
+If that's not enough, thre generic methods give you access to the internal
+Selenium Api in a managed fashion:
+
+To have full access to the underlying `WebElement`:
+
+```java
+find("...").execute(Consumer<? super WebElement> action);
+```
+
+To execute `actions` on the element:
+
+```java
+find("...").executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement);
+```
+
+To execute `selections` on the element:
+
+```java
+find("...").executeSelect(String description, Consumer<Select> selectOnElement);
+```
+
+Those three methods should hopefully not be used very often but it's great to
+know that the full power of Selenium is there underneath.
 
 ## Advanced topics
 
