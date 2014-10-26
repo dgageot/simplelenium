@@ -222,9 +222,19 @@ know that the full power of Selenium is there underneath.
 
 ## Advanced topics
 
-### Page Objects
+Le't say you are not impressed, what else can Simplelenium do to make writing
+tests easier?
 
-### Running tests in parallel
+### Page Objects and Section Objects
+
+Using Page Objects and Section Objects, one can encapsulate both the extraction
+of web elements and the verification, in a more domain oriented fashion. This
+also removes a lot of boilerplate code and decreases code duplication.
+
+Let's take a look at a small example:
+
+```java
+```
 
 ### Running tests in parallel
 
