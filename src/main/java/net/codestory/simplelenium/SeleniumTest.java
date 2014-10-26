@@ -87,7 +87,10 @@ public abstract class SeleniumTest implements SectionObject {
     return driver;
   }
 
-  protected abstract String getDefaultBaseUrl();
+  // Override to set a base url
+  protected String getDefaultBaseUrl() {
+    return "";
+  }
 
   public SeleniumTest goTo(String url) {
     Navigation.setBaseUrl(getDefaultBaseUrl());

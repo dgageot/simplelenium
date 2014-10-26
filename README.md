@@ -4,15 +4,18 @@ A simple and robust layer on top of WebDriver and PhantomJS.
 
 ## Goal
 
-Testing web pages with Selenium/WebDriver can prove difficult. I've seen a lot of projects with an unstable build
-because of Selenium. To be fair, it's more because of the way Selenium is used but experience showed me that using
+Testing web pages with Selenium/WebDriver can prove difficult. I've seen a lot
+of projects with an unstable build because of Selenium. To be fair, it's more
+because of the way Selenium is used but experience showed me that using
 Selenium properly is harder that one might think.
 
-In fact I think that proper usage of Selenium must be left out of tester hands and baked into a small, effective
-library. Simplelenium is my attempt to so and it served me well.
+In fact I think that proper usage of Selenium must be left out of tester hands
+and baked into a small, effective library. Simplelenium is my attempt to so and
+it served me well.
 
-Simplelenium deals properly and out-of-the-box with timing issues and StaleElementReferenceExceptions. Give it a try
-and you'll be surprises how Selenium testing can be fun again (ever?).
+Simplelenium deals properly and out-of-the-box with timing issues and
+`StaleElementReferenceExceptions`. Give it a try and you'll be surprises how
+Selenium testing can be fun again (ever?).
 
 ## Setup (Maven)
 
@@ -31,38 +34,55 @@ Add Simplelenium as a test dependency to your project and you are all set to go.
 
 [![Build Status](https://api.travis-ci.org/dgageot/simplelenium.png)](https://travis-ci.org/dgageot/simplelenium)
 
-## Samples
+## Quick Start
 
 ```java
-goTo("/unknown");
+import net.codestory.simplelenium.SeleniumTest;
+import org.junit.Test;
 
-find("#name").fill("Name");
-find("#age").clear();
-find("#form").submit();
+public class QuickStartTest extends SeleniumTest {
+  @Test
+  public void web_driver_site() {
+    goTo("http://docs.seleniumhq.org/projects/webdriver/");
 
-find("h1").should().contain("Page not found");
+    find("#q").fill("StaleElementReferenceExceptions");
+    find("#submit").click();
+
+    find("a.gs-title")
+      .should()
+      .haveMoreItemsThan(5)
+      .contain("Issue 1887 - selenium - Element not found in the cache")
+      .not().contain("Selenium Rocks!");
+  }
+}
 ```
 
-```java
-find("#level1").click();
-find("#errors").should().contain("Errors for level 1");
-find("#successes").should().contain("Successes for level 1");
+Notice the fluent api that doesn't rely on static imports. This will make your
+life easier.
 
-find("#level2").click();
-find("#errors").should().contain("Errors for level 2");
-find("#errors").should().not().contain("Errors for level 3");
-find("#successes").should().contain("Successes for level 2");
-```
+Lot's of finders, actions and verifications are supported. Notice that no timing
+information is provided. The default settings should be ok the vast majority of
+times.
 
-```java
-goTo("/auth/signout");
+## Finders
 
-find("#login").fill("john");
-find("#password").fill("pwd");
-find("#signin").submit();
+TODO
 
-goTo(url);
-```
+## Actions
+
+TODO
+
+## Verifications
+
+TODO
+
+## Advanced topics
+
+### Page Objects
+
+### Running tests in parallel
+
+### Running tests in parallel
 
 ## Release
 
