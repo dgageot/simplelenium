@@ -64,7 +64,7 @@ public abstract class SeleniumTest implements SectionObject {
   @Rule
   public RuleChain ruleChain = outerRule(testName).around(injectMissingPageObjects).around(takeSnapshot);
 
-  public void takeSnapshot(String suffix) {
+  public SeleniumTest takeSnapshot(String suffix) {
     try {
       byte[] snapshotData = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
       File snapshot = snapshotPath(suffix);
@@ -74,6 +74,7 @@ public abstract class SeleniumTest implements SectionObject {
     } catch (IOException ioe) {
       throw new RuntimeException("Unable to take snapshot", ioe);
     }
+    return this;
   }
 
   protected File snapshotPath(String suffix) {
