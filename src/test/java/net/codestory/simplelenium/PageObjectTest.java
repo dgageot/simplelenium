@@ -24,7 +24,7 @@ public class PageObjectTest {
   public void inject_elements() {
     ThePage thePage = new ThePage();
 
-    PageObjectSection.injectMissingElements(thePage);
+    SectionObject.injectMissingElements(thePage);
 
     assertThat(thePage.h1).isNotNull();
     assertThat(thePage.h4).isNotNull();
@@ -37,7 +37,7 @@ public class PageObjectTest {
   public void inject_page_objects() {
     TheTest theTest = new TheTest();
 
-    PageObjectSection.injectMissingPageObjects(theTest);
+    SectionObject.injectMissingPageObjects(theTest);
 
     assertThat(theTest.page).isNotNull();
     assertThat(theTest.anotherPage).isNotNull();
@@ -48,7 +48,7 @@ public class PageObjectTest {
   public void inject_sections() {
     ThePage thePage = new ThePage();
 
-    PageObjectSection.injectMissingElements(thePage);
+    SectionObject.injectMissingElements(thePage);
 
     assertThat(thePage.section).isNotNull();
     assertThat(thePage.section.name).isNotNull();
@@ -77,13 +77,13 @@ public class PageObjectTest {
     }
   }
 
-  private static class Section implements PageObjectSection {
+  private static class Section implements SectionObject {
     DomElement name;
     DomElement age = find(".age");
     SubSection subSection;
   }
 
-  private static class SubSection implements PageObjectSection {
+  private static class SubSection implements SectionObject {
     DomElement name;
   }
 }

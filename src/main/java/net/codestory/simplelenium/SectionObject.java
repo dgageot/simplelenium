@@ -20,7 +20,7 @@ import org.openqa.selenium.support.ByIdOrName;
 
 import static net.codestory.simplelenium.reflection.ReflectionUtil.*;
 
-public interface PageObjectSection extends Navigation {
+public interface SectionObject extends Navigation {
   public default String path() {
     String currentUrl = CurrentWebDriver.get().getCurrentUrl();
     String defaultBaseUrl = Navigation.getBaseUrl();
@@ -46,16 +46,16 @@ public interface PageObjectSection extends Navigation {
   // Injection
 
   public static void injectMissingPageObjects(Object instance) {
-    forEachFieldOfType(PageObjectSection.class, instance, field -> {
+    forEachFieldOfType(SectionObject.class, instance, field -> {
       setIfNull(field, instance, () -> {
-        PageObjectSection pageObject = newInstance((Class<? extends PageObjectSection>) field.getType());
+        SectionObject pageObject = newInstance((Class<? extends SectionObject>) field.getType());
         injectMissingElements(pageObject);
         return pageObject;
       });
     });
   }
 
-  public static void injectMissingElements(PageObjectSection pageObject) {
+  public static void injectMissingElements(SectionObject pageObject) {
     injectMissingPageObjects(pageObject);
     forEachFieldOfType(DomElement.class, pageObject, field -> {
       setIfNull(field, pageObject, () -> new DomElement(new ByIdOrName(field.getName())));

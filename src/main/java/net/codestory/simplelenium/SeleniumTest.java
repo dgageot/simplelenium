@@ -32,7 +32,7 @@ import java.io.IOException;
 import static org.junit.rules.RuleChain.outerRule;
 import static org.openqa.selenium.OutputType.BYTES;
 
-public abstract class SeleniumTest implements PageObjectSection {
+public abstract class SeleniumTest implements SectionObject {
   private final WebDriver driver = createWebDriver();
 
   public TestName testName = new TestName() {
@@ -49,8 +49,8 @@ public abstract class SeleniumTest implements PageObjectSection {
   public TestWatcher injectMissingPageObjects = new TestWatcher() {
     @Override
     protected void starting(Description desc) {
-      PageObjectSection.injectMissingPageObjects(SeleniumTest.this);
-      PageObjectSection.injectMissingElements(SeleniumTest.this);
+      SectionObject.injectMissingPageObjects(SeleniumTest.this);
+      SectionObject.injectMissingElements(SeleniumTest.this);
     }
   };
 
@@ -90,7 +90,7 @@ public abstract class SeleniumTest implements PageObjectSection {
 
   public SeleniumTest goTo(String url) {
     Navigation.setBaseUrl(getDefaultBaseUrl());
-    PageObjectSection.super.goTo(url);
+    SectionObject.super.goTo(url);
     return this;
   }
 }

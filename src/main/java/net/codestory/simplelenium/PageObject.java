@@ -16,6 +16,6 @@
 package net.codestory.simplelenium;
 
 @FunctionalInterface
-public interface PageObject extends PageObjectSection {
+public interface PageObject extends SectionObject {
   String url();
 }
