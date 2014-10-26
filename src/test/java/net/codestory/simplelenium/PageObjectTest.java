@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PageObjectTest {
   @Test
   public void create_page() {
-    ThePage thePage = PageObject.create(ThePage.class);
+    ThePage thePage = PageObjectSection.create(ThePage.class);
 
     assertThat(thePage.h1).isNotNull();
     assertThat(thePage.h4).isNotNull();
@@ -34,7 +34,7 @@ public class PageObjectTest {
   public void inject_elements() {
     ThePage thePage = new ThePage();
 
-    PageObject.injectMissingElements(thePage);
+    PageObjectSection.injectMissingElements(thePage);
 
     assertThat(thePage.h1).isNotNull();
     assertThat(thePage.h4).isNotNull();
@@ -47,7 +47,7 @@ public class PageObjectTest {
   public void inject_page_objects() {
     TheTest theTest = new TheTest();
 
-    PageObject.injectMissingPageObjects(theTest);
+    PageObjectSection.injectMissingPageObjects(theTest);
 
     assertThat(theTest.page).isNotNull();
     assertThat(theTest.anotherPage).isNotNull();
@@ -58,7 +58,7 @@ public class PageObjectTest {
   public void inject_sections() {
     ThePage thePage = new ThePage();
 
-    PageObject.injectMissingElements(thePage);
+    PageObjectSection.injectMissingElements(thePage);
 
     assertThat(thePage.section).isNotNull();
     assertThat(thePage.section.name).isNotNull();

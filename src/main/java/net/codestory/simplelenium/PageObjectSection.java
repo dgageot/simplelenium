@@ -16,6 +16,9 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.CurrentWebDriver;
+import org.openqa.selenium.support.ByIdOrName;
+
+import static net.codestory.simplelenium.reflection.ReflectionUtil.*;
 
 public interface PageObjectSection extends Navigation {
   public default String path() {
@@ -38,5 +41,26 @@ public interface PageObjectSection extends Navigation {
 
   public default String pageSource() {
     return CurrentWebDriver.get().getPageSource();
+  }
+
+  // Injection
+
+  public static <T extends PageObjectSection> T create(Class<T> type) {
+    T pageObject = newInstance(type);
+    injectMissingElements(pageObject);
+    return pageObject;
+  }
+
+  public static void injectMissingPageObjects(Object instance) {
+    forEachFieldOfType(PageObjectSection.class, instance, field -> {
+      setIfNull(field, instance, () -> create((Class<? extends PageObjectSection>) field.getType()));
+    });
+  }
+
+  public static void injectMissingElements(PageObjectSection pageObject) {
+    injectMissingPageObjects(pageObject);
+    forEachFieldOfType(DomElement.class, pageObject, field -> {
+      setIfNull(field, pageObject, () -> new DomElement(new ByIdOrName(field.getName())));
+    });
   }
 }

@@ -29,8 +29,6 @@ import org.openqa.selenium.WebDriver;
 import java.io.File;
 import java.io.IOException;
 
-import static net.codestory.simplelenium.PageObject.injectMissingElements;
-import static net.codestory.simplelenium.PageObject.injectMissingPageObjects;
 import static org.junit.rules.RuleChain.outerRule;
 import static org.openqa.selenium.OutputType.BYTES;
 
@@ -51,8 +49,8 @@ public abstract class SeleniumTest implements PageObjectSection {
   public TestWatcher injectMissingPageObjects = new TestWatcher() {
     @Override
     protected void starting(Description desc) {
-      injectMissingPageObjects(SeleniumTest.this);
-      injectMissingElements(SeleniumTest.this);
+      PageObjectSection.injectMissingPageObjects(SeleniumTest.this);
+      PageObjectSection.injectMissingElements(SeleniumTest.this);
     }
   };
 
