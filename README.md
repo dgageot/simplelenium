@@ -14,7 +14,8 @@ and baked into a small, effective library. Simplelenium is my attempt to so and
 it served me well.
 
 Simplelenium deals properly and out-of-the-box with timing issues and
-`StaleElementReferenceExceptions`. Give it a try and you'll be surprises how
+`StaleElementReferenceExceptions`. It supports running tests in parallel
+without you thinking about it. Give it a try and you'll be surprises how
 Selenium testing can be fun again (ever?).
 
 ## Setup (Maven)
