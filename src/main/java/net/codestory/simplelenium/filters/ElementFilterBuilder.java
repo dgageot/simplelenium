@@ -28,9 +28,9 @@ public class ElementFilterBuilder {
   private final DomElement domElement;
   private final String description;
   private final Function<WebElement, String> toValue;
-  private final Predicate<Boolean> ok;
+  private final boolean ok;
 
-  public ElementFilterBuilder(DomElement domElement, String description, Function<WebElement, String> toValue, Predicate<Boolean> ok) {
+  public ElementFilterBuilder(DomElement domElement, String description, Function<WebElement, String> toValue, boolean ok) {
     this.domElement = domElement;
     this.description = description;
     this.toValue = toValue;
@@ -40,52 +40,50 @@ public class ElementFilterBuilder {
   // Modifiers
 
   public ElementFilterBuilder not() {
-    return new ElementFilterBuilder(domElement, description, toValue, ok.negate());
+    return new ElementFilterBuilder(domElement, description, toValue, !ok);
   }
 
   // Matchers
 
   public DomElement equalsTo(String text) {
-    return build("=[" + text + "]", value -> value.equals(text));
+    return build("is equal to", text, StringPredicates.equalsTo(text));
   }
 
   public DomElement contains(String text) {
-    return build(" contains[" + text + "]", value -> value.contains(text));
+    return build("contains", text, StringPredicates.contains(text));
   }
 
   public DomElement contains(Pattern regex) {
-    return build(" contains[" + regex + "]", value -> regex.matcher(value).find());
+    return build("contains", regex, StringPredicates.contains(regex));
   }
 
   public DomElement containsWord(String word) {
-    Pattern pattern = patternForWord(word);
-    return build(" has word[" + word + "]", value -> pattern.matcher(value).find());
+    return build("has word", word, StringPredicates.containsWord(word));
   }
 
   public DomElement startsWith(String text) {
-    return build(" startsWith[" + text + "]", value -> value.startsWith(text));
+    return build("starts with", text, StringPredicates.startsWith(text));
   }
 
   public DomElement endsWith(String text) {
-    return build(" endsWith[" + text + "]", value -> value.endsWith(text));
+    return build("ends with", text, StringPredicates.endsWith(text));
   }
 
   public DomElement matches(Pattern regex) {
-    return build(" matches[" + regex + "]", value -> regex.matcher(value).matches());
+    return build("matches", regex, StringPredicates.matches(regex));
   }
 
   public DomElement matches(Predicate<String> predicate) {
-    return build(" matches[" + predicate + "]", predicate);
+    return build("matches", predicate, predicate);
   }
 
   // Internal
 
-  static Pattern patternForWord(String word) {
-    return Pattern.compile("\\b(" + word + ")\\b");
-  }
+  private DomElement build(String word, Object details, Predicate<String> predicate) {
+    String fullDescription = " with " + description + " that " + word + " [" + details + "]";
 
-  private DomElement build(String details, Predicate<String> predicate) {
-    UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> ok.test(predicate.test(toValue.apply(element))));
-    return domElement.with(new ElementFilter(" with " + description + details, filter));
+    UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> (ok == predicate.test(toValue.apply(element))));
+
+    return domElement.with(new ElementFilter(fullDescription, filter));
   }
 }

@@ -17,17 +17,17 @@ package net.codestory.simplelenium.filters;
 
 import org.junit.Test;
 
-import java.util.regex.Pattern;
+import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ElementFilterBuilderTest {
+public class StringPredicatesTest {
   @Test
   public void match_whole_word() {
-    Pattern pattern = ElementFilterBuilder.patternForWord("\\b(word)\\b");
+    Predicate<String> pattern = StringPredicates.containsWord("word");
 
-    assertThat(pattern.matcher("word").find()).isTrue();
-    assertThat(pattern.matcher("before word after").find()).isTrue();
-    assertThat(pattern.matcher("noword").find()).isFalse();
+    assertThat(pattern.test("word")).isTrue();
+    assertThat(pattern.test("before word after")).isTrue();
+    assertThat(pattern.test("noword")).isFalse();
   }
 }

@@ -20,8 +20,10 @@ import org.openqa.selenium.WebElement;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import static java.util.function.UnaryOperator.identity;
+
 public class ElementFilter {
-  private static final ElementFilter ANY = new ElementFilter("", UnaryOperator.identity());
+  private static final ElementFilter ANY = new ElementFilter("", identity());
 
   private final String description;
   private final UnaryOperator<Stream<WebElement>> filter;
@@ -29,6 +31,14 @@ public class ElementFilter {
   public ElementFilter(String description, UnaryOperator<Stream<WebElement>> filter) {
     this.description = description;
     this.filter = filter;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public UnaryOperator<Stream<WebElement>> getFilter() {
+    return filter;
   }
 
   public static ElementFilter any() {
@@ -42,14 +52,6 @@ public class ElementFilter {
     if (ANY == second) {
       return this;
     }
-    return new ElementFilter(getDescription() + "," + second.getDescription(), stream -> second.filter.apply(filter.apply(stream)));
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public UnaryOperator<Stream<WebElement>> getFilter() {
-    return filter;
+    return new ElementFilter(description + ',' + second.description, stream -> second.filter.apply(filter.apply(stream)));
   }
 }

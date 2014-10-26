@@ -80,7 +80,7 @@ public class DomElement {
   }
 
   private ElementFilterBuilder with(String description, Function<WebElement, String> toValue) {
-    return new ElementFilterBuilder(this, description, toValue, ok -> ok);
+    return new ElementFilterBuilder(this, description, toValue, true);
   }
 
   // Limit results
