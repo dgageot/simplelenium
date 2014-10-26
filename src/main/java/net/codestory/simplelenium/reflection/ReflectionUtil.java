@@ -18,8 +18,7 @@ package net.codestory.simplelenium.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 import static java.lang.reflect.Modifier.isFinal;
@@ -29,26 +28,18 @@ public class ReflectionUtil {
     // Static class
   }
 
-  public static void forEachFieldOfType(Class<?> type, Object target, Consumer<Field> action) {
+  public static void injectNullFieldsOfType(Class<?> type, Object target, Function<Field, Object> factory) {
     for (Field field : target.getClass().getDeclaredFields()) {
-      if (type.isAssignableFrom(field.getType())) {
-        action.accept(field);
+      if (!isFinal(field.getModifiers()) && type.isAssignableFrom(field.getType())) {
+        try {
+          field.setAccessible(true);
+          if (field.get(target) == null) {
+            field.set(target, factory.apply(field));
+          }
+        } catch (IllegalAccessException e) {
+          throw new IllegalStateException(format("Unable to set field [%s] on instance of type [%s]", field.getName(), target.getClass().getName()));
+        }
       }
-    }
-  }
-
-  public static void setIfNull(Field field, Object target, Supplier<Object> valueSupplier) {
-    if (isFinal(field.getModifiers())) {
-      return;
-    }
-
-    try {
-      field.setAccessible(true);
-      if (field.get(target) == null) {
-        field.set(target, valueSupplier.get());
-      }
-    } catch (IllegalAccessException e) {
-      throw new IllegalStateException(format("Unable to set field [%s] on instance of type [%s]", field.getName(), target.getClass().getName()));
     }
   }
 
