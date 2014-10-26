@@ -26,6 +26,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -238,6 +239,12 @@ public class DomElement {
 
   public void execute(Consumer<? super WebElement> action) {
     execute("execute(" + action + ")", action);
+  }
+
+  // Retry
+
+  public DomElement retryFor(long duration, TimeUnit timeUnit) {
+    return new DomElement(selector, this.filter.and(filter), new Retry(duration, timeUnit));
   }
 
   // Internal
