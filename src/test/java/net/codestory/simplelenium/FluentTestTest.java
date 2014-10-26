@@ -36,7 +36,7 @@ public class FluentTestTest {
   }
 
   static class FluentTest {
-    public DomElementFactory goTo(String url) {
+    public DomElementFinder goTo(String url) {
       return new SeleniumTest() {
         protected String getDefaultBaseUrl() {
           return "";

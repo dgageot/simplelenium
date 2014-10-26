@@ -20,7 +20,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.net.URI;
 
-public interface Navigation extends DomElementFactory {
+public interface Navigation extends DomElementFinder {
   ThreadLocal<String> baseUrl = new ThreadLocal<>();
 
   public static String getBaseUrl() {

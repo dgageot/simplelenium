@@ -17,7 +17,7 @@ package net.codestory.simplelenium;
 
 import org.openqa.selenium.By;
 
-public interface DomElementFactory {
+public interface DomElementFinder {
   // default syntax
 
   public default DomElement find(String selector) {
