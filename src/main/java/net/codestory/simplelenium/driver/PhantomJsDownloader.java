@@ -15,7 +15,6 @@
  */
 package net.codestory.simplelenium.driver;
 
-import net.codestory.simplelenium.misc.LockFile;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
