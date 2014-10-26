@@ -16,12 +16,6 @@ A simple and robust layer on top of Selenium and PhantomJS.
 </dependency>
 ```
 
-## Release
-
-```bash
-mvn release:clean release:prepare release:perform
-```
-
 ## Samples
 
 ```java
@@ -55,8 +49,8 @@ find("#signin").submit();
 goTo(url);
 ```
 
-## TODO
+## Release
 
-+ iframes()
-+ alerts()
-+ windows()
+```bash
+mvn release:clean release:prepare release:perform
+```
