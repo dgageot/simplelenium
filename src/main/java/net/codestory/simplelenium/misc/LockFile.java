@@ -15,16 +15,17 @@
  */
 package net.codestory.simplelenium.misc;
 
-import com.google.common.collect.Lists;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileLock;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static java.util.Objects.requireNonNull;
 
 public class LockFile {
-  private static final List<LockFile> LOCKS_TAKEN = Lists.newCopyOnWriteArrayList();
+  private static final List<LockFile> LOCKS_TAKEN = new CopyOnWriteArrayList<>();
 
   private final File lockFile;
   private FileLock lock;
@@ -39,12 +40,11 @@ public class LockFile {
       try {
         lock = new FileOutputStream(lockFile).getChannel().tryLock();
         if (lock != null) {
-          LOCKS_TAKEN.add(this); // Garde le lock en static pour qu'il ne soit pas relache par le GC
+          LOCKS_TAKEN.add(this); // This way the lock cannot be reclaimed by the GC
           return;
         }
       } catch (Exception e) {
         // Ignore
-        System.out.println(e);
       }
 
       waitBeforeRetry();
@@ -52,9 +52,7 @@ public class LockFile {
   }
 
   public void release() {
-    if (lock == null) {
-      throw new IllegalStateException("Lock before unlock");
-    }
+    requireNonNull(lock, "Lock before unlock");
 
     try {
       LOCKS_TAKEN.remove(this);
@@ -66,7 +64,7 @@ public class LockFile {
 
   private static void waitBeforeRetry() {
     try {
-      Thread.sleep(100);
+      Thread.sleep(500);
     } catch (InterruptedException e) {
       // Ignore
     }
