@@ -141,13 +141,13 @@ find(".name").should().haveDimension(width, height);
 find(".name").should().beAtLocation(x, y);
 ```
 
-All verifications can be inverted:
+Verifications can be inverted:
 
 ```java
 find(".name").should().not().contain("a word");
 ```
 
-And verifications can be chained:
+Verifications can be chained:
 
 ```java
 find(".name")
@@ -158,7 +158,7 @@ find(".name")
   .not().beDisplayed();
 ```
 
-The way Simplelenium deals with timing issue is simple :
+The way Simplelenium deals with timing issue is basic, yet efficient:
 
  + It tries to make the search
  + Then the verification
@@ -206,10 +206,10 @@ find("...").selectByIndex(index);
 find("...").selectByValue("value");
 ```
 
-If that's not enough, thre generic methods give you access to the internal
-Selenium Api in a managed fashion:
+If that's not enough, three generic methods give you access to the
+Selenium Api underneath but in a managed fashion:
 
-To have full access to the underlying `WebElement`:
+To do anything with the underlying `WebElement`:
 
 ```java
 find("...").execute(Consumer<? super WebElement> action);
@@ -227,7 +227,7 @@ To execute `selections` on the element:
 find("...").executeSelect(String description, Consumer<Select> selectOnElement);
 ```
 
-Those three methods should hopefully not be used very often but it's great to
+Those three methods should hopefully not be used often but it's great to
 know that the full power of Selenium is there underneath.
 
 ## Advanced topics
@@ -344,15 +344,15 @@ parallel at class or method level. Easy! You don't have to copy this
 configuration, with a different syntax, into your test framework. It will just
 work.
 
-Running tests in parallel with multiple vms also works well because we use a
-global lock when we download PhantomJS. I told you, you don't have to think
-about it.
+Running tests in parallel with multiple JVMs also works well. We use a
+lock on the filesystem when we download PhantomJS.
+I told you, you don't have to think about it.
 
 ### Tests without JUnit
 
 Sometimes, running the tests with JUnit is not what you want. You'd like to
-do your own threading and own lifecycle. You can then use the `FluentTest`
-class this way:
+do your own threading and own test lifecycle. You can then use the `FluentTest`
+class:
 
 ```java
 import org.junit.Test;
@@ -376,13 +376,15 @@ public class FluentTestTest {
   }
 }
 ```
+How cool is that?
 
 ## What Simplelenium doesn't do
 
-### Support anything else that PhantomJS
+### Support anything else than PhantomJS
 
-It's not difficult to add but that's not done already. Pull request anyone?
-I rarely face the need to test on multiple browser. This need exists though.
+It's not difficult to add but that's not done. Pull request anyone?
+I rarely face the need to test on multiple browsers.
+This need clearly exists though.
 
 ### Support alerts, iframes and windows
 
@@ -397,7 +399,7 @@ Simplelenium to check. Otherwise you might extract a value a bit too soon and
 there you are, back into timing hell, with false negative tests. You don't want
 that. Trust me.
 
-The Simplelenium way of doing this is using this syntax:
+Here's the Simplelenium way of doing this:
 
 ```java
 find("...").should().match(element -> /* Test something on every element found /*);
