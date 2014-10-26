@@ -43,6 +43,25 @@ public class ReflectionUtil {
     }
   }
 
+  public static void injectNullFieldsWithConstructorParameterOfType(Class<?> type, Object target, Function<Field, Object> factory) {
+    for (Field field : target.getClass().getDeclaredFields()) {
+      try {
+        if (!isFinal(field.getModifiers())) {
+          field.setAccessible(true);
+          if (field.get(target) == null) {
+            Constructor<?> constructor = field.getType().getDeclaredConstructor(type);
+            constructor.setAccessible(true);
+            field.set(target, constructor.newInstance(factory.apply(field)));
+          }
+        }
+      } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+        throw new IllegalStateException(format("Unable to set field [%s] on instance of type [%s]", field.getName(), target.getClass().getName()));
+      } catch (NoSuchMethodException e) {
+        // Ignore
+      }
+    }
+  }
+
   public static <T> T newInstance(Class<T> type) {
     Constructor<T> constructor;
     try {

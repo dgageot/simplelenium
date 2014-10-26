@@ -57,8 +57,6 @@ goTo(url);
 
 ## TODO
 
-+ inject MyDomElement with constructor(Domelement)
-+ inject MyDomElement with field(Domelement)
 + iframes()
 + alerts()
 + windows()

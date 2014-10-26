@@ -57,6 +57,15 @@ public class PageObjectTest {
     assertThat(thePage.section.subSection.name).isNotNull();
   }
 
+  @Test
+  public void inject_custom_dom_element() {
+    AnotherSection section = new AnotherSection();
+
+    SectionObject.injectMissingElements(section);
+
+    assertThat(section.name).isNotNull();
+  }
+
   private static class TheTest {
     ThePage page;
     final ThePage anotherPage = new ThePage();
@@ -85,5 +94,22 @@ public class PageObjectTest {
 
   private static class SubSection implements SectionObject {
     DomElement name;
+  }
+
+  private static class AnotherSection implements SectionObject {
+    CustomDomElement name;
+  }
+
+  private static class CustomDomElement {
+    private final DomElement delegate;
+
+    private CustomDomElement(DomElement delegate) {
+      this.delegate = delegate;
+    }
+
+    public void clickAndLog() {
+      delegate.click();
+      System.out.println("Clicked");
+    }
   }
 }

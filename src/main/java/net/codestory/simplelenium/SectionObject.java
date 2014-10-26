@@ -18,8 +18,7 @@ package net.codestory.simplelenium;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
 import org.openqa.selenium.support.ByIdOrName;
 
-import static net.codestory.simplelenium.reflection.ReflectionUtil.injectNullFieldsOfType;
-import static net.codestory.simplelenium.reflection.ReflectionUtil.newInstance;
+import static net.codestory.simplelenium.reflection.ReflectionUtil.*;
 
 public interface SectionObject extends Navigation {
   public default String path() {
@@ -57,5 +56,6 @@ public interface SectionObject extends Navigation {
   public static void injectMissingElements(SectionObject pageObject) {
     injectMissingPageObjects(pageObject);
     injectNullFieldsOfType(DomElement.class, pageObject, field -> new DomElement(new ByIdOrName(field.getName())));
+    injectNullFieldsWithConstructorParameterOfType(DomElement.class, pageObject, field -> new DomElement(new ByIdOrName(field.getName())));
   }
 }
