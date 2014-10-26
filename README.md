@@ -57,8 +57,6 @@ goTo(url);
 
 ## TODO
 
-+ fillWith(String...)
-+ fillWith(Bean)
 + inject MyDomElement with constructor(Domelement)
 + inject MyDomElement with field(Domelement)
 + iframes()
