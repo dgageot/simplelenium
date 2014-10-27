@@ -15,6 +15,11 @@
  */
 package net.codestory.simplelenium.reflection;
 
+import net.codestory.simplelenium.DomElement;
+import net.codestory.simplelenium.SectionObject;
+import net.codestory.simplelenium.filters.LazyDomElement;
+import org.openqa.selenium.support.ByIdOrName;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +31,20 @@ import static java.lang.reflect.Modifier.isFinal;
 public class ReflectionUtil {
   private ReflectionUtil() {
     // Static class
+  }
+
+  public static void injectMissingPageObjects(Object instance) {
+    injectNullFieldsOfType(SectionObject.class, instance, field -> {
+      SectionObject pageObject = newInstance((Class<? extends SectionObject>) field.getType());
+      injectMissingElements(pageObject);
+      return pageObject;
+    });
+  }
+
+  public static void injectMissingElements(SectionObject pageObject) {
+    injectMissingPageObjects(pageObject);
+    injectNullFieldsOfType(DomElement.class, pageObject, field -> new LazyDomElement(new ByIdOrName(field.getName())));
+    injectNullFieldsWithConstructorParameterOfType(DomElement.class, pageObject, field -> new LazyDomElement(new ByIdOrName(field.getName())));
   }
 
   public static void injectNullFieldsOfType(Class<?> type, Object target, Function<Field, Object> factory) {

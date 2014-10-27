@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.reflection.ReflectionUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +25,7 @@ public class PageObjectTest {
   public void inject_elements() {
     ThePage thePage = new ThePage();
 
-    SectionObject.injectMissingElements(thePage);
+    ReflectionUtil.injectMissingElements(thePage);
 
     assertThat(thePage.h1).isNotNull();
     assertThat(thePage.h4).isNotNull();
@@ -37,7 +38,7 @@ public class PageObjectTest {
   public void inject_page_objects() {
     TheTest theTest = new TheTest();
 
-    SectionObject.injectMissingPageObjects(theTest);
+    ReflectionUtil.injectMissingPageObjects(theTest);
 
     assertThat(theTest.page).isNotNull();
     assertThat(theTest.anotherPage).isNotNull();
@@ -48,7 +49,7 @@ public class PageObjectTest {
   public void inject_sections() {
     ThePage thePage = new ThePage();
 
-    SectionObject.injectMissingElements(thePage);
+    ReflectionUtil.injectMissingElements(thePage);
 
     assertThat(thePage.section).isNotNull();
     assertThat(thePage.section.name).isNotNull();
@@ -61,7 +62,7 @@ public class PageObjectTest {
   public void inject_custom_dom_element() {
     AnotherSection section = new AnotherSection();
 
-    SectionObject.injectMissingElements(section);
+    ReflectionUtil.injectMissingElements(section);
 
     assertThat(section.name).isNotNull();
   }

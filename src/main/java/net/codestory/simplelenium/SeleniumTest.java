@@ -17,6 +17,7 @@ package net.codestory.simplelenium;
 
 import com.google.common.io.Files;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
+import net.codestory.simplelenium.reflection.ReflectionUtil;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TestName;
@@ -49,8 +50,8 @@ public abstract class SeleniumTest implements SectionObject {
   public TestWatcher injectMissingPageObjects = new TestWatcher() {
     @Override
     protected void starting(Description desc) {
-      SectionObject.injectMissingPageObjects(SeleniumTest.this);
-      SectionObject.injectMissingElements(SeleniumTest.this);
+      ReflectionUtil.injectMissingPageObjects(SeleniumTest.this);
+      ReflectionUtil.injectMissingElements(SeleniumTest.this);
     }
   };
 

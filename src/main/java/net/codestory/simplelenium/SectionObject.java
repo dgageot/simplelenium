@@ -16,10 +16,6 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.CurrentWebDriver;
-import net.codestory.simplelenium.filters.LazyDomElement;
-import org.openqa.selenium.support.ByIdOrName;
-
-import static net.codestory.simplelenium.reflection.ReflectionUtil.*;
 
 public interface SectionObject extends Navigation {
   public default String path() {
@@ -42,21 +38,5 @@ public interface SectionObject extends Navigation {
 
   public default String pageSource() {
     return CurrentWebDriver.get().getPageSource();
-  }
-
-  // Injection
-
-  public static void injectMissingPageObjects(Object instance) {
-    injectNullFieldsOfType(SectionObject.class, instance, field -> {
-      SectionObject pageObject = newInstance((Class<? extends SectionObject>) field.getType());
-      injectMissingElements(pageObject);
-      return pageObject;
-    });
-  }
-
-  public static void injectMissingElements(SectionObject pageObject) {
-    injectMissingPageObjects(pageObject);
-    injectNullFieldsOfType(DomElement.class, pageObject, field -> new LazyDomElement(new ByIdOrName(field.getName())));
-    injectNullFieldsWithConstructorParameterOfType(DomElement.class, pageObject, field -> new LazyDomElement(new ByIdOrName(field.getName())));
   }
 }
