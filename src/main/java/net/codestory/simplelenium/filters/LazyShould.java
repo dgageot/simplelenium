@@ -17,7 +17,7 @@ package net.codestory.simplelenium.filters;
 
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import net.codestory.simplelenium.Should;
+import net.codestory.simplelenium.ShouldChain;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static net.codestory.simplelenium.text.Text.plural;
 
-class LazyShould implements Should {
+class LazyShould implements ShouldChain {
   private final By selector;
   private final ElementFilter filter;
   private final Retry retry;

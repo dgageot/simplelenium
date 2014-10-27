@@ -28,35 +28,31 @@ public interface Should extends Navigation {
 
   Should not();
 
-  Should and();
-
-  Should should();
-
   // Expectations
 
-  Should contain(String... texts);
+  ShouldChain contain(String... texts);
 
-  Should match(Pattern regexp);
+  ShouldChain match(Pattern regexp);
 
-  Should beEnabled();
+  ShouldChain beEnabled();
 
-  Should beDisplayed();
+  ShouldChain beDisplayed();
 
-  Should beSelected();
+  ShouldChain beSelected();
 
-  Should haveLessItemsThan(int maxCount);
+  ShouldChain haveLessItemsThan(int maxCount);
 
-  Should haveSize(int size);
+  ShouldChain haveSize(int size);
 
-  Should haveMoreItemsThan(int minCount);
+  ShouldChain haveMoreItemsThan(int minCount);
 
-  Should beEmpty();
+  ShouldChain beEmpty();
 
-  Should exist();
+  ShouldChain exist();
 
-  Should haveDimension(int width, int height);
+  ShouldChain haveDimension(int width, int height);
 
-  Should beAtLocation(int x, int y);
+  ShouldChain beAtLocation(int x, int y);
 
-  Should match(Predicate<WebElement> condition);
+  ShouldChain match(Predicate<WebElement> condition);
 }
