@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public class StreamFilters {
+class StreamFilters {
   private StreamFilters() {
     // Static class
   }

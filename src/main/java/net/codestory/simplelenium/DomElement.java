@@ -15,13 +15,6 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.driver.CurrentWebDriver;
-import net.codestory.simplelenium.filters.ElementFilter;
-import net.codestory.simplelenium.filters.ElementFilterBuilder;
-import net.codestory.simplelenium.filters.StreamFilters;
-import net.codestory.simplelenium.text.Text;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -29,235 +22,113 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
 
-public class DomElement {
-  private final By selector;
-  private final ElementFilter filter;
-  private final Retry retry;
-
-  public DomElement(By selector) {
-    this(selector, ElementFilter.any(), Retry._30_SECONDS);
-  }
-
-  private DomElement(By selector, ElementFilter filter, Retry retry) {
-    this.selector = selector;
-    this.filter = filter;
-    this.retry = retry;
-  }
-
+public interface DomElement {
   // Narrow find
 
-  public DomElement with(ElementFilter filter) {
-    return new DomElement(selector, this.filter.and(filter), retry);
-  }
+  FilteredDomElement withText();
 
-  public ElementFilterBuilder withText() {
-    return narrow("text", element -> element.getText());
-  }
+  FilteredDomElement withId();
 
-  public ElementFilterBuilder withId() {
-    return narrow("id", element -> element.getAttribute("id"));
-  }
+  FilteredDomElement withName();
 
-  public ElementFilterBuilder withName() {
-    return narrow("id", element -> element.getAttribute("name"));
-  }
+  FilteredDomElement withTagName();
 
-  public ElementFilterBuilder withTagName() {
-    return narrow("tag name", element -> element.getTagName());
-  }
+  FilteredDomElement withClass();
 
-  public ElementFilterBuilder withClass() {
-    return narrow("class", element -> element.getAttribute("class"));
-  }
+  FilteredDomElement withAttribute(String name);
 
-  public ElementFilterBuilder withAttribute(String name) {
-    return narrow("attribute[" + name + "]", element -> element.getAttribute(name));
-  }
-
-  public ElementFilterBuilder withCssValue(String name) {
-    return narrow("cssValue[" + name + "]", element -> element.getCssValue(name));
-  }
-
-  private ElementFilterBuilder narrow(String description, Function<WebElement, String> toValue) {
-    return new ElementFilterBuilder(this, description, toValue, true);
-  }
+  FilteredDomElement withCssValue(String name);
 
   // Limit results
 
-  public DomElement first() {
-    return filter("first", StreamFilters.first());
-  }
+  DomElement first();
 
-  public DomElement second() {
-    return filter("second", StreamFilters.second());
-  }
+  DomElement second();
 
-  public DomElement third() {
-    return filter("third", StreamFilters.third());
-  }
+  DomElement third();
 
-  public DomElement nth(int index) {
-    return filter("nth[" + index + "]", StreamFilters.nth(index));
-  }
+  DomElement nth(int index);
 
-  public DomElement limit(int max) {
-    return filter("limit[" + max + "]", StreamFilters.limit(max));
-  }
+  DomElement limit(int max);
 
-  public DomElement skip(int count) {
-    return filter("skip[" + count + "]", StreamFilters.skip(count));
-  }
+  DomElement skip(int count);
 
-  public DomElement last() {
-    return filter("last", StreamFilters.last());
-  }
-
-  private DomElement filter(String description, UnaryOperator<Stream<WebElement>> filter) {
-    return with(new ElementFilter(", " + description, filter));
-  }
+  DomElement last();
 
   // Shortcuts
 
-  public DomElement withText(String text) {
+  public default DomElement withText(String text) {
     return withText().contains(text);
   }
 
-  public DomElement withId(String id) {
+  public default DomElement withId(String id) {
     return withId().equalsTo(id);
   }
 
-  public DomElement withName(String name) {
+  public default DomElement withName(String name) {
     return withName().equalsTo(name);
   }
 
-  public DomElement withClass(String cssClass) {
+  public default DomElement withClass(String cssClass) {
     return withClass().containsWord(cssClass);
   }
 
-  public DomElement withTagName(String name) {
+  public default DomElement withTagName(String name) {
     return withTagName().equalsTo(name);
   }
 
   // Assertions
 
-  public Should should() {
-    return new Should(selector, filter, Retry._5_SECONDS, false);
-  }
+  Should should();
 
   // Actions
 
-  public void fill(CharSequence text) {
-    execute("fill(" + text + ")", element -> element.sendKeys(text));
-  }
+  void fill(CharSequence text);
 
-  public void pressReturn() {
-    execute("pressReturn()", element -> element.sendKeys(Keys.RETURN));
-  }
+  void pressReturn();
 
-  public void sendKeys(CharSequence... keysToSend) {
-    execute("sendKeys()", element -> element.sendKeys(keysToSend));
-  }
+  void sendKeys(CharSequence... keysToSend);
 
-  public void clear() {
-    execute("clear()", element -> element.clear());
-  }
+  void clear();
 
-  public void submit() {
-    execute("submit", element -> element.submit());
-  }
+  void submit();
 
-  public void click() {
-    execute("click", element -> element.click());
-  }
+  void click();
 
-  public void doubleClick() {
-    executeActions("doubleClick", (element, actions) -> actions.doubleClick(element));
-  }
+  void doubleClick();
 
-  public void clickAndHold() {
-    executeActions("clickAndHold", (element, actions) -> actions.clickAndHold(element));
-  }
+  void clickAndHold();
 
-  public void contextClick() {
-    executeActions("contextClick", (element, actions) -> actions.contextClick(element));
-  }
+  void contextClick();
 
-  public void release() {
-    executeActions("release", (element, actions) -> actions.release(element));
-  }
+  void release();
 
-  public void executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement) {
-    execute(description, element -> {
-      Actions actions = new Actions(CurrentWebDriver.get());
-      actionsOnElement.accept(element, actions);
-      actions.perform();
-    });
-  }
+  void executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement);
 
   // Selection
 
-  public void select(String text) {
-    executeSelect("select(" + text + ")", select -> select.selectByVisibleText(text));
-  }
+  void select(String text);
 
-  public void deselect() {
-    executeSelect("deselect()", select -> select.deselectAll());
-  }
+  void deselect();
 
-  public void deselectByValue(String value) {
-    executeSelect("deselectByValue(" + value + ")", select -> select.deselectByValue(value));
-  }
+  void deselectByValue(String value);
 
-  public void deselectByVisibleText(String text) {
-    executeSelect("deselectByVisibleText(" + text + ")", select -> select.deselectByVisibleText(text));
-  }
+  void deselectByVisibleText(String text);
 
-  public void deselectByIndex(int index) {
-    executeSelect("deselectByIndex(" + index + ")", select -> select.deselectByIndex(index));
-  }
+  void deselectByIndex(int index);
 
-  public void selectByIndex(int index) {
-    executeSelect("selectByIndex(" + index + ")", select -> select.selectByIndex(index));
-  }
+  void selectByIndex(int index);
 
-  public void selectByValue(String value) {
-    executeSelect("selectByValue(" + value + ")", select -> select.selectByValue(value));
-  }
+  void selectByValue(String value);
 
-  public void executeSelect(String description, Consumer<Select> selectOnElement) {
-    execute(description, element -> {
-      Select select = new Select(element);
-      selectOnElement.accept(select);
-    });
-  }
+  void executeSelect(String description, Consumer<Select> selectOnElement);
 
   // Actions on low level elements
 
-  public void execute(Consumer<? super WebElement> action) {
-    execute("execute(" + action + ")", action);
-  }
+  void execute(Consumer<? super WebElement> action);
 
   // Retry
 
-  public DomElement retryFor(long duration, TimeUnit timeUnit) {
-    return new DomElement(selector, this.filter.and(filter), new Retry(duration, timeUnit));
-  }
-
-  // Internal
-
-  private void execute(String message, Consumer<? super WebElement> action) {
-    System.out.println(" - " + Text.toString(selector) + filter.getDescription() + "." + message);
-
-    retry.execute(() -> findOne(), action);
-  }
-
-  private WebElement findOne() {
-    Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
-    Stream<WebElement> filtered = filter.getFilter().apply(webElements);
-    return filtered.findFirst().orElse(null);
-  }
+  DomElement retryFor(long duration, TimeUnit timeUnit);
 }

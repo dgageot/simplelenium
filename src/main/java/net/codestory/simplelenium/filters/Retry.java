@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium;
+package net.codestory.simplelenium.filters;
 
 import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.NotFoundException;
@@ -27,8 +27,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static net.codestory.simplelenium.Retry.Error.KO;
-import static net.codestory.simplelenium.Retry.Error.NOT_FOUND;
 
 class Retry {
   public static final Retry _5_SECONDS = new Retry(5, SECONDS);
@@ -36,7 +34,7 @@ class Retry {
 
   private final long timeoutInMs;
 
-  Retry(long duration, TimeUnit timeUnit) {
+  public Retry(long duration, TimeUnit timeUnit) {
     this.timeoutInMs = timeUnit.toMillis(duration);
   }
 
@@ -60,7 +58,7 @@ class Retry {
   }
 
   <T> boolean verify(Supplier<T> targetSupplier, Predicate<T> predicate) throws NoSuchElementException {
-    Error error = KO;
+    Error error = Error.KO;
 
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
@@ -69,17 +67,17 @@ class Retry {
           return true;
         }
 
-        error = KO;
+        error = Error.KO;
       } catch (InvalidElementStateException e) {
-        error = KO;
+        error = Error.KO;
       } catch (NotFoundException e) {
-        error = NOT_FOUND;
+        error = Error.NOT_FOUND;
       } catch (StaleElementReferenceException e) {
         // ignore
       }
     }
 
-    if (error == NOT_FOUND) {
+    if (error == Error.NOT_FOUND) {
       throw new NoSuchElementException("Not found");
     }
     return false;

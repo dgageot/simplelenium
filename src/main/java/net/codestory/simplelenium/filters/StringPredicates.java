@@ -18,7 +18,7 @@ package net.codestory.simplelenium.filters;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-public class StringPredicates {
+class StringPredicates {
   private StringPredicates() {
     // Static class
   }

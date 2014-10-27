@@ -15,27 +15,29 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.filters.LazyDomElement;
-import org.openqa.selenium.By;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
-public interface DomElementFinder {
-  // default syntax
+public interface FilteredDomElement {
+  // Modifiers
 
-  public default DomElement find(String selector) {
-    return new LazyDomElement(By.cssSelector(selector));
-  }
+  FilteredDomElement not();
 
-  public default DomElement find(By selector) {
-    return new LazyDomElement(selector);
-  }
+  // Matchers
 
-  // jquery syntax
+  DomElement equalsTo(String text);
 
-  public default DomElement $(String selector) {
-    return find(selector);
-  }
+  DomElement contains(String text);
 
-  public default DomElement $(By selector) {
-    return find(selector);
-  }
+  DomElement contains(Pattern regex);
+
+  DomElement containsWord(String word);
+
+  DomElement startsWith(String text);
+
+  DomElement endsWith(String text);
+
+  DomElement matches(Pattern regex);
+
+  DomElement matches(Predicate<String> predicate);
 }

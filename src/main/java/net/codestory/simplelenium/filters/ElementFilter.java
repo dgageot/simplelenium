@@ -22,13 +22,13 @@ import java.util.stream.Stream;
 
 import static java.util.function.UnaryOperator.identity;
 
-public class ElementFilter {
+class ElementFilter {
   private static final ElementFilter ANY = new ElementFilter("", identity());
 
   private final String description;
   private final UnaryOperator<Stream<WebElement>> filter;
 
-  public ElementFilter(String description, UnaryOperator<Stream<WebElement>> filter) {
+  ElementFilter(String description, UnaryOperator<Stream<WebElement>> filter) {
     this.description = description;
     this.filter = filter;
   }
