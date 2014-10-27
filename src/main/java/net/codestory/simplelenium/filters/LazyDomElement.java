@@ -55,40 +55,48 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public ElementFilterBuilder withText() {
-    return narrow("text", element -> element.getText());
+    Function<WebElement, String> toValue = element -> element.getText();
+    return with("text", toValue);
   }
 
   @Override
   public ElementFilterBuilder withId() {
-    return narrow("id", element -> element.getAttribute("id"));
+    Function<WebElement, String> toValue = element -> element.getAttribute("id");
+    return with("id", toValue);
   }
 
   @Override
   public ElementFilterBuilder withName() {
-    return narrow("id", element -> element.getAttribute("name"));
+    Function<WebElement, String> toValue = element -> element.getAttribute("name");
+    return with("id", toValue);
   }
 
   @Override
   public ElementFilterBuilder withTagName() {
-    return narrow("tag name", element -> element.getTagName());
+    Function<WebElement, String> toValue = element -> element.getTagName();
+    return with("tag name", toValue);
   }
 
   @Override
   public ElementFilterBuilder withClass() {
-    return narrow("class", element -> element.getAttribute("class"));
+    Function<WebElement, String> toValue = element -> element.getAttribute("class");
+    return with("class", toValue);
   }
 
   @Override
   public ElementFilterBuilder withAttribute(String name) {
-    return narrow("attribute[" + name + "]", element -> element.getAttribute(name));
+    Function<WebElement, String> toValue = element -> element.getAttribute(name);
+    return with("attribute[" + name + "]", toValue);
   }
 
   @Override
   public ElementFilterBuilder withCssValue(String name) {
-    return narrow("cssValue[" + name + "]", element -> element.getCssValue(name));
+    Function<WebElement, String> toValue = element -> element.getCssValue(name);
+    return with("cssValue[" + name + "]", toValue);
   }
 
-  private ElementFilterBuilder narrow(String description, Function<WebElement, String> toValue) {
+  @Override
+  public ElementFilterBuilder with(String description, Function<WebElement, String> toValue) {
     return new ElementFilterBuilder(this, description, toValue, true);
   }
 
@@ -129,14 +137,14 @@ public class LazyDomElement implements DomElement {
     return filter("last", StreamFilters.last());
   }
 
-  private LazyDomElement filter(String description, UnaryOperator<Stream<WebElement>> filter) {
+  @Override
+  public LazyDomElement filter(String description, UnaryOperator<Stream<WebElement>> filter) {
     return with(new ElementFilter(", " + description, filter));
   }
 
   LazyDomElement with(ElementFilter filter) {
     return new LazyDomElement(selector, this.filter.and(filter), retry);
   }
-
 
   // Assertions
 
@@ -246,8 +254,7 @@ public class LazyDomElement implements DomElement {
   @Override
   public LazyDomElement executeSelect(String description, Consumer<Select> selectOnElement) {
     return execute(description, element -> {
-      Select select = new Select(element);
-      selectOnElement.accept(select);
+      selectOnElement.accept(new Select(element));
     });
   }
 

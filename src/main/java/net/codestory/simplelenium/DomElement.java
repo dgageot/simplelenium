@@ -22,6 +22,9 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 public interface DomElement {
   // Narrow find
@@ -40,6 +43,8 @@ public interface DomElement {
 
   FilteredDomElement withCssValue(String name);
 
+  FilteredDomElement with(String description, Function<WebElement, String> toValue);
+
   // Limit results
 
   DomElement first();
@@ -55,6 +60,8 @@ public interface DomElement {
   DomElement skip(int count);
 
   DomElement last();
+
+  DomElement filter(String description, UnaryOperator<Stream<WebElement>> filter);
 
   // Shortcuts
 
