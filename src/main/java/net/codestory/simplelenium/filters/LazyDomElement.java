@@ -253,9 +253,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public LazyDomElement executeSelect(String description, Consumer<Select> selectOnElement) {
-    return execute(description, element -> {
-      selectOnElement.accept(new Select(element));
-    });
+    return execute(description, element -> selectOnElement.accept(new Select(element)));
   }
 
   // Actions on low level elements
