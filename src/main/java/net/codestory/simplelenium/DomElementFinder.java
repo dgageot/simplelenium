@@ -21,21 +21,21 @@ import org.openqa.selenium.By;
 public interface DomElementFinder {
   // default syntax
 
-  public default DomElement find(String selector) {
+  default DomElement find(String selector) {
     return new LazyDomElement(By.cssSelector(selector));
   }
 
-  public default DomElement find(By selector) {
+  default DomElement find(By selector) {
     return new LazyDomElement(selector);
   }
 
   // jquery syntax
 
-  public default DomElement $(String selector) {
+  default DomElement $(String selector) {
     return find(selector);
   }
 
-  public default DomElement $(By selector) {
+  default DomElement $(By selector) {
     return find(selector);
   }
 }

@@ -58,23 +58,23 @@ public interface DomElement {
 
   // Shortcuts
 
-  public default DomElement withText(String text) {
+  default DomElement withText(String text) {
     return withText().contains(text);
   }
 
-  public default DomElement withId(String id) {
+  default DomElement withId(String id) {
     return withId().equalsTo(id);
   }
 
-  public default DomElement withName(String name) {
+  default DomElement withName(String name) {
     return withName().equalsTo(name);
   }
 
-  public default DomElement withClass(String cssClass) {
+  default DomElement withClass(String cssClass) {
     return withClass().containsWord(cssClass);
   }
 
-  public default DomElement withTagName(String name) {
+  default DomElement withTagName(String name) {
     return withTagName().equalsTo(name);
   }
 

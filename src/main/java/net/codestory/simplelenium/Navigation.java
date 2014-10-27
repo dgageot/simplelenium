@@ -23,15 +23,15 @@ import java.net.URI;
 public interface Navigation extends DomElementFinder {
   ThreadLocal<String> baseUrl = new ThreadLocal<>();
 
-  public static String getBaseUrl() {
+  static String getBaseUrl() {
     return baseUrl.get();
   }
 
-  public static void setBaseUrl(String url) {
+  static void setBaseUrl(String url) {
     baseUrl.set(url);
   }
 
-  public default Navigation goTo(String url) {
+  default Navigation goTo(String url) {
     URI uri = URI.create(url);
     if (!uri.isAbsolute()) {
       url = getBaseUrl() + url;
@@ -47,7 +47,7 @@ public interface Navigation extends DomElementFinder {
     return this;
   }
 
-  public default Navigation goTo(PageObject page) {
+  default Navigation goTo(PageObject page) {
     goTo(page.url());
     return this;
   }

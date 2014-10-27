@@ -18,7 +18,7 @@ package net.codestory.simplelenium;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
 
 public interface SectionObject extends Navigation {
-  public default String path() {
+  default String path() {
     String currentUrl = CurrentWebDriver.get().getCurrentUrl();
     String defaultBaseUrl = Navigation.getBaseUrl();
 
@@ -28,15 +28,15 @@ public interface SectionObject extends Navigation {
     return currentUrl;
   }
 
-  public default String url() {
+  default String url() {
     return CurrentWebDriver.get().getCurrentUrl();
   }
 
-  public default String title() {
+  default String title() {
     return CurrentWebDriver.get().getTitle();
   }
 
-  public default String pageSource() {
+  default String pageSource() {
     return CurrentWebDriver.get().getPageSource();
   }
 }
