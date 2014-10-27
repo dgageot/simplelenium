@@ -6,7 +6,7 @@ A simple and robust layer on top of
 
 ## Goal
 
-Testing web pages with Selenium/WebDriver can prove difficult. I've seen a lot
+Testing web pages with Selenium can prove difficult. I've seen a lot
 of projects with an unstable build because of Selenium. To be fair, it's more
 because of the way Selenium is used. Although experience showed me that using
 Selenium properly is harder that one might think.
@@ -37,9 +37,9 @@ set to go. **Simplelenium requires java 8**.
 </dependency>
 ```
 
-The first time you run a test, it will download PhantomJS automatically for you
-so that nothing has to be installed on the machine. `mvn clean install` is all
-one should need!
+The first time you run a test, it will download [PhantomJS](http://phantomjs.org/)
+automatically for you so that nothing has to be installed on the machine.
+`mvn clean install` is all one should need!
 
 ## Build status
 
