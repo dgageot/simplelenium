@@ -77,10 +77,13 @@ times.
 
 ## Finders
 
-Finding elements start with either a `find("cssSelector")` or a
-`find(org.openqa.selenium.By)`. There's no other choice. That's simple. You can
-use the full power of cssSelector, which should be enough most of the time, or
-use standard Selenium `org.openqa.selenium.By` sub-classes.
+Finding elements start with either a
+[find("cssSelector")](src/main/java/net/codestory/simplelenium/DomElementFinder.java)
+or a
+[find(org.openqa.selenium.By)](src/main/java/net/codestory/simplelenium/DomElementFinder.java)
+. There's no other choice. That's simple. You can use the full power of cssSelector,
+which should be enough most of the time, or use standard Selenium
+`org.openqa.selenium.By` sub-classes.
 
 Findings can then be narrowed by additional filters, like those:
 
