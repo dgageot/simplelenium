@@ -148,58 +148,58 @@ public class LazyDomElement implements DomElement {
   // Actions
 
   @Override
-  public void fill(CharSequence text) {
-    execute("fill(" + text + ")", element -> element.sendKeys(text));
+  public LazyDomElement fill(CharSequence text) {
+    return execute("fill(" + text + ")", element -> element.sendKeys(text));
   }
 
   @Override
-  public void pressReturn() {
-    execute("pressReturn()", element -> element.sendKeys(Keys.RETURN));
+  public LazyDomElement pressReturn() {
+    return execute("pressReturn()", element -> element.sendKeys(Keys.RETURN));
   }
 
   @Override
-  public void sendKeys(CharSequence... keysToSend) {
-    execute("sendKeys()", element -> element.sendKeys(keysToSend));
+  public LazyDomElement sendKeys(CharSequence... keysToSend) {
+    return execute("sendKeys()", element -> element.sendKeys(keysToSend));
   }
 
   @Override
-  public void clear() {
-    execute("clear()", element -> element.clear());
+  public LazyDomElement clear() {
+    return execute("clear()", element -> element.clear());
   }
 
   @Override
-  public void submit() {
-    execute("submit", element -> element.submit());
+  public LazyDomElement submit() {
+    return execute("submit", element -> element.submit());
   }
 
   @Override
-  public void click() {
-    execute("click", element -> element.click());
+  public LazyDomElement click() {
+    return execute("click", element -> element.click());
   }
 
   @Override
-  public void doubleClick() {
-    executeActions("doubleClick", (element, actions) -> actions.doubleClick(element));
+  public LazyDomElement doubleClick() {
+    return executeActions("doubleClick", (element, actions) -> actions.doubleClick(element));
   }
 
   @Override
-  public void clickAndHold() {
-    executeActions("clickAndHold", (element, actions) -> actions.clickAndHold(element));
+  public LazyDomElement clickAndHold() {
+    return executeActions("clickAndHold", (element, actions) -> actions.clickAndHold(element));
   }
 
   @Override
-  public void contextClick() {
-    executeActions("contextClick", (element, actions) -> actions.contextClick(element));
+  public LazyDomElement contextClick() {
+    return executeActions("contextClick", (element, actions) -> actions.contextClick(element));
   }
 
   @Override
-  public void release() {
-    executeActions("release", (element, actions) -> actions.release(element));
+  public LazyDomElement release() {
+    return executeActions("release", (element, actions) -> actions.release(element));
   }
 
   @Override
-  public void executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement) {
-    execute(description, element -> {
+  public LazyDomElement executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement) {
+    return execute(description, element -> {
       Actions actions = new Actions(CurrentWebDriver.get());
       actionsOnElement.accept(element, actions);
       actions.perform();
@@ -209,43 +209,43 @@ public class LazyDomElement implements DomElement {
   // Selection
 
   @Override
-  public void select(String text) {
-    executeSelect("select(" + text + ")", select -> select.selectByVisibleText(text));
+  public LazyDomElement select(String text) {
+    return executeSelect("select(" + text + ")", select -> select.selectByVisibleText(text));
   }
 
   @Override
-  public void deselect() {
-    executeSelect("deselect()", select -> select.deselectAll());
+  public LazyDomElement deselect() {
+    return executeSelect("deselect()", select -> select.deselectAll());
   }
 
   @Override
-  public void deselectByValue(String value) {
-    executeSelect("deselectByValue(" + value + ")", select -> select.deselectByValue(value));
+  public LazyDomElement deselectByValue(String value) {
+    return executeSelect("deselectByValue(" + value + ")", select -> select.deselectByValue(value));
   }
 
   @Override
-  public void deselectByVisibleText(String text) {
-    executeSelect("deselectByVisibleText(" + text + ")", select -> select.deselectByVisibleText(text));
+  public LazyDomElement deselectByVisibleText(String text) {
+    return executeSelect("deselectByVisibleText(" + text + ")", select -> select.deselectByVisibleText(text));
   }
 
   @Override
-  public void deselectByIndex(int index) {
-    executeSelect("deselectByIndex(" + index + ")", select -> select.deselectByIndex(index));
+  public LazyDomElement deselectByIndex(int index) {
+    return executeSelect("deselectByIndex(" + index + ")", select -> select.deselectByIndex(index));
   }
 
   @Override
-  public void selectByIndex(int index) {
-    executeSelect("selectByIndex(" + index + ")", select -> select.selectByIndex(index));
+  public LazyDomElement selectByIndex(int index) {
+    return executeSelect("selectByIndex(" + index + ")", select -> select.selectByIndex(index));
   }
 
   @Override
-  public void selectByValue(String value) {
-    executeSelect("selectByValue(" + value + ")", select -> select.selectByValue(value));
+  public LazyDomElement selectByValue(String value) {
+    return executeSelect("selectByValue(" + value + ")", select -> select.selectByValue(value));
   }
 
   @Override
-  public void executeSelect(String description, Consumer<Select> selectOnElement) {
-    execute(description, element -> {
+  public LazyDomElement executeSelect(String description, Consumer<Select> selectOnElement) {
+    return execute(description, element -> {
       Select select = new Select(element);
       selectOnElement.accept(select);
     });
@@ -254,8 +254,8 @@ public class LazyDomElement implements DomElement {
   // Actions on low level elements
 
   @Override
-  public void execute(Consumer<? super WebElement> action) {
-    execute("execute(" + action + ")", action);
+  public LazyDomElement execute(Consumer<? super WebElement> action) {
+    return execute("execute(" + action + ")", action);
   }
 
   // Retry
@@ -267,10 +267,11 @@ public class LazyDomElement implements DomElement {
 
   // Internal
 
-  private void execute(String message, Consumer<? super WebElement> action) {
+  private LazyDomElement execute(String message, Consumer<? super WebElement> action) {
     System.out.println(" - " + Text.toString(selector) + filter.getDescription() + "." + message);
 
     retry.execute(() -> findOne(), action);
+    return this;
   }
 
   private WebElement findOne() {

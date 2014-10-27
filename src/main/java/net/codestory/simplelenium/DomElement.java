@@ -84,49 +84,49 @@ public interface DomElement {
 
   // Actions
 
-  void fill(CharSequence text);
+  DomElement fill(CharSequence text);
 
-  void pressReturn();
+  DomElement pressReturn();
 
-  void sendKeys(CharSequence... keysToSend);
+  DomElement sendKeys(CharSequence... keysToSend);
 
-  void clear();
+  DomElement clear();
 
-  void submit();
+  DomElement submit();
 
-  void click();
+  DomElement click();
 
-  void doubleClick();
+  DomElement doubleClick();
 
-  void clickAndHold();
+  DomElement clickAndHold();
 
-  void contextClick();
+  DomElement contextClick();
 
-  void release();
+  DomElement release();
 
-  void executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement);
+  DomElement executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement);
 
   // Selection
 
-  void select(String text);
+  DomElement select(String text);
 
-  void deselect();
+  DomElement deselect();
 
-  void deselectByValue(String value);
+  DomElement deselectByValue(String value);
 
-  void deselectByVisibleText(String text);
+  DomElement deselectByVisibleText(String text);
 
-  void deselectByIndex(int index);
+  DomElement deselectByIndex(int index);
 
-  void selectByIndex(int index);
+  DomElement selectByIndex(int index);
 
-  void selectByValue(String value);
+  DomElement selectByValue(String value);
 
-  void executeSelect(String description, Consumer<Select> selectOnElement);
+  DomElement executeSelect(String description, Consumer<Select> selectOnElement);
 
   // Actions on low level elements
 
-  void execute(Consumer<? super WebElement> action);
+  DomElement execute(Consumer<? super WebElement> action);
 
   // Retry
 
