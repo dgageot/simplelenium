@@ -28,6 +28,7 @@ public class FluentTest {
 
   public SeleniumTest goTo(String url) {
     return new SeleniumTest() {
+      @Override
       protected String getDefaultBaseUrl() {
         return FluentTest.this.baseUrl;
       }
