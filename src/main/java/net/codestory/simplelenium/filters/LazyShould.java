@@ -90,7 +90,7 @@ class LazyShould implements ShouldChain {
   public LazyShould match(Pattern regexp) {
     return verify(
       doesOrNot("match") + " (" + regexp.pattern() + ")",
-      elements -> elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches()),
+      elements -> !elements.isEmpty() && elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches()),
       elements -> "It contains " + statuses(elements, element -> element.getText()));
   }
 
@@ -98,7 +98,7 @@ class LazyShould implements ShouldChain {
   public LazyShould beEnabled() {
     return verify(
       isOrNot("enabled"),
-      elements -> elements.stream().allMatch(element -> element.isEnabled()),
+      elements -> !elements.isEmpty() && elements.stream().allMatch(element -> element.isEnabled()),
       elements -> "It is " + statuses(elements, element -> enabledStatus(element)));
   }
 
@@ -106,7 +106,7 @@ class LazyShould implements ShouldChain {
   public LazyShould beDisplayed() {
     return verify(
       isOrNot("displayed"),
-      elements -> elements.stream().allMatch(element -> element.isDisplayed()),
+      elements -> !elements.isEmpty() && elements.stream().allMatch(element -> element.isDisplayed()),
       elements -> "It is " + statuses(elements, element -> displayedStatus(element)));
   }
 
@@ -114,7 +114,7 @@ class LazyShould implements ShouldChain {
   public LazyShould beSelected() {
     return verify(
       isOrNot("selected"),
-      elements -> elements.stream().allMatch(element -> isSelected(element)),
+      elements -> !elements.isEmpty() && elements.stream().allMatch(element -> isSelected(element)),
       elements -> "It is " + statuses(elements, element -> selectedStatus(element)));
   }
 
@@ -162,7 +162,7 @@ class LazyShould implements ShouldChain {
   public LazyShould haveDimension(int width, int height) {
     return verify(
       hasOrNot("dimension"),
-      elements -> elements.stream().allMatch(element -> hasDimension(element, width, height)),
+      elements -> !elements.isEmpty() && elements.stream().allMatch(element -> hasDimension(element, width, height)),
       elements -> "It measures " + statuses(elements, element -> dimension(element)));
   }
 
@@ -170,7 +170,7 @@ class LazyShould implements ShouldChain {
   public LazyShould beAtLocation(int x, int y) {
     return verify(
       isOrNot("at location"),
-      elements -> elements.stream().allMatch(element -> hasLocation(element, x, y)),
+      elements -> !elements.isEmpty() && elements.stream().allMatch(element -> hasLocation(element, x, y)),
       elements -> "It is at location " + statuses(elements, element -> location(element)));
   }
 
@@ -178,7 +178,7 @@ class LazyShould implements ShouldChain {
   public LazyShould match(Predicate<WebElement> condition) {
     return verify(
       doesOrNot("match") + " (" + condition + ")",
-      elements -> elements.stream().allMatch(condition),
+      elements -> !elements.isEmpty() && elements.stream().allMatch(condition),
       elements -> "It is  " + statuses(elements, element -> Boolean.toString(condition.test(element))));
   }
 
