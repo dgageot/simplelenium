@@ -103,7 +103,11 @@ public interface DomElement extends Navigation {
 
   DomElement click();
 
+  DomElement click(int x, int y);
+
   DomElement doubleClick();
+
+  DomElement doubleClick(int x, int y);
 
   DomElement clickAndHold();
 

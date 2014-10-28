@@ -187,8 +187,18 @@ public class LazyDomElement implements DomElement {
   }
 
   @Override
+  public LazyDomElement click(int x, int y) {
+    return executeActions("click(" + x + "," + y + ")", (element, actions) -> actions.moveToElement(element, x, y).click());
+  }
+
+  @Override
   public LazyDomElement doubleClick() {
     return executeActions("doubleClick", (element, actions) -> actions.doubleClick(element));
+  }
+
+  @Override
+  public LazyDomElement doubleClick(int x, int y) {
+    return executeActions("doubleClick(" + x + "," + y + ")", (element, actions) -> actions.moveToElement(element, x, y).doubleClick());
   }
 
   @Override
