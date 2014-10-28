@@ -26,7 +26,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public interface DomElement {
+public interface DomElement extends DomElementFinder {
   // Narrow find
 
   FilteredDomElement withText();
