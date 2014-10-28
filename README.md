@@ -88,6 +88,7 @@ which should be enough most of the time, or use standard Selenium
 Findings can then be narrowed by additional filters, like those:
 
 ```java
+find("...").withText().isEmpty();
 find("...").withText().contains("text");
 find("...").withName().startWith("text");
 find("...").withId().equals("text");
@@ -192,6 +193,7 @@ Simplelenium supports a lot of actions. Here are some of them:
 find("...").fill("name");
 find("...").submit();
 find("...").click();
+find("...").click(x, y);
 find("...").pressReturn();
 find("...").sendKeys("A", "B", "C");
 find("...").clear();
