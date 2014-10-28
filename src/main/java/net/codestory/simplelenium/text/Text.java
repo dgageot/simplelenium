@@ -23,13 +23,20 @@ public abstract class Text {
   }
 
   public static String doesOrNot(boolean not, String verb) {
-    if (not) {
-      return "doesn't " + verb;
-    } else if (verb.endsWith("h")) {
-      return verb + "es";
-    } else {
-      return verb + "s";
+    if (!verb.contains(" ")) {
+      if (not) {
+        return "doesn't " + verb;
+      } else if (verb.endsWith("h")) {
+        return verb + "es";
+      } else {
+        return verb + "s";
+      }
     }
+
+    String[] verbs = verb.split("[ ]");
+    verbs[0] = doesOrNot(not, verbs[0]);
+
+    return String.join(" ", verbs);
   }
 
   public static String isOrNot(boolean not, String state) {

@@ -74,12 +74,12 @@ class ElementFilterBuilder implements FilteredDomElement {
 
   @Override
   public LazyDomElement startsWith(String text) {
-    return build(not ? "doesn't start with" : "starts with", text, StringPredicates.startsWith(text));
+    return build(doesOrNot("start with"), text, StringPredicates.startsWith(text));
   }
 
   @Override
   public LazyDomElement endsWith(String text) {
-    return build(not ? "doesn't end with" : "ends with", text, StringPredicates.endsWith(text));
+    return build(doesOrNot("end with"), text, StringPredicates.endsWith(text));
   }
 
   @Override
