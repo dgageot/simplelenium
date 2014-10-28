@@ -94,6 +94,7 @@ class ElementFilterBuilder implements FilteredDomElement {
   // Internal
 
   private LazyDomElement build(String word, Object details, Predicate<String> predicate) {
+    // TODO: deal with not
     String fullDescription = " with " + description + " that " + word + " [" + details + "]";
 
     UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> (ok == predicate.test(toValue.apply(element))));
