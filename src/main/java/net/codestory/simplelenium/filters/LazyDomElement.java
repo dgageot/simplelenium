@@ -211,7 +211,7 @@ public class LazyDomElement implements DomElement {
     return execute(description, element -> {
       Actions actions = new Actions(CurrentWebDriver.get());
       actionsOnElement.accept(element, actions);
-      actions.perform();
+      actions.build().perform();
     });
   }
 
