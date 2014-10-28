@@ -25,7 +25,9 @@ public interface FilteredDomElement {
 
   // Matchers
 
-  DomElement empty();
+  DomElement isNull();
+
+  DomElement isEmpty();
 
   DomElement equalsTo(String text);
 

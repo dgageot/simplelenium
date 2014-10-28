@@ -48,8 +48,13 @@ class ElementFilterBuilder implements FilteredDomElement {
   // Matchers
 
   @Override
-  public LazyDomElement empty() {
-    return build(isOrNot("empty"), "", StringPredicates.empty());
+  public LazyDomElement isEmpty() {
+    return build(isOrNot("empty"), "", StringPredicates.isEmpty());
+  }
+
+  @Override
+  public LazyDomElement isNull() {
+    return build(isOrNot("null"), "", StringPredicates.isNull());
   }
 
   @Override

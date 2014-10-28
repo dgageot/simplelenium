@@ -23,8 +23,12 @@ class StringPredicates {
     // Static class
   }
 
-  public static Predicate<String> empty() {
+  public static Predicate<String> isEmpty() {
     return value -> (value == null) || "".equals(value);
+  }
+
+  public static Predicate<String> isNull() {
+    return value -> (value == null);
   }
 
   public static Predicate<String> equalsTo(String text) {
