@@ -16,6 +16,7 @@
 package net.codestory.simplelenium.filters;
 
 import net.codestory.simplelenium.FilteredDomElement;
+import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.WebElement;
 
 import java.util.function.Function;
@@ -28,76 +29,87 @@ class ElementFilterBuilder implements FilteredDomElement {
   private final LazyDomElement domElement;
   private final String description;
   private final Function<WebElement, String> toValue;
-  private final boolean ok;
+  private final boolean not;
 
-  ElementFilterBuilder(LazyDomElement domElement, String description, Function<WebElement, String> toValue, boolean ok) {
+  ElementFilterBuilder(LazyDomElement domElement, String description, Function<WebElement, String> toValue, boolean not) {
     this.domElement = domElement;
     this.description = description;
     this.toValue = toValue;
-    this.ok = ok;
+    this.not = not;
   }
 
   // Modifiers
 
   @Override
   public ElementFilterBuilder not() {
-    return new ElementFilterBuilder(domElement, description, toValue, !ok);
+    return new ElementFilterBuilder(domElement, description, toValue, !not);
   }
 
   // Matchers
 
   @Override
   public LazyDomElement empty() {
-    return build("is empty", "", StringPredicates.empty());
+    return build(isOrNot("empty"), "", StringPredicates.empty());
   }
 
   @Override
   public LazyDomElement equalsTo(String text) {
-    return build("is equal to", text, StringPredicates.equalsTo(text));
+    return build(isOrNot("equal to"), text, StringPredicates.equalsTo(text));
   }
 
   @Override
   public LazyDomElement contains(String text) {
-    return build("contains", text, StringPredicates.contains(text));
+    return build(doesOrNot("contain"), text, StringPredicates.contains(text));
   }
 
   @Override
   public LazyDomElement contains(Pattern regex) {
-    return build("contains", regex, StringPredicates.contains(regex));
+    return build(doesOrNot("contain"), regex, StringPredicates.contains(regex));
   }
 
   @Override
   public LazyDomElement containsWord(String word) {
-    return build("has word", word, StringPredicates.containsWord(word));
+    return build(hasOrNot("word"), word, StringPredicates.containsWord(word));
   }
 
   @Override
   public LazyDomElement startsWith(String text) {
-    return build("starts with", text, StringPredicates.startsWith(text));
+    return build(not ? "doesn't start with" : "starts with", text, StringPredicates.startsWith(text));
   }
 
   @Override
   public LazyDomElement endsWith(String text) {
-    return build("ends with", text, StringPredicates.endsWith(text));
+    return build(not ? "doesn't end with" : "ends with", text, StringPredicates.endsWith(text));
   }
 
   @Override
   public LazyDomElement matches(Pattern regex) {
-    return build("matches", regex, StringPredicates.matches(regex));
+    return build(doesOrNot("match"), regex, StringPredicates.matches(regex));
   }
 
   @Override
   public LazyDomElement matches(Predicate<String> predicate) {
-    return build("matches", predicate, predicate);
+    return build(doesOrNot("match"), predicate, predicate);
   }
 
   // Internal
 
+  private String doesOrNot(String verb) {
+    return Text.doesOrNot(not, verb);
+  }
+
+  private String isOrNot(String state) {
+    return Text.isOrNot(not, state);
+  }
+
+  private String hasOrNot(String what) {
+    return Text.hasOrNot(not, what);
+  }
+
   private LazyDomElement build(String word, Object details, Predicate<String> predicate) {
-    // TODO: deal with not
     String fullDescription = " with " + description + " that " + word + " [" + details + "]";
 
-    UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> (ok == predicate.test(toValue.apply(element))));
+    UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> (not != predicate.test(toValue.apply(element))));
 
     return domElement.with(new ElementFilter(fullDescription, filter));
   }

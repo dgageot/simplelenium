@@ -98,7 +98,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public ElementFilterBuilder with(String description, Function<WebElement, String> toValue) {
-    return new ElementFilterBuilder(this, description, toValue, true);
+    return new ElementFilterBuilder(this, description, toValue, false);
   }
 
   // Limit results
