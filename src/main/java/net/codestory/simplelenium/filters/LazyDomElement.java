@@ -25,6 +25,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -275,7 +276,12 @@ public class LazyDomElement implements DomElement {
   private LazyDomElement execute(String message, Consumer<? super WebElement> action) {
     System.out.println(" - " + Text.toString(selector) + filter.getDescription() + "." + message);
 
-    retry.execute(() -> findOne(), action);
+    try {
+      retry.execute(() -> findOne(), action);
+    } catch (NoSuchElementException e) {
+      throw new AssertionError("Element not found: " + Text.toString(selector));
+    }
+
     return this;
   }
 
