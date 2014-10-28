@@ -42,7 +42,7 @@ public abstract class SeleniumTest implements SectionObject {
       super.starting(d);
 
       System.out.println("-----------------------------------------");
-      System.out.println(getClass().getSimpleName() + "." + getMethodName());
+      System.out.println(SeleniumTest.this.getClass().getSimpleName() + "." + getMethodName());
       System.out.println("-----------------------------------------");
     }
   };
