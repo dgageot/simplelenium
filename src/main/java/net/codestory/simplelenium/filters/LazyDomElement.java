@@ -98,7 +98,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public ElementFilterBuilder with(String description, Function<WebElement, String> toValue) {
-    return new ElementFilterBuilder(this, description, toValue, false);
+    return new ElementFilterBuilder(this, description, toValue, true);
   }
 
   // Limit results
@@ -151,7 +151,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public Should should() {
-    return new LazyShould(selector, filter, Retry._5_SECONDS, false);
+    return new LazyShould(selector, filter, Retry._5_SECONDS, true);
   }
 
   // Actions

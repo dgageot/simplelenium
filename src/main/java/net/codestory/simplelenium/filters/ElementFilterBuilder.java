@@ -29,20 +29,20 @@ class ElementFilterBuilder implements FilteredDomElement {
   private final LazyDomElement domElement;
   private final String description;
   private final Function<WebElement, String> toValue;
-  private final boolean not;
+  private final boolean ok;
 
-  ElementFilterBuilder(LazyDomElement domElement, String description, Function<WebElement, String> toValue, boolean not) {
+  ElementFilterBuilder(LazyDomElement domElement, String description, Function<WebElement, String> toValue, boolean ok) {
     this.domElement = domElement;
     this.description = description;
     this.toValue = toValue;
-    this.not = not;
+    this.ok = ok;
   }
 
   // Modifiers
 
   @Override
   public ElementFilterBuilder not() {
-    return new ElementFilterBuilder(domElement, description, toValue, !not);
+    return new ElementFilterBuilder(domElement, description, toValue, !ok);
   }
 
   // Matchers
@@ -100,15 +100,15 @@ class ElementFilterBuilder implements FilteredDomElement {
   // Internal
 
   private String doesOrNot(String verb) {
-    return Text.doesOrNot(not, verb);
+    return Text.doesOrNot(!ok, verb);
   }
 
   private String isOrNot(String state) {
-    return Text.isOrNot(not, state);
+    return Text.isOrNot(!ok, state);
   }
 
   private String hasOrNot(String what) {
-    return Text.hasOrNot(not, what);
+    return Text.hasOrNot(!ok, what);
   }
 
   private LazyDomElement build(String word, Object details, Predicate<String> predicate) {
@@ -117,7 +117,7 @@ class ElementFilterBuilder implements FilteredDomElement {
       fullDescription += " [" + details + "]";
     }
 
-    UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> (not != predicate.test(toValue.apply(element))));
+    UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> (ok == predicate.test(toValue.apply(element))));
 
     return domElement.with(new ElementFilter(fullDescription, filter));
   }

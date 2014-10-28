@@ -43,25 +43,25 @@ class LazyShould implements ShouldChain {
   private final By selector;
   private final ElementFilter filter;
   private final Retry retry;
-  private final boolean not;
+  private final boolean ok;
 
-  LazyShould(By selector, ElementFilter filter, Retry retry, boolean not) {
+  LazyShould(By selector, ElementFilter filter, Retry retry, boolean ok) {
     this.selector = selector;
     this.filter = filter;
     this.retry = retry;
-    this.not = not;
+    this.ok = ok;
   }
 
   // Modifiers
 
   @Override
   public LazyShould within(long duration, TimeUnit timeUnit) {
-    return new LazyShould(selector, filter, new Retry(duration, timeUnit), not);
+    return new LazyShould(selector, filter, new Retry(duration, timeUnit), ok);
   }
 
   @Override
   public LazyShould not() {
-    return new LazyShould(selector, filter, retry, !not);
+    return new LazyShould(selector, filter, retry, !ok);
   }
 
   @Override
@@ -187,14 +187,14 @@ class LazyShould implements ShouldChain {
     System.out.println("   -> " + verification);
 
     try {
-      if (!retry.verify(() -> findElements(), not ? predicate.negate() : predicate)) {
+      if (!retry.verify(() -> findElements(), ok ? predicate : predicate.negate())) {
         throw new AssertionError("Failed to " + verification + ". " + toErrorMessage.apply(findElements()));
       }
     } catch (NoSuchElementException e) {
       throw new AssertionError("Element not found. Failed to " + verification);
     }
 
-    return not ? not() : this;
+    return ok ? this : not();
   }
 
   // Internal
@@ -206,15 +206,15 @@ class LazyShould implements ShouldChain {
   }
 
   private String doesOrNot(String verb) {
-    return Text.doesOrNot(not, verb);
+    return Text.doesOrNot(!ok, verb);
   }
 
   private String isOrNot(String state) {
-    return Text.isOrNot(not, state);
+    return Text.isOrNot(!ok, state);
   }
 
   private String hasOrNot(String what) {
-    return Text.hasOrNot(not, what);
+    return Text.hasOrNot(!ok, what);
   }
 
   private static boolean hasDimension(WebElement element, int width, int height) {
