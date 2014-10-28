@@ -41,6 +41,8 @@ class Retry {
   <T> void execute(Supplier<T> target, Consumer<T> action) {
     WebDriverException lastError = null;
 
+    boolean retried = false;
+
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
@@ -49,16 +51,30 @@ class Retry {
           action.accept(targetElement);
           return;
         }
+      } catch (StaleElementReferenceException e) {
+        // ignore
       } catch (WebDriverException e) {
         lastError = e;
       }
+
+      retried = true;
+      System.out.print(".");
     }
 
-    throw lastError;
+    if (retried) {
+      System.out.println();
+    }
+
+    if (lastError != null) {
+      throw lastError;
+    }
+    throw new NoSuchElementException("Not found");
   }
 
   <T> boolean verify(Supplier<T> targetSupplier, Predicate<T> predicate) throws NoSuchElementException {
     Error error = Error.KO;
+
+    boolean retried = false;
 
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
@@ -75,6 +91,13 @@ class Retry {
       } catch (StaleElementReferenceException e) {
         // ignore
       }
+
+      retried = true;
+      System.out.print(".");
+    }
+
+    if (retried) {
+      System.out.println();
     }
 
     if (error == Error.NOT_FOUND) {
