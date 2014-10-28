@@ -25,6 +25,8 @@ public interface FilteredDomElement {
 
   // Matchers
 
+  DomElement empty();
+
   DomElement equalsTo(String text);
 
   DomElement contains(String text);

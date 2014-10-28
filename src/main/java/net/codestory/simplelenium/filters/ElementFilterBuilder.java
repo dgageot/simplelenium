@@ -47,6 +47,11 @@ class ElementFilterBuilder implements FilteredDomElement {
   // Matchers
 
   @Override
+  public LazyDomElement empty() {
+    return build("is empty", "", StringPredicates.empty());
+  }
+
+  @Override
   public LazyDomElement equalsTo(String text) {
     return build("is equal to", text, StringPredicates.equalsTo(text));
   }
