@@ -49,12 +49,12 @@ class ElementFilterBuilder implements FilteredDomElement {
 
   @Override
   public LazyDomElement isEmpty() {
-    return build(isOrNot("empty"), "", StringPredicates.isEmpty());
+    return build(isOrNot("empty"), null, StringPredicates.isEmpty());
   }
 
   @Override
   public LazyDomElement isNull() {
-    return build(isOrNot("null"), "", StringPredicates.isNull());
+    return build(isOrNot("null"), null, StringPredicates.isNull());
   }
 
   @Override
@@ -112,7 +112,10 @@ class ElementFilterBuilder implements FilteredDomElement {
   }
 
   private LazyDomElement build(String word, Object details, Predicate<String> predicate) {
-    String fullDescription = " with " + description + " that " + word + " [" + details + "]";
+    String fullDescription = " with " + description + " that " + word;
+    if (details != null) {
+      fullDescription += " [" + details + "]";
+    }
 
     UnaryOperator<Stream<WebElement>> filter = stream -> stream.filter(element -> (not != predicate.test(toValue.apply(element))));
 
