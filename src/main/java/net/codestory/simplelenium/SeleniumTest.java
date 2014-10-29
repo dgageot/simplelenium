@@ -16,7 +16,6 @@
 package net.codestory.simplelenium;
 
 import com.google.common.io.Files;
-import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.reflection.ReflectionUtil;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
@@ -34,7 +33,13 @@ import static org.junit.rules.RuleChain.outerRule;
 import static org.openqa.selenium.OutputType.BYTES;
 
 public abstract class SeleniumTest implements SectionObject {
-  private final WebDriver driver = createWebDriver();
+  protected SeleniumTest() {
+    configureWebDriver(driver());
+  }
+
+  protected void configureWebDriver(WebDriver driver) {
+    driver.manage().window().setSize(new Dimension(2048, 768));
+  }
 
   public TestName testName = new TestName() {
     @Override
@@ -67,7 +72,7 @@ public abstract class SeleniumTest implements SectionObject {
 
   public SeleniumTest takeSnapshot(String suffix) {
     try {
-      byte[] snapshotData = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
+      byte[] snapshotData = ((TakesScreenshot) driver()).getScreenshotAs(BYTES);
       File snapshot = snapshotPath(suffix);
       snapshot.getParentFile().mkdirs();
       Files.write(snapshotData, snapshot);
@@ -80,12 +85,6 @@ public abstract class SeleniumTest implements SectionObject {
 
   protected File snapshotPath(String suffix) {
     return new File("snapshots", getClass().getSimpleName() + "_" + testName.getMethodName() + suffix + ".png");
-  }
-
-  protected WebDriver createWebDriver() {
-    WebDriver driver = CurrentWebDriver.get();
-    driver.manage().window().setSize(new Dimension(2048, 768));
-    return driver;
   }
 
   // Override to set a base url
