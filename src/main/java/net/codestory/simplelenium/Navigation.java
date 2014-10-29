@@ -31,6 +31,10 @@ public interface Navigation extends DomElementFinder {
     baseUrl.set(url);
   }
 
+  default WebDriver driver() {
+    return CurrentWebDriver.get();
+  }
+
   default Navigation goTo(String url) {
     URI uri = URI.create(url);
     if (!uri.isAbsolute()) {
@@ -39,10 +43,9 @@ public interface Navigation extends DomElementFinder {
 
     System.out.println("goTo " + url);
 
-    WebDriver webDriver = CurrentWebDriver.get();
-    webDriver.get(url);
+    driver().get(url);
 
-    System.out.println(" - current url " + webDriver.getCurrentUrl());
+    System.out.println(" - current url " + driver().getCurrentUrl());
 
     return this;
   }
