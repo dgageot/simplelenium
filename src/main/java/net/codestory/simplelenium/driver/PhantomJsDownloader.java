@@ -42,8 +42,6 @@ public class PhantomJsDownloader {
   private static final int DEFAULT_RETRY = 4;
 
   private final int retry;
-  private final boolean isWindows;
-  private final boolean isMac;
 
   private final ThreadLocal<WebDriver> perThreadDriver = new ThreadLocal<WebDriver>() {
     @Override
@@ -57,13 +55,7 @@ public class PhantomJsDownloader {
   }
 
   protected PhantomJsDownloader(int retry) {
-    this(retry, System.getProperty("os.name").startsWith("Windows"), System.getProperty("os.name").startsWith("Mac OS X"));
-  }
-
-  protected PhantomJsDownloader(int retry, boolean isWindows, boolean isMac) {
     this.retry = retry;
-    this.isWindows = isWindows;
-    this.isMac = isMac;
   }
 
   public WebDriver getDriverForThread() {
@@ -145,12 +137,15 @@ public class PhantomJsDownloader {
     try {
       String url;
       File phantomJsExe;
-      if (isWindows) {
+      if (isWindows()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip";
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-windows/phantomjs.exe");
-      } else if (isMac) {
+      } else if (isMac()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-macosx.zip";
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-macosx/bin/phantomjs");
+      } else if (isLinux32()) {
+        url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-i686.tar.bz2";
+        phantomJsExe = new File(installDir, "phantomjs-1.9.8-linux-i686/bin/phantomjs");
       } else {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2";
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-linux-x86_64/bin/phantomjs");
@@ -175,7 +170,7 @@ public class PhantomJsDownloader {
 
     System.out.println("Extracting phantomjs");
     try {
-      if (isWindows || isMac) {
+      if (isWindows() || isMac()) {
         unzip(targetZip, phantomInstallDir);
       } else {
         executeNative(phantomInstallDir, "tar", "xjvf", zipName);
@@ -239,5 +234,21 @@ public class PhantomJsDownloader {
 
   protected void executeNative(File workingDir, String... commands) throws IOException, InterruptedException {
     new ProcessBuilder().command(commands).directory(workingDir).start().waitFor();
+  }
+
+  protected boolean isWindows() {
+    return System.getProperty("os.name").startsWith("Windows");
+  }
+
+  protected boolean isMac() {
+    return System.getProperty("os.name").startsWith("Mac OS X");
+  }
+
+  protected boolean isLinux32() {
+    return System.getProperty("os.name").contains("x86");
+  }
+
+  protected boolean isLinux64() {
+    return System.getProperty("os.name").contains("amd64");
   }
 }
