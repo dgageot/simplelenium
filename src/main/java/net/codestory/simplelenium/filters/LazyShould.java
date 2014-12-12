@@ -16,9 +16,7 @@
 package net.codestory.simplelenium.filters;
 
 import net.codestory.simplelenium.ShouldChain;
-import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.text.Text;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
@@ -29,24 +27,21 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static net.codestory.simplelenium.filters.WebElementHelper.text;
 import static net.codestory.simplelenium.text.Text.plural;
 
 class LazyShould implements ShouldChain {
-  private final By selector;
-  private final ElementFilter filter;
+  private final LazyDomElement element;
   private final Retry retry;
   private final boolean ok;
 
-  LazyShould(By selector, ElementFilter filter, Retry retry, boolean ok) {
-    this.selector = selector;
-    this.filter = filter;
+  LazyShould(LazyDomElement element, Retry retry, boolean ok) {
+    this.element = element;
     this.retry = retry;
     this.ok = ok;
   }
@@ -55,12 +50,12 @@ class LazyShould implements ShouldChain {
 
   @Override
   public LazyShould within(long duration, TimeUnit timeUnit) {
-    return new LazyShould(selector, filter, new Retry(duration, timeUnit), ok);
+    return new LazyShould(element, new Retry(duration, timeUnit), ok);
   }
 
   @Override
   public LazyShould not() {
-    return new LazyShould(selector, filter, retry, !ok);
+    return new LazyShould(element, retry, !ok);
   }
 
   @Override
@@ -182,7 +177,7 @@ class LazyShould implements ShouldChain {
   }
 
   private LazyShould verify(String message, Predicate<List<WebElement>> predicate, Function<List<WebElement>, String> toErrorMessage) {
-    String verification = "verify that " + Text.toString(selector) + filter.getDescription() + " " + message;
+    String verification = "verify that " + element + " " + message;
     System.out.println("   -> " + verification);
 
     try {
@@ -199,9 +194,7 @@ class LazyShould implements ShouldChain {
   // Internal
 
   private List<WebElement> findElements() {
-    Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
-    Stream<WebElement> filtered = filter.getFilter().apply(webElements);
-    return filtered.collect(toList());
+    return element.stream().collect(Collectors.toList());
   }
 
   private String doesOrNot(String verb) {

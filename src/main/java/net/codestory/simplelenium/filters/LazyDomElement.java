@@ -153,7 +153,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public Should should() {
-    return new LazyShould(selector, filter, Retry._5_SECONDS, true);
+    return new LazyShould(this, Retry._5_SECONDS, true);
   }
 
   // Actions
@@ -297,9 +297,18 @@ public class LazyDomElement implements DomElement {
     return this;
   }
 
+  @Override
+  public String toString() {
+    return Text.toString(selector) + filter.getDescription();
+  }
+
   private WebElement findOne() {
+    return stream().findFirst().orElse(null);
+  }
+
+  Stream<WebElement> stream() {
     Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
     Stream<WebElement> filtered = filter.getFilter().apply(webElements);
-    return filtered.findFirst().orElse(null);
+    return filtered;
   }
 }
