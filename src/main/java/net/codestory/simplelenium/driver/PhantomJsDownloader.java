@@ -15,19 +15,16 @@
  */
 package net.codestory.simplelenium.driver;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.net.PortProber;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
-import org.openqa.selenium.remote.service.DriverService;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -81,31 +78,13 @@ public class PhantomJsDownloader {
   }
 
   protected WebDriver createNewPhantomJsDriver(File phantomJsExe) {
-    int port = PortProber.findFreePort();
-
-    DriverService service;
     try {
-      service = new DriverService(phantomJsExe, port, ImmutableList.of(
-        String.format("--webdriver=%d", port),
-        String.format("--webdriver-logfile=%s", new File("target/phantomjs.log").getAbsolutePath())
-      ), ImmutableMap.of()) {
-      };
-    } catch (IOException e) {
-      throw new IllegalStateException("Unable to create PhantomJs driver", e);
+      URL url = new URL("http://localhost:" + PortProber.findFreePort());
+
+      return new PhantomJSDriver(phantomJsExe, url, new File("target/phantomjs.log"));
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
     }
-
-    return new RemoteWebDriver(new PhantomJSHttpCommandExecutor(service), new DesiredCapabilities()) {
-      private boolean hookInstalled;
-
-      @Override
-      public void quit() {
-        // We don't want anybody to quit() our (per thread) driver
-        if (!hookInstalled) {
-          Runtime.getRuntime().addShutdownHook(new Thread(super::quit));
-          hookInstalled = true;
-        }
-      }
-    };
   }
 
   private void pause(long timeout) {
