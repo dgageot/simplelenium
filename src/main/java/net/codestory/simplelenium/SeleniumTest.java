@@ -23,7 +23,6 @@ import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
@@ -97,9 +96,5 @@ public abstract class SeleniumTest implements SectionObject {
     Navigation.setBaseUrl(getDefaultBaseUrl());
     SectionObject.super.goTo(url);
     return this;
-  }
-
-  public Object executeJavascript(String javascriptCode, Object... args) {
-    return ((JavascriptExecutor) driver()).executeScript(javascriptCode, args);
   }
 }
