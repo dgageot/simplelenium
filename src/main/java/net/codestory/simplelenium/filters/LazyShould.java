@@ -15,8 +15,6 @@
  */
 package net.codestory.simplelenium.filters;
 
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import net.codestory.simplelenium.ShouldChain;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.text.Text;
@@ -257,6 +255,6 @@ class LazyShould implements ShouldChain {
   }
 
   private static boolean isSelectable(WebElement element) {
-    return ((element instanceof HtmlInput) || (element instanceof HtmlOption));
+    return element.getTagName().equals("input") || element.getTagName().equals("option");
   }
 }
