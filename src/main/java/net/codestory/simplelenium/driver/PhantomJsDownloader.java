@@ -15,28 +15,25 @@
  */
 package net.codestory.simplelenium.driver;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
+import org.openqa.selenium.remote.service.DriverService;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Proxy;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.Enumeration;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static java.util.Collections.addAll;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.openqa.selenium.phantomjs.PhantomJSDriverService.Builder;
 
 public class PhantomJsDownloader {
   private static final int DEFAULT_RETRY = 4;
@@ -84,40 +81,31 @@ public class PhantomJsDownloader {
   }
 
   protected WebDriver createNewPhantomJsDriver(File phantomJsExe) {
-    PhantomJSDriverService service = new Builder()
-      .usingPhantomJSExecutable(phantomJsExe)
-      .withLogFile(new File("target/phantomjs.log"))
-      .build();
+    int port = PortProber.findFreePort();
 
-    PhantomJSDriver driver = new PhantomJSDriver(service, new DesiredCapabilities());
-
-    return disableQuit(driver);
-  }
-
-  protected WebDriver disableQuit(PhantomJSDriver driver) {
-    Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
-
-    return (WebDriver) Proxy.newProxyInstance(getClass().getClassLoader(), findInterfaces(driver.getClass()), (proxy, method, args) -> {
-      if (method.getName().equals("quit")) {
-        return null; // We don't want anybody to quit() our (per thread) driver
-      }
-      try {
-        return method.invoke(driver, args);
-      } catch (InvocationTargetException e) {
-        throw e.getCause();
-      }
-    });
-  }
-
-  protected Class[] findInterfaces(Class<?> type) {
-    Set<Class<?>> interfaces = new LinkedHashSet<>();
-
-    for (Class<?> parent = type; parent != null; ) {
-      addAll(interfaces, parent.getInterfaces());
-      parent = parent.getSuperclass();
+    DriverService service;
+    try {
+      service = new DriverService(phantomJsExe, port, ImmutableList.of(
+        String.format("--webdriver=%d", port),
+        String.format("--webdriver-logfile=%s", new File("target/phantomjs.log").getAbsolutePath())
+      ), ImmutableMap.of()) {
+      };
+    } catch (IOException e) {
+      throw new IllegalStateException("Unable to create PhantomJs driver", e);
     }
 
-    return interfaces.toArray(new Class[interfaces.size()]);
+    return new RemoteWebDriver(new PhantomJSHttpCommandExecutor(service), new DesiredCapabilities()) {
+      private boolean hookInstalled;
+
+      @Override
+      public void quit() {
+        // We don't want anybody to quit() our (per thread) driver
+        if (!hookInstalled) {
+          Runtime.getRuntime().addShutdownHook(new Thread(super::quit));
+          hookInstalled = true;
+        }
+      }
+    };
   }
 
   private void pause(long timeout) {

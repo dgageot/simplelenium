@@ -42,6 +42,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <selenium.version>2.44.0</selenium.version>
   </properties>
 
   <profiles>
@@ -207,9 +208,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.github.detro</groupId>
-      <artifactId>phantomjsdriver</artifactId>
-      <version>1.2.0</version>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>${selenium.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-remote-driver</artifactId>
+      <version>${selenium.version}</version>
     </dependency>
 
     <dependency>
