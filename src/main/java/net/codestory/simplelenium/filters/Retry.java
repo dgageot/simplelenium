@@ -15,12 +15,10 @@
  */
 package net.codestory.simplelenium.filters;
 
-import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.*;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -38,7 +36,7 @@ class Retry {
     this.timeoutInMs = timeUnit.toMillis(duration);
   }
 
-  <T> void execute(Supplier<T> target, Consumer<T> action) {
+  <T> void execute(Supplier<Optional<T>> target, Consumer<T> action) {
     WebDriverException lastError = null;
 
     boolean retried = false;
@@ -46,9 +44,9 @@ class Retry {
     long start = System.currentTimeMillis();
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
-        T targetElement = target.get();
-        if (targetElement != null) {
-          action.accept(targetElement);
+        Optional<T> targetElement = target.get();
+        if (targetElement.isPresent()) {
+          action.accept(targetElement.get());
           return;
         }
       } catch (StaleElementReferenceException e) {

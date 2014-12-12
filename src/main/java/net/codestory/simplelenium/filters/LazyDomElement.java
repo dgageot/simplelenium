@@ -26,11 +26,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 import static net.codestory.simplelenium.filters.WebElementHelper.text;
@@ -272,7 +270,7 @@ public class LazyDomElement implements DomElement {
   // Actions on low level elements
 
   @Override
-  public LazyDomElement execute(Consumer<? super WebElement> action) {
+  public LazyDomElement execute(Consumer<WebElement> action) {
     return execute("execute(" + action + ")", action);
   }
 
@@ -285,11 +283,12 @@ public class LazyDomElement implements DomElement {
 
   // Internal
 
-  private LazyDomElement execute(String message, Consumer<? super WebElement> action) {
+  private LazyDomElement execute(String message, Consumer<WebElement> action) {
     System.out.println(" - " + Text.toString(selector) + filter.getDescription() + "." + message);
 
+    Supplier<Optional<WebElement>> findOne = () -> stream().findFirst();
     try {
-      retry.execute(() -> findOne(), action);
+      retry.execute(findOne, action);
     } catch (NoSuchElementException e) {
       throw new AssertionError("Element not found: " + Text.toString(selector));
     }
@@ -300,10 +299,6 @@ public class LazyDomElement implements DomElement {
   @Override
   public String toString() {
     return Text.toString(selector) + filter.getDescription();
-  }
-
-  private WebElement findOne() {
-    return stream().findFirst().orElse(null);
   }
 
   Stream<WebElement> stream() {

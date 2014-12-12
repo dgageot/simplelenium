@@ -137,7 +137,7 @@ public interface DomElement extends Navigation {
 
   // Actions on low level elements
 
-  DomElement execute(Consumer<? super WebElement> action);
+  DomElement execute(Consumer<WebElement> action);
 
   // Retry
 
