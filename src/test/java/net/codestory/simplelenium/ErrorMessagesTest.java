@@ -17,7 +17,6 @@ package net.codestory.simplelenium;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -51,6 +50,15 @@ public class ErrorMessagesTest extends AbstractTest {
   }
 
   @Test
+  public void fail_on_empty() {
+    goTo("/");
+
+    expectError("Failed to verify that h1 is empty. It contains (Hello World)");
+
+    find("h1").should().within(1, MILLISECONDS).beEmpty();
+  }
+
+  @Test
   public void fail_on_size() {
     goTo("/list");
 
@@ -75,15 +83,6 @@ public class ErrorMessagesTest extends AbstractTest {
     expectError("Failed to verify that .name contains more than 10 elements. It contains 2 elements");
 
     find(".name").should().within(1, MILLISECONDS).haveMoreItemsThan(10);
-  }
-
-  @Test
-  public void fail_on_empty() {
-    goTo("/list");
-
-    expectError("Failed to verify that .name is empty. It contains 2 elements");
-
-    find(".name").should().within(1, MILLISECONDS).beEmpty();
   }
 
   @Test

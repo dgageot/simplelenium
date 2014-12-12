@@ -86,6 +86,14 @@ class LazyShould implements ShouldChain {
   }
 
   @Override
+  public LazyShould beEmpty() {
+    return verify(
+      isOrNot("empty"),
+      elements -> !elements.isEmpty() && elements.stream().allMatch(element -> text(element).isEmpty()),
+      elements -> "It contains " + statuses(elements, element -> text(element)));
+  }
+
+  @Override
   public LazyShould match(Pattern regexp) {
     return verify(
       doesOrNot("match") + " (" + regexp.pattern() + ")",
@@ -138,14 +146,6 @@ class LazyShould implements ShouldChain {
     return verify(
       doesOrNot("contain") + " more than " + plural(minCount, "element"),
       elements -> elements.size() > minCount,
-      elements -> "It contains " + plural(elements.size(), "element"));
-  }
-
-  @Override
-  public LazyShould beEmpty() {
-    return verify(
-      isOrNot("empty"),
-      elements -> elements.isEmpty(),
       elements -> "It contains " + plural(elements.size(), "element"));
   }
 

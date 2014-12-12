@@ -32,6 +32,8 @@ public interface Should extends Navigation {
 
   ShouldChain contain(String... texts);
 
+  ShouldChain beEmpty();
+
   ShouldChain match(Pattern regexp);
 
   ShouldChain beEnabled();
@@ -45,8 +47,6 @@ public interface Should extends Navigation {
   ShouldChain haveSize(int size);
 
   ShouldChain haveMoreItemsThan(int minCount);
-
-  ShouldChain beEmpty();
 
   ShouldChain exist();
 

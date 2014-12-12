@@ -29,7 +29,6 @@ public class ListTest extends AbstractTest {
     find(".name").should().haveSize(2);
     find(".name").should().haveLessItemsThan(3);
     find(".name").should().haveMoreItemsThan(1);
-    find(".name").should().not().beEmpty();
     find(".name").should().not().contain("Casper", "Zorro");
     find(".name").should().match(Pattern.compile("([a-zA-Z ]+)"));
   }
@@ -44,7 +43,6 @@ public class ListTest extends AbstractTest {
       .haveSize(2)
       .haveLessItemsThan(3)
       .haveMoreItemsThan(1)
-      .not().beEmpty()
       .not().contain("Casper", "Zorro")
       .match(Pattern.compile("([a-zA-Z ]+)"));
   }
@@ -61,7 +59,7 @@ public class ListTest extends AbstractTest {
     find(".name").withText().startingWith("B").should().haveSize(1);
     find(".name").withText().endingWith("Morane").should().haveSize(1);
     find(".name").withText().containing("ora").should().haveSize(1);
-    find(".name").withText().matching(Pattern.compile("[0-9]*")).should().beEmpty();
+    find(".name").withText().matching(Pattern.compile("[0-9]*")).should().not().exist();
     find(".name").withText().matching(Pattern.compile("[a-zA-Z ']*")).should().haveSize(2);
   }
 
@@ -72,7 +70,7 @@ public class ListTest extends AbstractTest {
     find(".name").withId("joe").should().haveSize(1);
     find(".name").withId().equalTo("joe").should().haveSize(1);
     find(".name").withId().equalTo("joe").withText("Joe").should().haveSize(1);
-    find(".name").withId().equalTo("joe").withText("Bob").should().beEmpty();
+    find(".name").withId().equalTo("joe").withText("Bob").should().not().exist();
   }
 
   @Test
@@ -87,7 +85,7 @@ public class ListTest extends AbstractTest {
     goTo("/list");
 
     find(".name").withClass("man").should().haveSize(2);
-    find(".name").withClass("ma").should().beEmpty();
+    find(".name").withClass("ma").should().not().exist();
     find(".name").withClass("cartoon").should().haveSize(1);
   }
 
@@ -96,14 +94,14 @@ public class ListTest extends AbstractTest {
     goTo("/list");
 
     find(".name").first().withText("Bob").should().haveSize(1);
-    find(".name").first().withText("Joe").should().beEmpty();
+    find(".name").first().withText("Joe").should().not().exist();
   }
 
   @Test
   public void filter_second() {
     goTo("/list");
 
-    find(".name").second().withText("Bob").should().beEmpty();
+    find(".name").second().withText("Bob").should().not().exist();
     find(".name").second().withText("Joe").should().haveSize(1);
   }
 
@@ -111,7 +109,7 @@ public class ListTest extends AbstractTest {
   public void filter_last() {
     goTo("/list");
 
-    find(".name").second().withText("Bob").should().beEmpty();
+    find(".name").second().withText("Bob").should().not().exist();
     find(".name").second().withText("Joe").should().haveSize(1);
   }
 }

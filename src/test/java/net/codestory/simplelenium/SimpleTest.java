@@ -35,12 +35,12 @@ public class SimpleTest extends AbstractTest {
     goTo("/");
 
     find("h1").withText("Hello World").should().exist();
-    find("h1").withText("UNKNOWN").should().beEmpty();
+    find("h1").withText("UNKNOWN").should().not().exist();
 
     find("h1").withText().not().containing("UNKNOWN").should().exist();
 
     find("h1").withText().equalTo("Hello World").should().exist();
-    find("h1").withText().equalTo("UNKNOWN").should().beEmpty();
+    find("h1").withText().equalTo("UNKNOWN").should().not().exist();
   }
 
   @Test
@@ -48,10 +48,10 @@ public class SimpleTest extends AbstractTest {
     goTo("/");
 
     find("ul li .item").withTagName("em").should().exist();
-    find("ul li .item").withTagName("object").should().beEmpty();
+    find("ul li .item").withTagName("object").should().not().exist();
 
     find("ul li .item").withTagName().equalTo("em").should().exist();
-    find("ul li .item").withTagName().equalTo("object").should().beEmpty();
+    find("ul li .item").withTagName().equalTo("object").should().not().exist();
   }
 
   @Test
@@ -60,17 +60,17 @@ public class SimpleTest extends AbstractTest {
 
     find("h1").withText("Hello World")
       .should().exist()
-      .and().should().not().beEmpty()
-      .and().should().not().beEmpty();
+      .and().should().not().haveSize(10)
+      .and().should().not().haveSize(10);
 
     find("h1").withText("Hello World")
       .should().exist()
-      .and().not().beEmpty()
-      .and().not().beEmpty();
+      .and().not().haveSize(10)
+      .and().not().haveSize(10);
 
     find("h1").withText("Hello World").should()
       .exist()
-      .not().beEmpty()
-      .not().beEmpty();
+      .not().haveSize(10)
+      .not().haveSize(10);
   }
 }

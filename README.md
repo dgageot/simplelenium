@@ -105,13 +105,13 @@ Of course more complex verifications are supported:
 ```java
 find(".name").should().contain("a word", "anything");
 find(".name").should().match(Pattern.compile("regexp"));
+find(".name").should().beEmpty();
 find(".name").should().beEnabled();
 find(".name").should().beDisplayed();
 find(".name").should().beSelected();
 find(".name").should().haveMoreItemsThan(min);
 find(".name").should().haveSize(10);
 find(".name").should().haveLessItemsThan(max);
-find(".name").should().beEmpty();
 find(".name").should().haveDimension(width, height);
 find(".name").should().beAtLocation(x, y);
 ```
@@ -375,7 +375,7 @@ public class FluentTestTest {
     range(0, 20).parallel().forEach(index -> {
       new FluentTest(baseUrl)
         .goTo("/")
-        .find("h1").should().contain("Hello World").and().not().beEmpty()
+        .find("h1").should().contain("Hello World").and().not().contain("Unknown")
         .find("h2").should().contain("SubTitle")
         .find(".age").should().contain("42")
         .goTo("/list")

@@ -19,10 +19,19 @@ import org.junit.Test;
 
 public class FormTest extends AbstractTest {
   @Test
-  public void click() {
+  public void input_text() {
     goTo("/form");
 
     find("input").should().contain("The Text");
     find("input").withText("The Text").should().exist();
+  }
+
+  @Test
+  public void clear() {
+    goTo("/form");
+
+    find("input").clear();
+
+    find("input").should().beEmpty();
   }
 }
