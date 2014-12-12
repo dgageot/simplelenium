@@ -66,23 +66,23 @@ public interface DomElement extends Navigation {
   // Shortcuts
 
   default DomElement withText(String text) {
-    return withText().contains(text);
+    return withText().containing(text);
   }
 
   default DomElement withId(String id) {
-    return withId().equalsTo(id);
+    return withId().equalTo(id);
   }
 
   default DomElement withName(String name) {
-    return withName().equalsTo(name);
+    return withName().equalTo(name);
   }
 
   default DomElement withClass(String cssClass) {
-    return withClass().containsWord(cssClass);
+    return withClass().containingWord(cssClass);
   }
 
   default DomElement withTagName(String name) {
-    return withTagName().equalsTo(name);
+    return withTagName().equalTo(name);
   }
 
   // Assertions

@@ -85,36 +85,7 @@ or a
 which should be enough most of the time, or use standard Selenium
 `org.openqa.selenium.By` sub-classes.
 
-Findings can then be narrowed by additional filters, like those:
-
-```java
-find("...").withText().isEmpty();
-find("...").withText().contains("text");
-find("...").withName().startWith("text");
-find("...").withId().equals("text");
-find("...").withAttribute("name").matches(Pattern.compile(".*value"));
-find("...").withTagName().equals("h1");
-find("...").withClass().containsWord("blue");
-find("...").withCssValue("color").not().endsWith("grey");
-find("...").withText().startsWith("Prefix").endsWith("Suffix");
-...
-```
-
-Also results can be filtered out this way:
-
-```java
-find("...").first();
-find("...").second();
-find("...").third();
-find("...").fourth();
-find("...").nth(5);
-find("...").limit(10);
-find("...").skip(3);
-find("...").skip(5).limit(20);
-find("...").last();
-```
-
-All the searches are not done until a verification is made on the elements.
+Searching is not done until a verification is made on the elements.
 Simplelenium is both lazy and tolerant to slow pages and ongoing refreshes.
 You don't have to worry about it. Just write what the page should look like
 and it happens within a sound period of time, the next verification is made.
@@ -182,6 +153,38 @@ Default timeout can be set using this syntax:
 
 ```java
 find(".name").should().within(1, MINUTE).contain("a word");
+```
+
+## Narrowing search
+
+Sometime, searching elements is more difficult than using a simple css selector.
+Simplelenium supports narrowing searches with additional filters, like those:
+
+```java
+find("...").withText().beingEmpty().should()...;
+find("...").withText().containing("text").should()...;
+find("...").withName().startingWith("text").should()...;
+find("...").withId().equalTo("text").should()...;
+find("...").withAttribute("name").matching(Pattern.compile(".*value")).should()...;
+find("...").withTagName().equalTo("h1").should()...;
+find("...").withClass().containingWord("blue").should()...;
+find("...").withCssValue("color").not().endingWith("grey").should()...;
+find("...").withText().startsWith("Prefix").endingWith("Suffix").should()...;
+...
+```
+
+Also multiple results can be filtered out this way:
+
+```java
+find("...").first();
+find("...").second();
+find("...").third();
+find("...").fourth();
+find("...").nth(5);
+find("...").limit(10);
+find("...").skip(3);
+find("...").skip(5).limit(20);
+find("...").last();
 ```
 
 ## Actions

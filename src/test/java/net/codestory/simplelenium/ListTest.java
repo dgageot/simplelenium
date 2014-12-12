@@ -57,12 +57,12 @@ public class ListTest extends AbstractTest {
     find(".name").withText("Bob").should().haveSize(1);
     find(".name").withText("Bob Morane").should().exist();
     find(".name").withText("John Doe").should().not().exist();
-    find(".name").withText().equalsTo("Bob Morane").should().haveSize(1);
-    find(".name").withText().startsWith("B").should().haveSize(1);
-    find(".name").withText().endsWith("Morane").should().haveSize(1);
-    find(".name").withText().contains("ora").should().haveSize(1);
-    find(".name").withText().matches(Pattern.compile("[0-9]*")).should().beEmpty();
-    find(".name").withText().matches(Pattern.compile("[a-zA-Z ']*")).should().haveSize(2);
+    find(".name").withText().equalTo("Bob Morane").should().haveSize(1);
+    find(".name").withText().startingWith("B").should().haveSize(1);
+    find(".name").withText().endingWith("Morane").should().haveSize(1);
+    find(".name").withText().containing("ora").should().haveSize(1);
+    find(".name").withText().matching(Pattern.compile("[0-9]*")).should().beEmpty();
+    find(".name").withText().matching(Pattern.compile("[a-zA-Z ']*")).should().haveSize(2);
   }
 
   @Test
@@ -70,9 +70,9 @@ public class ListTest extends AbstractTest {
     goTo("/list");
 
     find(".name").withId("joe").should().haveSize(1);
-    find(".name").withId().equalsTo("joe").should().haveSize(1);
-    find(".name").withId().equalsTo("joe").withText("Joe").should().haveSize(1);
-    find(".name").withId().equalsTo("joe").withText("Bob").should().beEmpty();
+    find(".name").withId().equalTo("joe").should().haveSize(1);
+    find(".name").withId().equalTo("joe").withText("Joe").should().haveSize(1);
+    find(".name").withId().equalTo("joe").withText("Bob").should().beEmpty();
   }
 
   @Test

@@ -25,23 +25,23 @@ public interface FilteredDomElement {
 
   // Matchers
 
-  DomElement isNull();
+  DomElement beingNull();
 
-  DomElement isEmpty();
+  DomElement beingEmpty();
 
-  DomElement equalsTo(String text);
+  DomElement equalTo(String text);
 
-  DomElement contains(String text);
+  DomElement containing(String text);
 
-  DomElement contains(Pattern regex);
+  DomElement containing(Pattern regex);
 
-  DomElement containsWord(String word);
+  DomElement containingWord(String word);
 
-  DomElement startsWith(String text);
+  DomElement startingWith(String text);
 
-  DomElement endsWith(String text);
+  DomElement endingWith(String text);
 
-  DomElement matches(Pattern regex);
+  DomElement matching(Pattern regex);
 
-  DomElement matches(Predicate<String> predicate);
+  DomElement matching(Predicate<String> predicate);
 }

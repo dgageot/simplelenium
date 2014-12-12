@@ -48,52 +48,52 @@ class ElementFilterBuilder implements FilteredDomElement {
   // Matchers
 
   @Override
-  public LazyDomElement isEmpty() {
+  public LazyDomElement beingEmpty() {
     return build(isOrNot("empty"), null, StringPredicates.isEmpty());
   }
 
   @Override
-  public LazyDomElement isNull() {
+  public LazyDomElement beingNull() {
     return build(isOrNot("null"), null, StringPredicates.isNull());
   }
 
   @Override
-  public LazyDomElement equalsTo(String text) {
+  public LazyDomElement equalTo(String text) {
     return build(isOrNot("equal to"), text, StringPredicates.equalsTo(text));
   }
 
   @Override
-  public LazyDomElement contains(String text) {
+  public LazyDomElement containing(String text) {
     return build(doesOrNot("contain"), text, StringPredicates.contains(text));
   }
 
   @Override
-  public LazyDomElement contains(Pattern regex) {
+  public LazyDomElement containing(Pattern regex) {
     return build(doesOrNot("contain"), regex, StringPredicates.contains(regex));
   }
 
   @Override
-  public LazyDomElement containsWord(String word) {
+  public LazyDomElement containingWord(String word) {
     return build(hasOrNot("word"), word, StringPredicates.containsWord(word));
   }
 
   @Override
-  public LazyDomElement startsWith(String text) {
+  public LazyDomElement startingWith(String text) {
     return build(doesOrNot("start with"), text, StringPredicates.startsWith(text));
   }
 
   @Override
-  public LazyDomElement endsWith(String text) {
+  public LazyDomElement endingWith(String text) {
     return build(doesOrNot("end with"), text, StringPredicates.endsWith(text));
   }
 
   @Override
-  public LazyDomElement matches(Pattern regex) {
+  public LazyDomElement matching(Pattern regex) {
     return build(doesOrNot("match"), regex, StringPredicates.matches(regex));
   }
 
   @Override
-  public LazyDomElement matches(Predicate<String> predicate) {
+  public LazyDomElement matching(Predicate<String> predicate) {
     return build(doesOrNot("match"), predicate, predicate);
   }
 
