@@ -33,19 +33,14 @@ import static org.openqa.selenium.remote.DriverCommand.QUIT;
 import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
 class PhantomJSDriver extends RemoteWebDriver {
-  private boolean hookInstalled;
-
   PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
     super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), new DesiredCapabilities());
+    Runtime.getRuntime().addShutdownHook(new Thread(super::quit));
   }
 
   @Override
   public void quit() {
     // We don't want anybody to quit() our (per thread) driver
-    if (!hookInstalled) {
-      Runtime.getRuntime().addShutdownHook(new Thread(super::quit));
-      hookInstalled = true;
-    }
   }
 
   static class PhantomJSHttpCommandExecutor extends HttpCommandExecutor {
