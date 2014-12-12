@@ -16,8 +16,7 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.CurrentWebDriver;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
+import net.codestory.simplelenium.driver.PhantomJSDriver;
 
 import java.net.URI;
 
@@ -34,12 +33,12 @@ public interface Navigation extends DomElementFinder {
     baseUrl.set(url);
   }
 
-  default WebDriver driver() {
+  default PhantomJSDriver driver() {
     return CurrentWebDriver.get();
   }
 
   default Object executeJavascript(String javascriptCode, Object... args) {
-    return ((JavascriptExecutor) driver()).executeScript(javascriptCode, args);
+    return driver().executeScript(javascriptCode, args);
   }
 
   default Navigation goTo(String url) {

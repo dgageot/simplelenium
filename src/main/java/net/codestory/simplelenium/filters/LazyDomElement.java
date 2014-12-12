@@ -17,7 +17,6 @@ package net.codestory.simplelenium.filters;
 
 import net.codestory.simplelenium.DomElement;
 import net.codestory.simplelenium.Should;
-import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -239,7 +238,7 @@ public class LazyDomElement implements DomElement {
   @Override
   public LazyDomElement executeActions(String description, BiConsumer<WebElement, Actions> actionsOnElement) {
     return execute(description, element -> {
-      Actions actions = new Actions(CurrentWebDriver.get());
+      Actions actions = new Actions(driver());
       actionsOnElement.accept(element, actions);
       actions.build().perform();
     });
@@ -330,7 +329,7 @@ public class LazyDomElement implements DomElement {
     if (parent != null) {
       webElements = parent.stream().flatMap(element -> element.findElements(selector).stream());
     } else {
-      webElements = CurrentWebDriver.get().findElements(selector).stream();
+      webElements = driver().findElements(selector).stream();
     }
     return filter.getFilter().apply(webElements);
   }

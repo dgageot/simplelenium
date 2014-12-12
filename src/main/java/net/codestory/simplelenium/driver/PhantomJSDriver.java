@@ -32,7 +32,7 @@ import static org.openqa.selenium.remote.DriverCommand.NEW_SESSION;
 import static org.openqa.selenium.remote.DriverCommand.QUIT;
 import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
-class PhantomJSDriver extends RemoteWebDriver {
+public class PhantomJSDriver extends RemoteWebDriver {
   PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
     super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), new DesiredCapabilities());
     Runtime.getRuntime().addShutdownHook(new Thread(super::quit));

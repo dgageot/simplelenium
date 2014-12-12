@@ -16,6 +16,7 @@
 package net.codestory.simplelenium;
 
 import com.google.common.io.Files;
+import net.codestory.simplelenium.driver.PhantomJSDriver;
 import net.codestory.simplelenium.reflection.ReflectionUtil;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
@@ -24,7 +25,6 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public abstract class SeleniumTest implements SectionObject {
     configureWebDriver(driver());
   }
 
-  protected void configureWebDriver(WebDriver driver) {
+  protected void configureWebDriver(PhantomJSDriver driver) {
     driver.manage().window().setSize(new Dimension(2048, 768));
   }
 

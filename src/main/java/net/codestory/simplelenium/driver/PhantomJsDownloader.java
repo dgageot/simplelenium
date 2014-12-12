@@ -15,7 +15,6 @@
  */
 package net.codestory.simplelenium.driver;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
@@ -37,9 +36,9 @@ public class PhantomJsDownloader {
 
   private final int retry;
 
-  private final ThreadLocal<WebDriver> perThreadDriver = new ThreadLocal<WebDriver>() {
+  private final ThreadLocal<PhantomJSDriver> perThreadDriver = new ThreadLocal<PhantomJSDriver>() {
     @Override
-    protected WebDriver initialValue() {
+    protected PhantomJSDriver initialValue() {
       return createNewDriver();
     }
   };
@@ -52,11 +51,11 @@ public class PhantomJsDownloader {
     this.retry = retry;
   }
 
-  public WebDriver getDriverForThread() {
+  public PhantomJSDriver getDriverForThread() {
     return perThreadDriver.get();
   }
 
-  protected WebDriver createNewDriver() {
+  protected PhantomJSDriver createNewDriver() {
     System.out.println("Create a new PhantomJSDriver");
 
     File phantomJsExe = downloadAndExtract();
@@ -77,7 +76,7 @@ public class PhantomJsDownloader {
     throw new IllegalStateException("Unable to start PhantomJS", error);
   }
 
-  protected WebDriver createNewPhantomJsDriver(File phantomJsExe) {
+  protected PhantomJSDriver createNewPhantomJsDriver(File phantomJsExe) {
     try {
       URL url = new URL("http://localhost:" + PortProber.findFreePort());
 
