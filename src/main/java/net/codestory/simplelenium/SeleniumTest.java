@@ -46,9 +46,9 @@ public abstract class SeleniumTest implements SectionObject {
     protected void starting(Description d) {
       super.starting(d);
 
-      System.out.println("-----------------------------------------");
+      System.out.println("----------------------------------------------------------------------");
       System.out.println(SeleniumTest.this.getClass().getSimpleName() + "." + getMethodName());
-      System.out.println("-----------------------------------------");
+      System.out.println("----------------------------------------------------------------------");
     }
   };
 
