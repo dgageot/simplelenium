@@ -99,7 +99,7 @@ public abstract class SeleniumTest implements SectionObject {
     return this;
   }
 
-  public Object executeJavascript(String javascriptCode) {
-    return ((JavascriptExecutor) driver()).executeScript(javascriptCode);
+  public Object executeJavascript(String javascriptCode, Object... args) {
+    return ((JavascriptExecutor) driver()).executeScript(javascriptCode, args);
   }
 }

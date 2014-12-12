@@ -20,4 +20,11 @@ public class JavascriptTest extends AbstractTest {
 
     assertThat((List) executeJavascript("return window.top.document.querySelectorAll('a')")).hasSize(2);
   }
+
+  @Test
+  public void execute_javaScript_with_arguments() {
+    goTo("/");
+
+    assertThat((Long) executeJavascript("return arguments[0]+arguments[1]", 3, 1)).isEqualTo(4);
+  }
 }
