@@ -48,5 +48,14 @@ public class TestWebServer {
     routes.get("/form",
       "<input type='text' value='The Text'>"
     );
+
+    routes.get("/nested",
+      "<div id='first'><div class='child'>First Child</div></div>" +
+      "<div id='second'><div class='child'>Second Child</div></div>" +
+      "<div id='third'>" +
+        "<div class='first_child'>First Child</div>" +
+        "<div class='second_child'>Second Child</div>" +
+        "</div>"
+    );
   }
 }

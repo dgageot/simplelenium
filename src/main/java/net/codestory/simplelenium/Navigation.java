@@ -20,6 +20,8 @@ import org.openqa.selenium.WebDriver;
 
 import java.net.URI;
 
+import static java.util.Objects.requireNonNull;
+
 public interface Navigation extends DomElementFinder {
   ThreadLocal<String> baseUrl = new ThreadLocal<>();
 
@@ -36,6 +38,8 @@ public interface Navigation extends DomElementFinder {
   }
 
   default Navigation goTo(String url) {
+    requireNonNull(url, "The url cannot be null");
+
     URI uri = URI.create(url);
     if (!uri.isAbsolute()) {
       url = getBaseUrl() + url;

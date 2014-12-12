@@ -15,8 +15,10 @@
  */
 package net.codestory.simplelenium.filters;
 
+import net.codestory.simplelenium.DomElement;
 import net.codestory.simplelenium.ShouldChain;
 import net.codestory.simplelenium.text.Text;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
@@ -44,6 +46,22 @@ class LazyShould implements ShouldChain {
     this.element = element;
     this.retry = retry;
     this.ok = ok;
+  }
+
+  // Nested find
+
+  public DomElement find(String selector) {
+    if (element.parent() != null) {
+      return element.parent().find(selector);
+    }
+    return new LazyDomElement(By.cssSelector(selector));
+  }
+
+  public DomElement find(By selector) {
+    if (element.parent() != null) {
+      return element.parent().find(selector);
+    }
+    return new LazyDomElement(selector);
   }
 
   // Modifiers

@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import static net.codestory.simplelenium.filters.WebElementHelper.text;
 
 public class LazyDomElement implements DomElement {
+  private final LazyDomElement parent;
   private final By selector;
   private final ElementFilter filter;
   private final Retry retry;
@@ -43,13 +44,32 @@ public class LazyDomElement implements DomElement {
   }
 
   public LazyDomElement(By selector, Retry retry) {
-    this(selector, ElementFilter.any(), retry);
+    this(null, selector, ElementFilter.any(), retry);
   }
 
-  private LazyDomElement(By selector, ElementFilter filter, Retry retry) {
+  public LazyDomElement(LazyDomElement parent, By selector) {
+    this(parent, selector, Retry._30_SECONDS);
+  }
+
+  public LazyDomElement(LazyDomElement parent, By selector, Retry retry) {
+    this(parent, selector, ElementFilter.any(), retry);
+  }
+
+  private LazyDomElement(LazyDomElement parent, By selector, ElementFilter filter, Retry retry) {
+    this.parent = parent;
     this.selector = selector;
     this.filter = filter;
     this.retry = retry;
+  }
+
+  // Nested find
+
+  public DomElement find(String selector) {
+    return new LazyDomElement(this, By.cssSelector(selector));
+  }
+
+  public DomElement find(By selector) {
+    return new LazyDomElement(this, selector);
   }
 
   // Narrow find
@@ -144,7 +164,7 @@ public class LazyDomElement implements DomElement {
   }
 
   LazyDomElement with(ElementFilter filter) {
-    return new LazyDomElement(selector, this.filter.and(filter), retry);
+    return new LazyDomElement(parent, selector, this.filter.and(filter), retry);
   }
 
   // Assertions
@@ -278,7 +298,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public LazyDomElement retryFor(long duration, TimeUnit timeUnit) {
-    return new LazyDomElement(selector, this.filter.and(filter), new Retry(duration, timeUnit));
+    return new LazyDomElement(parent, selector, this.filter.and(filter), new Retry(duration, timeUnit));
   }
 
   // Internal
@@ -298,12 +318,20 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public String toString() {
-    return Text.toString(selector) + filter.getDescription();
+    return ((parent == null) ? "" : parent.toString() + " ") + Text.toString(selector) + filter.getDescription();
+  }
+
+  LazyDomElement parent() {
+    return parent;
   }
 
   Stream<WebElement> stream() {
-    Stream<WebElement> webElements = CurrentWebDriver.get().findElements(selector).stream();
-    Stream<WebElement> filtered = filter.getFilter().apply(webElements);
-    return filtered;
+    Stream<WebElement> webElements;
+    if (parent != null) {
+      webElements = parent.stream().flatMap(element -> element.findElements(selector).stream());
+    } else {
+      webElements = CurrentWebDriver.get().findElements(selector).stream();
+    }
+    return filter.getFilter().apply(webElements);
   }
 }
