@@ -188,10 +188,10 @@ class LazyShould implements ShouldChain {
 
     try {
       if (!retry.verify(() -> findElements(), ok ? predicate : predicate.negate())) {
-        throw new AssertionError("Failed to " + verification + ". " + toErrorMessage.apply(findElements()));
+        throw Failure.create("Failed to " + verification + ". " + toErrorMessage.apply(findElements()));
       }
     } catch (NoSuchElementException e) {
-      throw new AssertionError("Element not found. Failed to " + verification);
+      throw Failure.create("Element not found. Failed to " + verification);
     }
 
     return ok ? this : not();

@@ -15,6 +15,9 @@
  */
 package net.codestory.simplelenium;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,6 +25,7 @@ import org.junit.rules.ExpectedException;
 import java.util.regex.Pattern;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.stream.Stream.of;
 import static org.junit.rules.ExpectedException.none;
 
 public class ErrorMessagesTest extends AbstractTest {
@@ -132,6 +136,24 @@ public class ErrorMessagesTest extends AbstractTest {
     goTo("/list");
 
     expectError("Failed to verify that .name with text that contains [Any Text] exists. It contains 0 element");
+
+    find(".name").withText("Any Text").should().within(1, MILLISECONDS).exist();
+  }
+
+  @Test
+  public void stacktrace_should_not_mention_simplelenium() {
+    goTo("/list");
+
+    thrown.expect(new TypeSafeDiagnosingMatcher<AssertionError>() {
+      @Override
+      protected boolean matchesSafely(AssertionError error, Description mismatchDescription) {
+        return of(error.getStackTrace()).noneMatch(element -> element.getClassName().contains("net.codestory.simplelenium.filters."));
+      }
+
+      @Override
+      public void describeTo(Description description) {
+      }
+    });
 
     find(".name").withText("Any Text").should().within(1, MILLISECONDS).exist();
   }
