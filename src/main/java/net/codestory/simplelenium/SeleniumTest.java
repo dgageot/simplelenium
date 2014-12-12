@@ -100,11 +100,6 @@ public abstract class SeleniumTest implements SectionObject {
   }
 
   public Object executeJavascript(String javascriptCode) {
-    WebDriver webDriver = driver();
-    if (webDriver instanceof JavascriptExecutor) {
-      return ((JavascriptExecutor)webDriver).executeScript(javascriptCode);
-    } else {
-      throw new RuntimeException("Can't execute javascript");
-    }
+    return ((JavascriptExecutor) driver()).executeScript(javascriptCode);
   }
 }
