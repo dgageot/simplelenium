@@ -19,7 +19,7 @@ import net.codestory.http.WebServer;
 import net.codestory.http.routes.Routes;
 
 public class TestWebServer {
-  private final static WebServer serverStartedOnlyOnce = new WebServer(TestWebServer::configure).startOnRandomPort();
+  private final static WebServer serverStartedOnlyOnce = new WebServer().configure(TestWebServer::configure).startOnRandomPort();
 
   public int port() {
     return serverStartedOnlyOnce.port();
