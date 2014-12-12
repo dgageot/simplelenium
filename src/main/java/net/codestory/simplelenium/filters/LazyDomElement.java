@@ -33,6 +33,8 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import static net.codestory.simplelenium.filters.WebElementHelper.text;
+
 public class LazyDomElement implements DomElement {
   private final By selector;
   private final ElementFilter filter;
@@ -56,7 +58,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public ElementFilterBuilder withText() {
-    Function<WebElement, String> toValue = element -> element.getText();
+    Function<WebElement, String> toValue = element -> text(element);
     return with("text", toValue);
   }
 

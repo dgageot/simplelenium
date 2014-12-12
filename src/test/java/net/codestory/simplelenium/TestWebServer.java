@@ -44,5 +44,9 @@ public class TestWebServer {
         "   <li id='joe' name='theJoe' class='name man tv'>Joe l'Indien</li>" +
         "</ul>"
     );
+
+    routes.get("/form",
+      "<input type='text' value='The Text'>"
+    );
   }
 }

@@ -37,6 +37,7 @@ import static java.lang.String.join;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
+import static net.codestory.simplelenium.filters.WebElementHelper.text;
 import static net.codestory.simplelenium.text.Text.plural;
 
 class LazyShould implements ShouldChain {
@@ -81,17 +82,17 @@ class LazyShould implements ShouldChain {
     return verify(
       doesOrNot("contain") + " (" + join(";", texts) + ")",
       elements -> of(texts).allMatch(expected -> {
-        return elements.stream().anyMatch(element -> element.getText().contains(expected));
+        return elements.stream().anyMatch(element -> text(element).contains(expected));
       }),
-      elements -> "It contains " + statuses(elements, element -> element.getText()));
+      elements -> "It contains " + statuses(elements, element -> text(element)));
   }
 
   @Override
   public LazyShould match(Pattern regexp) {
     return verify(
       doesOrNot("match") + " (" + regexp.pattern() + ")",
-      elements -> !elements.isEmpty() && elements.stream().anyMatch(element -> regexp.matcher(element.getText()).matches()),
-      elements -> "It contains " + statuses(elements, element -> element.getText()));
+      elements -> !elements.isEmpty() && elements.stream().anyMatch(element -> regexp.matcher(text(element)).matches()),
+      elements -> "It contains " + statuses(elements, element -> text(element)));
   }
 
   @Override
