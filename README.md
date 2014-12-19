@@ -396,7 +396,7 @@ This need clearly exists though.
 
 ### Support alerts, iframes and windows
 
-Pull requests are you best friends.
+Pull requests are your best friends.
 
 ### Reading properties from web elements
 
