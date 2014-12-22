@@ -38,6 +38,7 @@ class LockFile {
   public void waitLock() {
     while (true) {
       try {
+        lockFile.getParentFile().mkdirs();
         lock = new FileOutputStream(lockFile).getChannel().tryLock();
         if (lock != null) {
           LOCKS_TAKEN.add(this); // This way the lock cannot be reclaimed by the GC
@@ -57,6 +58,7 @@ class LockFile {
     try {
       LOCKS_TAKEN.remove(this);
       lock.release();
+      lockFile.delete();
     } catch (IOException e) {
       throw new IllegalStateException("Unable to release lock");
     }
