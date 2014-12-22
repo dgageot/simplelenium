@@ -165,7 +165,7 @@ public class PhantomJsDownloader {
     try (InputStream input = URI.create(url).toURL().openStream()) {
       Files.copy(input, zipTemp.toPath());
     } catch (IOException e) {
-      throw new IllegalStateException("Unable to download phantomjs from " + url, e);
+      throw new IllegalStateException("Unable to download phantomjs from " + url + " to " + targetZip, e);
     }
 
     if (!zipTemp.renameTo(targetZip)) {
