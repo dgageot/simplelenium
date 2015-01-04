@@ -24,7 +24,6 @@ import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.TakesScreenshot;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +71,7 @@ public abstract class SeleniumTest implements SectionObject {
 
   public SeleniumTest takeSnapshot(String suffix) {
     try {
-      byte[] snapshotData = ((TakesScreenshot) driver()).getScreenshotAs(BYTES);
+      byte[] snapshotData = driver().getScreenshotAs(BYTES);
       File snapshot = snapshotPath(suffix);
       snapshot.getParentFile().mkdirs();
       Files.write(snapshotData, snapshot);
