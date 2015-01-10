@@ -26,18 +26,8 @@ import java.io.IOException;
 import static org.openqa.selenium.OutputType.BYTES;
 
 public class TakeSnapshot extends TestWatcher {
-  private final String suffix;
-
   private Class<?> testClass;
   private String methodName;
-
-  public TakeSnapshot() {
-    this("");
-  }
-
-  public TakeSnapshot(String suffix) {
-    this.suffix = suffix;
-  }
 
   @Override
   protected void starting(Description description) {
@@ -63,6 +53,6 @@ public class TakeSnapshot extends TestWatcher {
   }
 
   public File snapshotPath(Class<?> testClass, String methodName) {
-    return new File("snapshots", testClass.getSimpleName() + "_" + methodName + suffix + ".png");
+    return new File("snapshots", testClass.getSimpleName() + "_" + methodName + ".png");
   }
 }
