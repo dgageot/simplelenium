@@ -15,7 +15,6 @@
  */
 package net.codestory.simplelenium.driver;
 
-import com.google.common.base.Throwables;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.UrlChecker;
 import org.openqa.selenium.os.CommandLine;
@@ -61,8 +60,9 @@ public class PhantomJSDriver extends RemoteWebDriver {
 
       try {
         return super.execute(command);
+      } catch (Error | RuntimeException | IOException t) {
+        throw t;
       } catch (Throwable t) {
-        Throwables.propagateIfPossible(t);
         throw new WebDriverException(t);
       } finally {
         if (QUIT.equals(command.getName())) {
