@@ -27,7 +27,9 @@ import static org.openqa.selenium.OutputType.BYTES;
 
 public class TakeSnapshot extends TestWatcher {
   private final String suffix;
-  private Description description;
+
+  private Class<?> testClass;
+  private String methodName;
 
   public TakeSnapshot() {
     this("");
@@ -39,7 +41,8 @@ public class TakeSnapshot extends TestWatcher {
 
   @Override
   protected void starting(Description description) {
-    this.description = description;
+    this.testClass = description.getTestClass();
+    this.methodName = description.getMethodName();
   }
 
   @Override
@@ -50,7 +53,7 @@ public class TakeSnapshot extends TestWatcher {
   public void takeSnapshot() {
     try {
       byte[] snapshotData = CurrentWebDriver.get().getScreenshotAs(BYTES);
-      File snapshot = snapshotPath(description);
+      File snapshot = snapshotPath(testClass, methodName);
       snapshot.getParentFile().mkdirs();
       Files.write(snapshotData, snapshot);
       System.err.println("   !! A snapshot was taken here [" + snapshot.getAbsoluteFile() + "] to help you debug");
@@ -59,7 +62,7 @@ public class TakeSnapshot extends TestWatcher {
     }
   }
 
-  public File snapshotPath(Description description) {
-    return new File("snapshots", description.getTestClass().getSimpleName() + "_" + description.getMethodName() + suffix + ".png");
+  public File snapshotPath(Class<?> testClass, String methodName) {
+    return new File("snapshots", testClass.getSimpleName() + "_" + methodName + suffix + ".png");
   }
 }
