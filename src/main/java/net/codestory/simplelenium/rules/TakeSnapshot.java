@@ -15,13 +15,13 @@
  */
 package net.codestory.simplelenium.rules;
 
-import com.google.common.io.Files;
 import net.codestory.simplelenium.driver.CurrentWebDriver;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import static org.openqa.selenium.OutputType.BYTES;
 
@@ -53,7 +53,7 @@ public class TakeSnapshot extends TestWatcher {
 
   protected void write(byte[] snapshotData, File to) throws IOException {
     to.getParentFile().mkdirs();
-    Files.write(snapshotData, to);
+    Files.write(to.toPath(), snapshotData);
   }
 
   protected File snapshotPath(Class<?> testClass, String methodName) {
