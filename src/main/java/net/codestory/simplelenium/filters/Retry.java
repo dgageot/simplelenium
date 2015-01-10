@@ -15,7 +15,10 @@
  */
 package net.codestory.simplelenium.filters;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.InvalidElementStateException;
+import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriverException;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
