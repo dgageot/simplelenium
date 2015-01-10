@@ -213,8 +213,4 @@ public class PhantomJsDownloader {
   protected boolean isLinux32() {
     return System.getProperty("os.name").contains("x86");
   }
-
-  protected boolean isLinux64() {
-    return System.getProperty("os.name").contains("amd64");
-  }
 }
