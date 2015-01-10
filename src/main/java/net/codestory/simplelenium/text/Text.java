@@ -33,34 +33,22 @@ public abstract class Text {
       }
     }
 
-    String[] verbs = verb.split("[ ]");
+    String[] verbs = verb.split(" ");
     verbs[0] = doesOrNot(not, verbs[0]);
 
     return String.join(" ", verbs);
   }
 
   public static String isOrNot(boolean not, String state) {
-    if (not) {
-      return "is not " + state;
-    } else {
-      return "is " + state;
-    }
+    return (not ? "is not " : "is ") + state;
   }
 
   public static String hasOrNot(boolean not, String what) {
-    if (not) {
-      return "has " + what;
-    } else {
-      return "hasn't " + what;
-    }
+    return (not ? "has " : "hasn't ") + what;
   }
 
   public static String plural(int n, String word) {
-    if (n <= 1) {
-      return n + " " + word;
-    } else {
-      return n + " " + word + "s";
-    }
+    return (n + " " + word) + (n <= 1 ? "" : "s");
   }
 
   public static String toString(By selector) {
