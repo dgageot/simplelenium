@@ -41,7 +41,7 @@ public class ReflectionUtil {
     });
   }
 
-  public static void injectMissingElements(SectionObject pageObject) {
+  public static void injectMissingElements(Object pageObject) {
     injectMissingPageObjects(pageObject);
     injectNullFieldsOfType(DomElement.class, pageObject, field -> new LazyDomElement(new ByIdOrName(field.getName())));
     injectNullFieldsWithConstructorParameterOfType(DomElement.class, pageObject, field -> new LazyDomElement(new ByIdOrName(field.getName())));
