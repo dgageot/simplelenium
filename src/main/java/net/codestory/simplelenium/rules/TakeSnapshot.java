@@ -42,17 +42,21 @@ public class TakeSnapshot extends TestWatcher {
 
   public void takeSnapshot() {
     try {
-      byte[] snapshotData = CurrentWebDriver.get().getScreenshotAs(BYTES);
-      File snapshot = snapshotPath(testClass, methodName);
-      snapshot.getParentFile().mkdirs();
-      Files.write(snapshotData, snapshot);
-      System.err.println("   !! A snapshot was taken here [" + snapshot.getAbsoluteFile() + "] to help you debug");
+      byte[] image = CurrentWebDriver.get().getScreenshotAs(BYTES);
+      File file = snapshotPath(testClass, methodName);
+      write(image, file);
+      System.err.println("   !! A snapshot was taken here [" + file.getAbsoluteFile() + "] to help you debug");
     } catch (IOException ioe) {
       throw new RuntimeException("Unable to take snapshot", ioe);
     }
   }
 
-  public File snapshotPath(Class<?> testClass, String methodName) {
+  protected void write(byte[] snapshotData, File to) throws IOException {
+    to.getParentFile().mkdirs();
+    Files.write(snapshotData, to);
+  }
+
+  protected File snapshotPath(Class<?> testClass, String methodName) {
     return new File("snapshots", testClass.getSimpleName() + "_" + methodName + ".png");
   }
 }
