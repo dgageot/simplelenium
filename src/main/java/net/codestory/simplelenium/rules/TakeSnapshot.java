@@ -45,7 +45,7 @@ public class TakeSnapshot extends TestWatcher {
       byte[] image = CurrentWebDriver.get().getScreenshotAs(BYTES);
       File file = snapshotPath(testClass, methodName);
       write(image, file);
-      System.err.println("   !! A snapshot was taken here [" + file.getAbsoluteFile() + "] to help you debug");
+      System.err.println("   !! A snapshot was taken here [" + file.getAbsolutePath() + "] to help you debug");
     } catch (IOException ioe) {
       throw new RuntimeException("Unable to take snapshot", ioe);
     }
