@@ -47,7 +47,7 @@ public class ReflectionUtil {
     injectNullFieldsWithConstructorParameterOfType(DomElement.class, pageObject, field -> new LazyDomElement(new ByIdOrName(field.getName())));
   }
 
-  public static void injectNullFieldsOfType(Class<?> type, Object target, Function<Field, Object> factory) {
+  public static <T> void injectNullFieldsOfType(Class<T> type, Object target, Function<Field, T> factory) {
     for (Field field : target.getClass().getDeclaredFields()) {
       if (!isFinal(field.getModifiers()) && type.isAssignableFrom(field.getType())) {
         try {
@@ -62,7 +62,7 @@ public class ReflectionUtil {
     }
   }
 
-  public static void injectNullFieldsWithConstructorParameterOfType(Class<?> type, Object target, Function<Field, Object> factory) {
+  public static <T> void injectNullFieldsWithConstructorParameterOfType(Class<T> type, Object target, Function<Field, T> factory) {
     for (Field field : target.getClass().getDeclaredFields()) {
       try {
         if (!isFinal(field.getModifiers())) {
