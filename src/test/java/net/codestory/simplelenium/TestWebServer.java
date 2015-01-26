@@ -46,7 +46,8 @@ public class TestWebServer {
     );
 
     routes.get("/form",
-      "<input type='text' value='The Text'>"
+      "<input id=\"name\" type='text' value='The Name'>" +
+      "<input id=\"city\" type='text' value='The City'>"
     );
 
     routes.get("/nested",

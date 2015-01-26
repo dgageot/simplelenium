@@ -312,7 +312,16 @@ public class LazyDomElement implements DomElement {
       throw new AssertionError("Element not found: " + Text.toString(selector));
     }
 
-    return this;
+    // After an action, go back to root level for future finds
+    return new LazyDomElement(parent, selector, filter, retry) {
+      public DomElement find(String selector) {
+        return new LazyDomElement(By.cssSelector(selector));
+      }
+
+      public DomElement find(By selector) {
+        return new LazyDomElement(selector);
+      }
+    };
   }
 
   @Override

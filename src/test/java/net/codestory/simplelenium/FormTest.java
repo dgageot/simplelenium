@@ -22,16 +22,26 @@ public class FormTest extends AbstractTest {
   public void input_text() {
     goTo("/form");
 
-    find("input").should().contain("The Text");
-    find("input").withText("The Text").should().exist();
+    find("input#name").should().contain("The Name");
+    find("input#name").withText("The Name").should().exist();
   }
 
   @Test
   public void clear() {
     goTo("/form");
 
-    find("input").clear();
+    find("input#name").clear();
 
-    find("input").should().beEmpty();
+    find("input#name").should().beEmpty();
+  }
+
+  @Test
+  public void chain() {
+    goTo("/form");
+
+    find("input#name").fill("name")
+      .find("input#city").fill("Paris")
+      .find("input#name").should().contain("The Name")
+      .find("input#city").should().contain("Paris");
   }
 }
