@@ -25,12 +25,13 @@ class WebElementHelper {
   public static String text(WebElement element) {
     String text = element.getText();
     if (!"".equals(text)) {
-      return text;
+      return nullToEmpty(text);
     }
-    String value = element.getAttribute("value");
-    if (!"".equals(value)) {
-      return value;
-    }
-    return "";
+
+    return nullToEmpty(element.getAttribute("value"));
+  }
+
+  private static String nullToEmpty(String text) {
+    return (text == null) ? "" : text;
   }
 }
