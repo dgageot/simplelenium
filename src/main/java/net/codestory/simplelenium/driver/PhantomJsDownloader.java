@@ -32,9 +32,11 @@ import java.util.zip.ZipFile;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class PhantomJsDownloader {
-  private static final int DEFAULT_RETRY = 4;
+  private static final int DEFAULT_RETRY_DOWNLOAD = 4;
+  private static final int DEFAULT_RETRY_CONNECT = 4;
 
-  private final int retry;
+  private final int retryDownload;
+  private final int retryConnect;
 
   private final ThreadLocal<PhantomJSDriver> perThreadDriver = new ThreadLocal<PhantomJSDriver>() {
     @Override
@@ -44,11 +46,12 @@ public class PhantomJsDownloader {
   };
 
   public PhantomJsDownloader() {
-    this(DEFAULT_RETRY);
+    this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
   }
 
-  protected PhantomJsDownloader(int retry) {
-    this.retry = retry;
+  protected PhantomJsDownloader(int retryDownload, int retryConnect) {
+    this.retryDownload = retryDownload;
+    this.retryConnect = retryConnect;
   }
 
   public PhantomJSDriver getDriverForThread() {
@@ -58,22 +61,37 @@ public class PhantomJsDownloader {
   protected PhantomJSDriver createNewDriver() {
     System.out.println("Create a new PhantomJSDriver");
 
-    File phantomJsExe = downloadAndExtract();
+    File phantomJsExe = null;
+    IllegalStateException downloadError = null;
+    for (int i = retryDownload; i >= 0; i--) {
+      try {
+        phantomJsExe = downloadAndExtract();
+      } catch (IllegalStateException e) {
+        downloadError = e;
+        if (i != 0) {
+          System.err.println("Unable to download PhantomJS " + downloadError);
+          pause(5);
+        }
+      }
+      if (phantomJsExe == null) {
+        throw new IllegalStateException("Unable to download PhantomJS", downloadError);
+      }
+    }
 
-    UnreachableBrowserException error = null;
-    for (int i = retry; i >= 0; i--) {
+    UnreachableBrowserException connectError = null;
+    for (int i = retryConnect; i >= 0; i--) {
       try {
         return createNewPhantomJsDriver(phantomJsExe);
       } catch (UnreachableBrowserException e) {
-        error = e;
+        connectError = e;
         if (i != 0) {
-          System.err.println("Unable to start PhantomJS " + error);
+          System.err.println("Unable to start PhantomJS " + connectError);
           pause(5);
         }
       }
     }
 
-    throw new IllegalStateException("Unable to start PhantomJS", error);
+    throw new IllegalStateException("Unable to start PhantomJS", connectError);
   }
 
   protected PhantomJSDriver createNewPhantomJsDriver(File phantomJsExe) {
@@ -157,19 +175,22 @@ public class PhantomJsDownloader {
       }
     }
 
-    System.out.printf("Downloading phantomjs from %s...%n", url);
+    for (int i = 0; i < 5; i++) {
+      System.out.printf("Downloading phantomjs from %s...%n", url);
 
-    File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
-    zipTemp.getParentFile().mkdirs();
+      File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
+      zipTemp.getParentFile().mkdirs();
 
-    try (InputStream input = URI.create(url).toURL().openStream()) {
-      Files.copy(input, zipTemp.toPath());
-    } catch (IOException e) {
-      throw new IllegalStateException("Unable to download phantomjs from " + url + " to " + targetZip, e);
-    }
+      try (InputStream input = URI.create(url).toURL().openStream()) {
+        Files.copy(input, zipTemp.toPath());
+      } catch (IOException e) {
+        throw new IllegalStateException("Unable to download phantomjs from " + url + " to " + targetZip, e);
+      }
 
-    if (!zipTemp.renameTo(targetZip)) {
-      throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
+      if (!zipTemp.renameTo(targetZip)) {
+        throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
+      }
+      return;
     }
   }
 
