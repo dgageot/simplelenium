@@ -66,6 +66,7 @@ public class PhantomJsDownloader {
     for (int i = retryDownload; i >= 0; i--) {
       try {
         phantomJsExe = downloadAndExtract();
+        break;
       } catch (IllegalStateException e) {
         downloadError = e;
         if (i != 0) {
@@ -73,9 +74,9 @@ public class PhantomJsDownloader {
           pause(5);
         }
       }
-      if (phantomJsExe == null) {
-        throw new IllegalStateException("Unable to download PhantomJS", downloadError);
-      }
+    }
+    if (phantomJsExe == null) {
+      throw new IllegalStateException("Unable to download PhantomJS", downloadError);
     }
 
     UnreachableBrowserException connectError = null;
