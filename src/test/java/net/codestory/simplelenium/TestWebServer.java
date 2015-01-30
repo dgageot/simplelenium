@@ -42,7 +42,7 @@ public class TestWebServer {
       "<ul>" +
         "   <li id='bob' name='theBob' class='name man cartoon'>Bob Morane</li>" +
         "   <li id='joe' name='theJoe' class='name man tv'>Joe l'Indien</li>" +
-        "</ul>"
+      "</ul>"
     );
 
     routes.get("/form",
@@ -56,7 +56,10 @@ public class TestWebServer {
       "<div id='third'>" +
         "<div class='first_child'>First Child</div>" +
         "<div class='second_child'>Second Child</div>" +
-        "</div>"
+      "</div>"
+    );
+
+    routes.get("/console", "<script>console.log('Hello World');</script>"
     );
   }
 }

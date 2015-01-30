@@ -19,8 +19,10 @@ import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.driver.PhantomJSDriver;
 
 import java.net.URI;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 public interface Navigation extends DomElementFinder {
   ThreadLocal<String> baseUrl = new ThreadLocal<>();
@@ -35,6 +37,10 @@ public interface Navigation extends DomElementFinder {
 
   default PhantomJSDriver driver() {
     return CurrentWebDriver.get();
+  }
+
+  default List<String> console() {
+    return driver().manage().logs().get("browser").getAll().stream().map(log -> log.getMessage()).collect(toList());
   }
 
   default Object executeJavascript(String javascriptCode, Object... args) {
