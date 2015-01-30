@@ -33,7 +33,7 @@ import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
 public class PhantomJSDriver extends RemoteWebDriver {
   PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
-    super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), new DesiredCapabilities());
+    super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), DesiredCapabilities.phantomjs());
     Runtime.getRuntime().addShutdownHook(new Thread(super::quit));
   }
 
