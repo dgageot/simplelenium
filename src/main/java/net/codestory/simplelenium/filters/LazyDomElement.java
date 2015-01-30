@@ -186,6 +186,11 @@ public class LazyDomElement implements DomElement {
   }
 
   @Override
+  public LazyDomElement pressEnter() {
+    return execute("pressEnter()", element -> element.sendKeys(Keys.ENTER));
+  }
+
+  @Override
   public LazyDomElement sendKeys(CharSequence... keysToSend) {
     return execute("sendKeys()", element -> element.sendKeys(keysToSend));
   }

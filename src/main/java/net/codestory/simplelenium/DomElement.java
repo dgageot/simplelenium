@@ -95,6 +95,8 @@ public interface DomElement extends Navigation {
 
   DomElement pressReturn();
 
+  DomElement pressEnter();
+
   DomElement sendKeys(CharSequence... keysToSend);
 
   DomElement clear();
