@@ -126,8 +126,8 @@ public class PhantomJsDownloader {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip";
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-windows/phantomjs.exe");
       } else if (isMac()) {
-        url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.0.0-macosx.zip";
-        phantomJsExe = new File(installDir, "phantomjs-2.0.0-macosx/bin/phantomjs");
+        url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-macosx.zip";
+        phantomJsExe = new File(installDir, "phantomjs-1.9.8-macosx/bin/phantomjs");
       } else if (isLinux32()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-i686.tar.bz2";
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-linux-i686/bin/phantomjs");
