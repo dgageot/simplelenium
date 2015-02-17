@@ -37,4 +37,24 @@ public class SelectTest extends AbstractTest {
     find("select option").withText("SECOND").should().beSelected();
     find("select option").withText("THIRD").should().not().beSelected();
   }
+
+  @Test
+  public void change_selection() {
+    goTo("/select");
+
+    find("select").selectByValue("1");
+    find("select option").withText("FIRST").should().beSelected();
+    find("select option").withText("SECOND").should().not().beSelected();
+    find("select option").withText("THIRD").should().not().beSelected();
+
+    find("select").selectByValue("2");
+    find("select option").withText("FIRST").should().not().beSelected();
+    find("select option").withText("SECOND").should().beSelected();
+    find("select option").withText("THIRD").should().not().beSelected();
+
+    find("select").selectByValue("3");
+    find("select option").withText("FIRST").should().not().beSelected();
+    find("select option").withText("SECOND").should().not().beSelected();
+    find("select option").withText("THIRD").should().beSelected();
+  }
 }
