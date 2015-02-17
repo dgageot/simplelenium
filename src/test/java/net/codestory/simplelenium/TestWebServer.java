@@ -59,7 +59,16 @@ public class TestWebServer {
       "</div>"
     );
 
-    routes.get("/console", "<script>console.log('Hello World');</script>"
+    routes.get("/console",
+      "<script>console.log('Hello World');</script>"
+    );
+
+    routes.get("/select",
+      "<select>" +
+        "<option value=\"1\">FIRST</option>" +
+        "<option value=\"2\" selected>SECOND</option>" +
+        "<option value=\"3\">THIRD</option>" +
+      "</select>"
     );
   }
 }
