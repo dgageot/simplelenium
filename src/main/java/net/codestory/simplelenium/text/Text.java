@@ -52,6 +52,6 @@ public abstract class Text {
   }
 
   public static String toString(By selector) {
-    return selector.toString().replace("By.selector: ", "");
+    return selector.toString().replace("By.selector: ", "").replace("By.cssSelector: ", "");
   }
 }
