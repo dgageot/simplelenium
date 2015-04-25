@@ -176,22 +176,19 @@ public class PhantomJsDownloader {
       }
     }
 
-    for (int i = 0; i < 5; i++) {
-      System.out.printf("Downloading phantomjs from %s...%n", url);
+    System.out.printf("Downloading phantomjs from %s...%n", url);
 
-      File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
-      zipTemp.getParentFile().mkdirs();
+    File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
+    zipTemp.getParentFile().mkdirs();
 
-      try (InputStream input = URI.create(url).toURL().openStream()) {
-        Files.copy(input, zipTemp.toPath());
-      } catch (IOException e) {
-        throw new IllegalStateException("Unable to download phantomjs from " + url + " to " + targetZip, e);
-      }
+    try (InputStream input = URI.create(url).toURL().openStream()) {
+      Files.copy(input, zipTemp.toPath());
+    } catch (IOException e) {
+      throw new IllegalStateException("Unable to download phantomjs from " + url + " to " + targetZip, e);
+    }
 
-      if (!zipTemp.renameTo(targetZip)) {
-        throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
-      }
-      return;
+    if (!zipTemp.renameTo(targetZip)) {
+      throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
     }
   }
 
