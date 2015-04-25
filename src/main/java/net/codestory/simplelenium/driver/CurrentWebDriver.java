@@ -20,7 +20,7 @@ package net.codestory.simplelenium.driver;
 public interface CurrentWebDriver {
   PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
 
-  public static PhantomJSDriver get() {
+  static PhantomJSDriver get() {
     return phantomJsDownloader.getDriverForThread();
   }
 }
