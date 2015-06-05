@@ -15,12 +15,14 @@
  */
 package net.codestory.simplelenium.driver;
 
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 // Hack to avoid passing the PhantomJSDriver around
 //
 public interface CurrentWebDriver {
   PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
 
-  static PhantomJSDriver get() {
+  static RemoteWebDriver get() {
     return phantomJsDownloader.getDriverForThread();
   }
 }

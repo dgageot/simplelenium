@@ -16,7 +16,7 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.CurrentWebDriver;
-import net.codestory.simplelenium.driver.PhantomJSDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URI;
 import java.util.List;
@@ -35,7 +35,7 @@ public interface Navigation extends DomElementFinder {
     baseUrl.set(url);
   }
 
-  default PhantomJSDriver driver() {
+  default RemoteWebDriver driver() {
     return CurrentWebDriver.get();
   }
 
