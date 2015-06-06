@@ -15,13 +15,13 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.driver.SeleniumDriver;
 import net.codestory.simplelenium.rules.InjectPageObjects;
 import net.codestory.simplelenium.rules.PrintTestName;
 import net.codestory.simplelenium.rules.TakeSnapshot;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static org.junit.rules.RuleChain.outerRule;
 
@@ -37,7 +37,7 @@ public abstract class SeleniumTest implements SectionObject {
     configureWebDriver(driver());
   }
 
-  protected void configureWebDriver(RemoteWebDriver driver) {
+  protected void configureWebDriver(SeleniumDriver driver) {
     driver.manage().window().setSize(new Dimension(2048, 768));
   }
 

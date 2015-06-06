@@ -38,13 +38,6 @@ public class PhantomJsDownloader {
   private final int retryDownload;
   private final int retryConnect;
 
-  private final ThreadLocal<PhantomJSDriver> perThreadDriver = new ThreadLocal<PhantomJSDriver>() {
-    @Override
-    protected PhantomJSDriver initialValue() {
-      return createNewDriver();
-    }
-  };
-
   public PhantomJsDownloader() {
     this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
   }
@@ -54,11 +47,7 @@ public class PhantomJsDownloader {
     this.retryConnect = retryConnect;
   }
 
-  public PhantomJSDriver getDriverForThread() {
-    return perThreadDriver.get();
-  }
-
-  protected PhantomJSDriver createNewDriver() {
+  public PhantomJSDriver createNewDriver() {
     System.out.println("Create a new PhantomJSDriver");
 
     File phantomJsExe = null;

@@ -15,23 +15,5 @@
  */
 package net.codestory.simplelenium.driver;
 
-import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.util.function.Supplier;
-
-public interface CurrentWebDriver {
-  PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
-  //  Supplier<RemoteWebDriver> driverSupplier = () -> new FirefoxDriver();
-  Supplier<RemoteWebDriver> driverSupplier = () -> phantomJsDownloader.createNewDriver();
-
-  ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
-    @Override
-    protected SeleniumDriver initialValue() {
-      return ThreadSafeDriver.makeThreadSafe(driverSupplier.get());
-    }
-  };
-
-  static SeleniumDriver get() {
-    return perThreadDriver.get();
-  }
+public interface SeleniumDriver extends org.openqa.selenium.WebDriver, org.openqa.selenium.JavascriptExecutor, org.openqa.selenium.internal.FindsById, org.openqa.selenium.internal.FindsByClassName, org.openqa.selenium.internal.FindsByLinkText, org.openqa.selenium.internal.FindsByName, org.openqa.selenium.internal.FindsByCssSelector, org.openqa.selenium.internal.FindsByTagName, org.openqa.selenium.internal.FindsByXPath, org.openqa.selenium.interactions.HasInputDevices, org.openqa.selenium.HasCapabilities, org.openqa.selenium.TakesScreenshot {
 }
