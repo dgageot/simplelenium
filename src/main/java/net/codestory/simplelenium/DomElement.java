@@ -113,6 +113,8 @@ public interface DomElement extends Navigation {
 
   DomElement clickAndHold();
 
+  DomElement dragAndDropTo(String selector);
+
   DomElement contextClick();
 
   DomElement release();

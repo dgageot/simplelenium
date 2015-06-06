@@ -231,6 +231,14 @@ public class LazyDomElement implements DomElement {
   }
 
   @Override
+  public LazyDomElement dragAndDropTo(String destinationSelector) {
+    return executeActions("dragAndDropTo(" + destinationSelector + ")", (element, actions) -> actions
+      .clickAndHold(element)
+      .pause(100)
+      .release(driver().findElementByCssSelector(destinationSelector)));
+  }
+
+  @Override
   public LazyDomElement contextClick() {
     return executeActions("contextClick", (element, actions) -> actions.contextClick(element));
   }

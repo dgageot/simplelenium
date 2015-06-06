@@ -1,0 +1,53 @@
+[ng-drag].dragging {
+  opacity: 0.9;
+}
+
+[ng-drop].drag-enter {
+  border: solid 3px red !important;
+}
+
+[ng-drop] li {
+  position: relative;
+  z-index: 2;
+}
+
+#main {
+  position: relative;
+
+  .box {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    position: absolute;
+    width: 300px;
+    height: 485px;
+    border: solid 3px transparent;
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        height: 3em;
+        line-height: 3em;
+        padding: 0 10px;
+        border: 1px solid black;
+        margin: 5px;
+        border-radius: 5px;
+        background-color: white;
+        cursor: move;
+      }
+    }
+  }
+
+  #left {
+    background-color: #ffaa6d;
+    left: 0;
+  }
+
+  #right {
+    background-color: #74beff;
+    left: 350px;
+  }
+}
+

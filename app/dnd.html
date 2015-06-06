@@ -1,0 +1,38 @@
+---
+layout: default
+ng-app: dnd
+---
+
+<div id="main" ng-controller="DndController as dnd">
+
+    <div class="box" id="left"
+         ng-drop="true"
+         ng-drop-success="dnd.onDropList1($data)">
+        <ul>
+            <li ng-repeat="item in dnd.list1"
+                ng-drag="true"
+                ng-mousedown="dnd.onDragList1()"
+                ng-drag-data="item">
+                {{item}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="box" id="right"
+         ng-drop="true"
+         ng-drop-success="dnd.onDropList2($data)">
+        <ul>
+            <li ng-repeat="item in dnd.list2"
+                ng-drag="true"
+                ng-mousedown="dnd.onDragList2()"
+                ng-drag-data="item">
+                {{item}}
+            </li>
+        </ul>
+    </div>
+</div>
+
+[[css 'style']]
+[[webjar 'angular.js']]
+[[script 'ngDraggable']]
+[[script 'app']]
