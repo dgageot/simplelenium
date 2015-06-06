@@ -17,6 +17,7 @@ package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.SeleniumDriver;
 import net.codestory.simplelenium.rules.InjectPageObjects;
+import net.codestory.simplelenium.rules.PrintErrorConsole;
 import net.codestory.simplelenium.rules.PrintTestName;
 import net.codestory.simplelenium.rules.TakeSnapshot;
 import org.junit.Rule;
@@ -29,9 +30,10 @@ public abstract class SeleniumTest implements SectionObject {
   private final PrintTestName printTestName = new PrintTestName();
   private final InjectPageObjects injectPageObjects = new InjectPageObjects(this);
   private final TakeSnapshot takeSnapshot = new TakeSnapshot();
+  private final PrintErrorConsole printErrorConsole = new PrintErrorConsole();
 
   @Rule
-  public RuleChain ruleChain = outerRule(printTestName).around(injectPageObjects).around(takeSnapshot);
+  public RuleChain ruleChain = outerRule(printTestName).around(injectPageObjects).around(printErrorConsole).around(takeSnapshot);
 
   protected SeleniumTest() {
     configureWebDriver(driver());
