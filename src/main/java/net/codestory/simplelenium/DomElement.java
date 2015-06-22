@@ -39,9 +39,9 @@ public interface DomElement extends Navigation {
 
   FilteredDomElement withClass();
 
-  FilteredDomElement withAttribute(String name);
+  FilteredDomElement with(String name);
 
-  FilteredDomElement withCssValue(String name);
+  FilteredDomElement withCss(String name);
 
   FilteredDomElement with(String description, Function<WebElement, String> toValue);
 

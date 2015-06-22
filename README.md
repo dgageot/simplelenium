@@ -165,10 +165,10 @@ find("...").withText().beingEmpty().should()...;
 find("...").withText().containing("text").should()...;
 find("...").withName().startingWith("text").should()...;
 find("...").withId().equalTo("text").should()...;
-find("...").withAttribute("name").matching(Pattern.compile(".*value")).should()...;
+find("...").with("name").matching(Pattern.compile(".*value")).should()...;
 find("...").withTagName().equalTo("h1").should()...;
 find("...").withClass().containingWord("blue").should()...;
-find("...").withCssValue("color").not().endingWith("grey").should()...;
+find("...").withCss("color").not().endingWith("grey").should()...;
 find("...").withText().startsWith("Prefix").endingWith("Suffix").should()...;
 ...
 ```

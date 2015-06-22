@@ -104,13 +104,13 @@ public class LazyDomElement implements DomElement {
   }
 
   @Override
-  public ElementFilterBuilder withAttribute(String name) {
+  public ElementFilterBuilder with(String name) {
     Function<WebElement, String> toValue = element -> element.getAttribute(name);
     return with("attribute[" + name + "]", toValue);
   }
 
   @Override
-  public ElementFilterBuilder withCssValue(String name) {
+  public ElementFilterBuilder withCss(String name) {
     Function<WebElement, String> toValue = element -> element.getCssValue(name);
     return with("cssValue[" + name + "]", toValue);
   }

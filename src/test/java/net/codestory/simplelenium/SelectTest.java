@@ -23,9 +23,9 @@ public class SelectTest extends AbstractTest {
     goTo("/select");
 
     find("select").should().beDisplayed();
-    find("select option").withAttribute("value").equalTo("1").should().not().beSelected();
-    find("select option").withAttribute("value").equalTo("2").should().beSelected();
-    find("select option").withAttribute("value").equalTo("3").should().not().beSelected();
+    find("select option").with("value").equalTo("1").should().not().beSelected();
+    find("select option").with("value").equalTo("2").should().beSelected();
+    find("select option").with("value").equalTo("3").should().not().beSelected();
   }
 
   @Test
