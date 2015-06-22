@@ -24,6 +24,6 @@ public class ConsoleTest extends AbstractTest {
   public void capture_console() {
     goTo("/console");
 
-    assertThat(console()).containsExactly("Hello World (undefined:undefined)");
+    assertThat(console()).containsExactly("Hello World");
   }
 }

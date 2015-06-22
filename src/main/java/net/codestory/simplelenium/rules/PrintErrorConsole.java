@@ -32,7 +32,7 @@ public class PrintErrorConsole extends TestWatcher {
       System.err.println("<EMPTY>");
     } else {
       for (LogEntry log : logs) {
-        System.err.println(" - " + log.getMessage());
+        System.err.println(" - " + log.getMessage().replace(" (undefined:undefined)", ""));
       }
     }
   }
