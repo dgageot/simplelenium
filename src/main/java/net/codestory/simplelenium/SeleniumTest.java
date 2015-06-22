@@ -43,10 +43,7 @@ public abstract class SeleniumTest implements SectionObject {
     driver.manage().window().setSize(new Dimension(2048, 768));
   }
 
-  // Override to set a base url
-  protected String getDefaultBaseUrl() {
-    return "";
-  }
+  protected abstract String getDefaultBaseUrl();
 
   public SeleniumTest takeSnapshot() {
     takeSnapshot.takeSnapshot();
