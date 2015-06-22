@@ -28,14 +28,4 @@ public interface DomElementFinder {
   default DomElement find(By selector) {
     return new LazyDomElement(selector);
   }
-
-  // jquery syntax
-
-  default DomElement $(String selector) {
-    return find(selector);
-  }
-
-  default DomElement $(By selector) {
-    return find(selector);
-  }
 }
