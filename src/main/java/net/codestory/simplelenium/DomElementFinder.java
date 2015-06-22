@@ -19,8 +19,6 @@ import net.codestory.simplelenium.filters.LazyDomElement;
 import org.openqa.selenium.By;
 
 public interface DomElementFinder {
-  // default syntax
-
   default DomElement find(String selector) {
     return new LazyDomElement(By.cssSelector(selector));
   }
