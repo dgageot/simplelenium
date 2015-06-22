@@ -220,12 +220,6 @@
       <artifactId>selenium-remote-driver</artifactId>
       <version>${selenium.version}</version>
     </dependency>
-    <!--<dependency>-->
-      <!--<groupId>org.seleniumhq.selenium</groupId>-->
-      <!--<artifactId>selenium-java</artifactId>-->
-      <!--<version>${selenium.version}</version>-->
-      <!--<optional>true</optional>-->
-    <!--</dependency>-->
 
     <dependency>
       <groupId>junit</groupId>
