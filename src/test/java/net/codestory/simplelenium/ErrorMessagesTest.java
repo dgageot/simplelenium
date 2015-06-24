@@ -140,6 +140,15 @@ public class ErrorMessagesTest extends AbstractTest {
   }
 
   @Test
+  public void fail_with_filter_on_name() {
+    goTo("/list");
+
+    expectError("Failed to verify that .name with name that is equal to [wrongName] exists. It contains 0 element");
+
+    find(".name").withName("wrongName").should().within(1, MILLISECONDS).exist();
+  }
+
+  @Test
   public void stacktrace_should_not_mention_simplelenium() {
     goTo("/list");
 
