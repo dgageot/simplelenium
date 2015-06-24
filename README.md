@@ -12,7 +12,7 @@ because of the way Selenium is used. Although experience showed me that using
 Selenium properly is harder that one might think.
 
 In fact I think that proper usage of Selenium must be left out of tester hands
-and baked into a small, effective library. Simplelenium is my attempt to so and
+and baked into a small, effective library. Simplelenium is my attempt to do so and
 it served me well.
 
 Simplelenium deals properly and out-of-the-box with timing issues and
@@ -20,7 +20,7 @@ Simplelenium deals properly and out-of-the-box with timing issues and
 without you thinking about it. It doesn't open annoying windows since it's
 using [PhantomJS](http://phantomjs.org/), a headless browser.
 
-Give it a try and you'll be surprises how Selenium testing can be fun again
+Give it a try and you'll be surprised at how Selenium testing can be fun again
 (was it ever?).
 
 ## Setup (Maven)
@@ -71,7 +71,7 @@ public class QuickStartTest extends SeleniumTest {
 Notice the fluent api that doesn't rely on static imports. This will make your
 life easier.
 
-Lot's of finders, actions and verifications are supported. Notice that no timing
+Lots of finders, actions and verifications are supported. Notice that no timing
 information is provided. The default settings should be ok the vast majority of
 times.
 
@@ -88,7 +88,7 @@ which should be enough most of the time, or use standard Selenium
 Searching is not done until a verification is made on the elements.
 Simplelenium is both lazy and tolerant to slow pages and ongoing refreshes.
 You don't have to worry about it. Just write what the page should look like
-and it happens within a sound period of time, the next verification is made.
+and if it happens within a sound period of time, the next verification is made.
 
 We'll dig into more details in the last section.
 
@@ -157,7 +157,7 @@ find(".name").should().within(1, MINUTE).contain("a word");
 
 ## Narrowing search
 
-Sometime, searching elements is more difficult than using a simple css selector.
+Sometimes, searching elements is more difficult than using a simple css selector.
 Simplelenium supports narrowing searches with additional filters, like those:
 
 ```java
@@ -240,7 +240,7 @@ know that the full power of Selenium is there underneath.
 
 ## Advanced topics
 
-Le't say you are not impressed, what else can Simplelenium do to make writing
+Let's say you are not impressed, what else can Simplelenium do to make writing
 tests easier?
 
 ### Page Objects and Section Objects
