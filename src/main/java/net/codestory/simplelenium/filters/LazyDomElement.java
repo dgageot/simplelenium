@@ -88,7 +88,7 @@ public class LazyDomElement implements DomElement {
   @Override
   public ElementFilterBuilder withName() {
     Function<WebElement, String> toValue = element -> element.getAttribute("name");
-    return with("id", toValue);
+    return with("name", toValue);
   }
 
   @Override
