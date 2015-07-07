@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium.driver;
+package net.codestory.simplelenium.driver.initializers;
 
+import net.codestory.simplelenium.driver.Browser;
+import net.codestory.simplelenium.driver.DriverInitializer;
+import net.codestory.simplelenium.driver.LockFile;
+import net.codestory.simplelenium.driver.PhantomJSDriver;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
@@ -31,7 +35,7 @@ import java.util.zip.ZipFile;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class PhantomJsDownloader {
+public class PhantomJsDownloader implements DriverInitializer {
   private static final int DEFAULT_RETRY_DOWNLOAD = 4;
   private static final int DEFAULT_RETRY_CONNECT = 4;
 
@@ -45,6 +49,11 @@ public class PhantomJsDownloader {
   protected PhantomJsDownloader(int retryDownload, int retryConnect) {
     this.retryDownload = retryDownload;
     this.retryConnect = retryConnect;
+  }
+
+  @Override
+  public Browser getBrowser() {
+    return Browser.PHANTOM_JS;
   }
 
   public PhantomJSDriver createNewDriver() {

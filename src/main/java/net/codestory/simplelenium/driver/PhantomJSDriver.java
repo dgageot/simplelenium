@@ -15,6 +15,8 @@
  */
 package net.codestory.simplelenium.driver;
 
+import net.codestory.simplelenium.driver.initializers.PhantomJsDownloader;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.UrlChecker;
 import org.openqa.selenium.os.CommandLine;
@@ -23,6 +25,7 @@ import org.openqa.selenium.remote.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.function.Supplier;
 
 import static java.util.Collections.singletonMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -31,9 +34,23 @@ import static org.openqa.selenium.remote.DriverCommand.NEW_SESSION;
 import static org.openqa.selenium.remote.DriverCommand.QUIT;
 import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
-public class PhantomJSDriver extends RemoteWebDriver {
-  PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
+public class PhantomJSDriver extends RemoteWebDriver implements CurrentWebDriver {
+  public PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
     super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), DesiredCapabilities.phantomjs());
+  }
+
+  @Override
+  public WebDriver get() {
+    PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
+    Supplier<RemoteWebDriver> driverSupplier = () -> phantomJsDownloader.createNewDriver();
+
+    ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
+      @Override
+      protected SeleniumDriver initialValue() {
+        return ThreadSafeDriver.makeThreadSafe(driverSupplier.get());
+      }
+    };
+    return perThreadDriver.get();
   }
 
   static class PhantomJSHttpCommandExecutor extends HttpCommandExecutor {

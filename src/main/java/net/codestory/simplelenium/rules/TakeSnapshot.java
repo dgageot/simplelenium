@@ -42,7 +42,7 @@ public class TakeSnapshot extends TestWatcher {
 
   public void takeSnapshot() {
     try {
-      byte[] image = CurrentWebDriver.get().getScreenshotAs(BYTES);
+      byte[] image = CurrentWebDriver.getPhantomDriver().getScreenshotAs(BYTES);
       File file = snapshotPath(testClass, methodName);
       write(image, file);
       System.err.println("   !! A snapshot was taken here [" + file.getAbsolutePath() + "] to help you debug");

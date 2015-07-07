@@ -25,7 +25,7 @@ import java.util.List;
 public class PrintErrorConsole extends TestWatcher {
   @Override
   protected void failed(Throwable e, Description description) {
-    List<LogEntry> logs = CurrentWebDriver.get().manage().logs().get("browser").getAll();
+    List<LogEntry> logs = CurrentWebDriver.getPhantomDriver().manage().logs().get("browser").getAll();
 
     System.err.println("Browser's console:");
     if (logs.isEmpty()) {

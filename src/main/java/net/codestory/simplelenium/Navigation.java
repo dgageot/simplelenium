@@ -16,10 +16,15 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.CurrentWebDriver;
+import net.codestory.simplelenium.driver.PhantomJSDriver;
 import net.codestory.simplelenium.driver.SeleniumDriver;
+import net.codestory.simplelenium.driver.ThreadSafeDriver;
+import net.codestory.simplelenium.driver.initializers.PhantomJsDownloader;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URI;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -36,7 +41,8 @@ public interface Navigation extends DomElementFinder {
   }
 
   default SeleniumDriver driver() {
-    return CurrentWebDriver.get();
+    // TODO: get browser parameter and initialize according driver
+    return CurrentWebDriver.getPhantomDriver();
   }
 
   default List<String> console() {

@@ -15,6 +15,8 @@
  */
 package net.codestory.simplelenium.driver;
 
+import net.codestory.simplelenium.driver.initializers.PhantomJsDownloader;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.function.Supplier;
@@ -30,8 +32,18 @@ public interface CurrentWebDriver {
       return ThreadSafeDriver.makeThreadSafe(driverSupplier.get());
     }
   };
+//
+//  static SeleniumDriver get() {
+//    return perThreadDriver.get();
+//  }
 
-  static SeleniumDriver get() {
-    return perThreadDriver.get();
+  public abstract WebDriver get();
+
+  /**
+   * @deprecated
+   * @return
+   */
+  static SeleniumDriver getPhantomDriver() {
+      return perThreadDriver.get();
   }
 }
