@@ -15,10 +15,7 @@
  */
 package net.codestory.simplelenium.driver.initializers;
 
-import net.codestory.simplelenium.driver.Browser;
-import net.codestory.simplelenium.driver.DriverInitializer;
-import net.codestory.simplelenium.driver.LockFile;
-import net.codestory.simplelenium.driver.PhantomJSDriver;
+import net.codestory.simplelenium.driver.*;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
@@ -56,7 +53,7 @@ public class PhantomJsInitializer implements DriverInitializer {
     return Browser.PHANTOM_JS;
   }
 
-  public PhantomJSDriver createNewDriver() {
+  public SeleniumDriver createNewDriver() {
     System.out.println("Create a new PhantomJSDriver");
 
     File phantomJsExe = null;

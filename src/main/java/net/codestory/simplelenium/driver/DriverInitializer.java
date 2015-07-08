@@ -30,5 +30,5 @@ public interface DriverInitializer {
   /**
    * @return the initialized driver
    */
-  public RemoteWebDriver createNewDriver();
+  public SeleniumDriver createNewDriver();
 }

@@ -81,8 +81,8 @@ public class Configuration {
    */
   public Browser getTargetBrowser() {
     if (this.targetBrowser == null) {
-      String browserProptery = System.getProperty("browser", "phantom_js");
-      this.targetBrowser = Browser.valueOf(browserProptery.trim().toUpperCase());
+      String browserProperty = System.getProperty("browser", "phantom_js");
+      this.targetBrowser = Browser.valueOf(browserProperty.trim().toUpperCase());
     }
     return this.targetBrowser;
   }

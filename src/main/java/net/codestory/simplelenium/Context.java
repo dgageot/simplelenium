@@ -15,29 +15,38 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.driver.Browser;
-import net.codestory.simplelenium.driver.DriverInitializer;
-import net.codestory.simplelenium.driver.SeleniumDriver;
-import net.codestory.simplelenium.driver.ThreadSafeDriver;
+import net.codestory.simplelenium.configuration.Configuration;
+import net.codestory.simplelenium.driver.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.util.function.Supplier;
 
 /**
  * Created by kag on 08/07/15.
  */
 public class Context {
 
-  private static ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>();
+  private static ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
+    @Override
+    protected SeleniumDriver initialValue() {
+      Browser browser = currentBrowser.get();
+      DriverInitializerFactoryImpl driverInitializerFactory = DriverInitializerFactoryImpl.getInstance();
+      SeleniumDriver driver = driverInitializerFactory.getDriverInitializer(browser).createNewDriver();
+      return driver;
+    }
+  };
 
-  private static final ThreadLocal<Browser> currentBrowser = new ThreadLocal<>();
+  private static final ThreadLocal<Browser> currentBrowser = new ThreadLocal<Browser>() {
+    @Override
+    protected Browser initialValue() {
+      return Configuration.getInstance().getTargetBrowser();
+    }
+  };
 
   public static SeleniumDriver getCurrentWebDriver() {
     return perThreadDriver.get();
   }
 
-  public static void setCurrentWebDriver(RemoteWebDriver driver) {
-    perThreadDriver.set(ThreadSafeDriver.makeThreadSafe(driver));
+  public static void setCurrentWebDriver(SeleniumDriver driver) {
+    perThreadDriver.set(ThreadSafeDriver.makeThreadSafe((RemoteWebDriver) driver));
   }
 
   public static Browser getCurrentBrowser() {

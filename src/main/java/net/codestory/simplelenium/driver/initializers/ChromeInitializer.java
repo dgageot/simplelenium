@@ -16,18 +16,12 @@
 package net.codestory.simplelenium.driver.initializers;
 
 import net.codestory.simplelenium.driver.*;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import net.codestory.simplelenium.driver.ChromeDriver;
 
 /**
  * Created by kag on 07/07/15.
  */
 public class ChromeInitializer implements DriverInitializer {
-//    ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
-//      @Override
-//      protected SeleniumDriver initialValue() {
-//        return createNewDriver();
-//      }
-//    };
 
   @Override
   public Browser getBrowser() {
@@ -35,7 +29,7 @@ public class ChromeInitializer implements DriverInitializer {
   }
 
   @Override
-  public RemoteWebDriver createNewDriver() {
+  public ChromeDriver createNewDriver() {
     return new ChromeDriver();
   }
 }

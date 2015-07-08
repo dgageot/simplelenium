@@ -45,7 +45,7 @@ public abstract class SeleniumTest implements SectionObject {
     Context.setCurrentBrowser(browser);
 
     DriverInitializerFactoryImpl driverInitializerFactory = DriverInitializerFactoryImpl.getInstance();
-    RemoteWebDriver driver = driverInitializerFactory.getDriverInitializer(browser).createNewDriver();
+    SeleniumDriver driver = driverInitializerFactory.getDriverInitializer(browser).createNewDriver();
     Context.setCurrentWebDriver(driver);
   }
 
