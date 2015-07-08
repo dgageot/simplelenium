@@ -28,8 +28,7 @@ public interface DriverInitializer {
   public abstract Browser getBrowser();
 
   /**
-   * Initialze a remote driver/browser
    * @return the initialized driver
    */
-  public SeleniumDriver createNewDriver();
+  public RemoteWebDriver createNewDriver();
 }

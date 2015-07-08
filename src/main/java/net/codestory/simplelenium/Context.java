@@ -16,22 +16,28 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.Browser;
+import net.codestory.simplelenium.driver.DriverInitializer;
 import net.codestory.simplelenium.driver.SeleniumDriver;
+import net.codestory.simplelenium.driver.ThreadSafeDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.util.function.Supplier;
 
 /**
  * Created by kag on 08/07/15.
  */
 public class Context {
 
-  private static final ThreadLocal<SeleniumDriver> currentWebDriver = new ThreadLocal<>();
+  private static ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>();
+
   private static final ThreadLocal<Browser> currentBrowser = new ThreadLocal<>();
 
   public static SeleniumDriver getCurrentWebDriver() {
-    return currentWebDriver.get();
+    return perThreadDriver.get();
   }
 
-  public static void setCurrentWebDriver(SeleniumDriver driver) {
-    currentWebDriver.set(driver);
+  public static void setCurrentWebDriver(RemoteWebDriver driver) {
+    perThreadDriver.set(ThreadSafeDriver.makeThreadSafe(driver));
   }
 
   public static Browser getCurrentBrowser() {

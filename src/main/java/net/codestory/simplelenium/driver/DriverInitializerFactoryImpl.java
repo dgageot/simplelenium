@@ -16,7 +16,7 @@
 package net.codestory.simplelenium.driver;
 
 import net.codestory.simplelenium.driver.initializers.ChromeInitializer;
-import net.codestory.simplelenium.driver.initializers.PhantomJsDownloader;
+import net.codestory.simplelenium.driver.initializers.PhantomJsInitializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +79,7 @@ public class DriverInitializerFactoryImpl implements DriverInitializerFactory {
   private Class<?>[] getInitializerClasses () {
     return new Class[] {
       ChromeInitializer.class,
-      PhantomJsDownloader.class
+      PhantomJsInitializer.class
     };
   }
 

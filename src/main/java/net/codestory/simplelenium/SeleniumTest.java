@@ -27,6 +27,7 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static org.junit.rules.RuleChain.outerRule;
 
@@ -35,25 +36,21 @@ public abstract class SeleniumTest implements SectionObject {
   private final InjectPageObjects injectPageObjects = new InjectPageObjects(this);
   private final TakeSnapshot takeSnapshot = new TakeSnapshot();
   private final PrintErrorConsole printErrorConsole = new PrintErrorConsole();
-  private final Browser browser;
 
   @Rule
   public RuleChain ruleChain = outerRule(printTestName).around(injectPageObjects).around(printErrorConsole).around(takeSnapshot);
 
-  protected SeleniumTest() {
-    Configuration config = Configuration.getInstance();
-    this.browser = config.getTargetBrowser();
-    init();
-  }
-
-  private void init() {
-    Context.setCurrentBrowser(this.browser);
+  static {
+    Browser browser = Configuration.getInstance().getTargetBrowser();
+    Context.setCurrentBrowser(browser);
 
     DriverInitializerFactoryImpl driverInitializerFactory = DriverInitializerFactoryImpl.getInstance();
-    SeleniumDriver driver = driverInitializerFactory.getDriverInitializer(this.browser).createNewDriver();
+    RemoteWebDriver driver = driverInitializerFactory.getDriverInitializer(browser).createNewDriver();
     Context.setCurrentWebDriver(driver);
+  }
 
-    configureWebDriver(driver);
+  protected SeleniumTest() {
+    configureWebDriver(Context.getCurrentWebDriver());
   }
 
   protected void configureWebDriver(WebDriver driver) {

@@ -40,31 +40,14 @@ public class ConfigurationTest {
   public void testGetTargetBrowsers () {
     // NOTE: after each operation, 'clearConfiguration' is required since the target browsers are cached internally:
 
-    // check default browser:
-//    Set<Browser> browsers = Configuration.getInstance().getTargetBrowsers();
-//    assertEquals(1, browsers.size());
-//    assertEquals(Browser.PHANTOM_JS, browsers.iterator().next());
     Browser browser = Configuration.getInstance().getTargetBrowser();
     assertEquals(Browser.PHANTOM_JS, browser);
     Configuration.clearConfiguration();
 
     setProperty("browser", "chrome");
-//    browsers = Configuration.getInstance().getTargetBrowsers();
-//    assertEquals(1, browsers.size());
-////    assertTrue(browsers.contains(Browser.IE));
-////    assertTrue(browsers.contains(Browser.FIREFOX));
-//    assertTrue(browsers.contains(Browser.CHROME));
     browser = Configuration.getInstance().getTargetBrowser();
     assertEquals(Browser.CHROME, browser);
     Configuration.clearConfiguration();
-
-//    // try 'all' browsers
-//    setProperty("browser", "all");
-//    browsers = Configuration.getInstance().getTargetBrowsers();
-//    assertEquals(Browser.values().length, browsers.size());
-//    for (Browser browser: Browser.values()) {
-//      assertTrue(browsers.contains(browser));
-//    }
   }
 
   private void setProperty (String key, String value) {

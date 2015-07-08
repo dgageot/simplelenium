@@ -35,18 +35,18 @@ import java.util.zip.ZipFile;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class PhantomJsDownloader implements DriverInitializer {
+public class PhantomJsInitializer implements DriverInitializer {
   private static final int DEFAULT_RETRY_DOWNLOAD = 4;
   private static final int DEFAULT_RETRY_CONNECT = 4;
 
   private final int retryDownload;
   private final int retryConnect;
 
-  public PhantomJsDownloader() {
+  public PhantomJsInitializer() {
     this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
   }
 
-  protected PhantomJsDownloader(int retryDownload, int retryConnect) {
+  protected PhantomJsInitializer(int retryDownload, int retryConnect) {
     this.retryDownload = retryDownload;
     this.retryConnect = retryConnect;
   }

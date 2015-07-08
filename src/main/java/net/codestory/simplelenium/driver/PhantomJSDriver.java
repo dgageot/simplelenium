@@ -15,8 +15,6 @@
  */
 package net.codestory.simplelenium.driver;
 
-import net.codestory.simplelenium.driver.initializers.PhantomJsDownloader;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.UrlChecker;
 import org.openqa.selenium.os.CommandLine;
@@ -25,7 +23,6 @@ import org.openqa.selenium.remote.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.function.Supplier;
 
 import static java.util.Collections.singletonMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
