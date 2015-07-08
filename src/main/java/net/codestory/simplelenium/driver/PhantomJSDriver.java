@@ -31,8 +31,8 @@ import static org.openqa.selenium.remote.DriverCommand.NEW_SESSION;
 import static org.openqa.selenium.remote.DriverCommand.QUIT;
 import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
-public class PhantomJSDriver extends RemoteWebDriver {
-  PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
+public class PhantomJSDriver extends RemoteWebDriver implements SeleniumDriver {
+  public PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
     super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), DesiredCapabilities.phantomjs());
   }
 

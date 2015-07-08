@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium.driver;
+package net.codestory.simplelenium.driver.initializers;
 
+import net.codestory.simplelenium.driver.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.util.function.Supplier;
+/**
+ * Created by kag on 07/07/15.
+ */
+public class ChromeInitializer implements DriverInitializer {
+//    ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
+//      @Override
+//      protected SeleniumDriver initialValue() {
+//        return createNewDriver();
+//      }
+//    };
 
-public interface CurrentWebDriver {
-  PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
-  //  Supplier<RemoteWebDriver> driverSupplier = () -> new FirefoxDriver();
-  Supplier<RemoteWebDriver> driverSupplier = () -> phantomJsDownloader.createNewDriver();
+  @Override
+  public Browser getBrowser() {
+    return Browser.CHROME;
+  }
 
-  ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
-    @Override
-    protected SeleniumDriver initialValue() {
-      return ThreadSafeDriver.makeThreadSafe(driverSupplier.get());
-    }
-  };
-
-  static SeleniumDriver get() {
-    return perThreadDriver.get();
+  @Override
+  public RemoteWebDriver createNewDriver() {
+    return new ChromeDriver();
   }
 }
