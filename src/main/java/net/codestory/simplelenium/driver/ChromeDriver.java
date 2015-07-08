@@ -13,28 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium.driver.initializers;
-
-import net.codestory.simplelenium.driver.*;
+package net.codestory.simplelenium.driver;
 
 /**
- * Created by kag on 07/07/15.
+ * Created by kag on 08/07/15.
  */
-public class ChromeInitializer implements DriverInitializer {
-    ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
-      @Override
-      protected SeleniumDriver initialValue() {
-        return createNewDriver();
-      }
-    };
-
-  @Override
-  public Browser getBrowser() {
-    return Browser.CHROME;
-  }
-
-  @Override
-  public SeleniumDriver createNewDriver() {
-    return new ChromeDriver();
-  }
+public class ChromeDriver extends org.openqa.selenium.chrome.ChromeDriver implements SeleniumDriver {
 }

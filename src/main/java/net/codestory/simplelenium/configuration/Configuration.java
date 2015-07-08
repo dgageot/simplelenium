@@ -28,7 +28,8 @@ import java.util.Set;
 public class Configuration {
 
   private static Configuration instance = null;
-  private Set<Browser> targetBrowsers = null;
+  private Browser targetBrowser = null;
+//  private Set<Browser> targetBrowsers = null;
 
   /**
    * Private constructor for singleton
@@ -78,22 +79,29 @@ public class Configuration {
    * the program's parameters. If no browser is specified,
    * PhantomJS is used as the only standard browser
    */
-  public Set<Browser> getTargetBrowsers () {
-    if (this.targetBrowsers == null) {
-      this.targetBrowsers = new HashSet<Browser>();
-      String browserProperty = System.getProperty("browser", "phantom_js");
-      if (browserProperty.toLowerCase().equals("all")) {
-        for (Browser browser : Browser.values()) {
-          this.targetBrowsers.add(browser);
-        }
-      }
-      else {
-        String[] browsers = browserProperty.split(",");
-        for (String browser : browsers) {
-          this.targetBrowsers.add(Browser.valueOf(browser.trim().toUpperCase()));
-        }
-      }
+  public Browser getTargetBrowser() {
+    if (this.targetBrowser == null) {
+      String browserProptery = System.getProperty("browser", "phantom_js");
+      this.targetBrowser = Browser.valueOf(browserProptery.trim().toUpperCase());
     }
-    return this.targetBrowsers;
+    return this.targetBrowser;
   }
+//  public Set<Browser> getTargetBrowsers () {
+//    if (this.targetBrowsers == null) {
+//      this.targetBrowsers = new HashSet<Browser>();
+//      String browserProperty = System.getProperty("browser", "phantom_js");
+//      if (browserProperty.toLowerCase().equals("all")) {
+//        for (Browser browser : Browser.values()) {
+//          this.targetBrowsers.add(browser);
+//        }
+//      }
+//      else {
+//        String[] browsers = browserProperty.split(",");
+//        for (String browser : browsers) {
+//          this.targetBrowsers.add(Browser.valueOf(browser.trim().toUpperCase()));
+//        }
+//      }
+//    }
+//    return this.targetBrowsers;
+//  }
 }

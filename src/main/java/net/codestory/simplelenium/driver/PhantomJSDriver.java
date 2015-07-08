@@ -34,23 +34,9 @@ import static org.openqa.selenium.remote.DriverCommand.NEW_SESSION;
 import static org.openqa.selenium.remote.DriverCommand.QUIT;
 import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
-public class PhantomJSDriver extends RemoteWebDriver implements CurrentWebDriver {
+public class PhantomJSDriver extends RemoteWebDriver implements SeleniumDriver {
   public PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
     super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), DesiredCapabilities.phantomjs());
-  }
-
-  @Override
-  public WebDriver get() {
-    PhantomJsDownloader phantomJsDownloader = new PhantomJsDownloader();
-    Supplier<RemoteWebDriver> driverSupplier = () -> phantomJsDownloader.createNewDriver();
-
-    ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
-      @Override
-      protected SeleniumDriver initialValue() {
-        return ThreadSafeDriver.makeThreadSafe(driverSupplier.get());
-      }
-    };
-    return perThreadDriver.get();
   }
 
   static class PhantomJSHttpCommandExecutor extends HttpCommandExecutor {

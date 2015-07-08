@@ -15,7 +15,7 @@
  */
 package net.codestory.simplelenium.driver;
 
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 /**
  * Created by kag on 07/07/15.
@@ -31,5 +31,5 @@ public interface DriverInitializer {
    * Initialze a remote driver/browser
    * @return the initialized driver
    */
-  public WebDriver createNewDriver();
+  public SeleniumDriver createNewDriver();
 }
