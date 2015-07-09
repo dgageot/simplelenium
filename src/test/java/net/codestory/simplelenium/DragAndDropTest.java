@@ -16,7 +16,6 @@
 package net.codestory.simplelenium;
 
 import org.junit.Test;
-import org.openqa.selenium.support.events.WebDriverEventListener;
 
 public class DragAndDropTest extends AbstractTest {
   @Test
