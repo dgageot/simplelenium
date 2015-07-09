@@ -15,10 +15,6 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.configuration.Configuration;
-import net.codestory.simplelenium.driver.Browser;
-import net.codestory.simplelenium.driver.DriverInitializerFactoryImpl;
-import net.codestory.simplelenium.driver.SeleniumDriver;
 import net.codestory.simplelenium.rules.InjectPageObjects;
 import net.codestory.simplelenium.rules.PrintErrorConsole;
 import net.codestory.simplelenium.rules.PrintTestName;
@@ -27,7 +23,6 @@ import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static org.junit.rules.RuleChain.outerRule;
 
@@ -40,17 +35,8 @@ public abstract class SeleniumTest implements SectionObject {
   @Rule
   public RuleChain ruleChain = outerRule(printTestName).around(injectPageObjects).around(printErrorConsole).around(takeSnapshot);
 
-  static {
-    Browser browser = Configuration.getInstance().getTargetBrowser();
-    Context.setCurrentBrowser(browser);
-
-    DriverInitializerFactoryImpl driverInitializerFactory = DriverInitializerFactoryImpl.getInstance();
-    SeleniumDriver driver = driverInitializerFactory.getDriverInitializer(browser).createNewDriver();
-    Context.setCurrentWebDriver(driver);
-  }
-
   protected SeleniumTest() {
-    configureWebDriver(Context.getCurrentWebDriver());
+    configureWebDriver(driver());
   }
 
   protected void configureWebDriver(WebDriver driver) {

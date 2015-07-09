@@ -16,7 +16,6 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.SeleniumDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URI;
 import java.util.List;
@@ -36,7 +35,7 @@ public interface Navigation extends DomElementFinder {
   }
 
   default SeleniumDriver driver() {
-    return Context.getCurrentWebDriver();
+    return CurrentWebDriver.get();
   }
 
   default List<String> console() {

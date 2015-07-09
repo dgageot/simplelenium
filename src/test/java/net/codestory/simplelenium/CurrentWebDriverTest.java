@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium.driver;
+package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.driver.Browser;
+import org.junit.After;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testing {@link DriverInitializerFactoryImpl}
- * Created by kag on 07/07/15.
- */
-public class DriverInitializerFactoryImplTest {
+public class CurrentWebDriverTest {
+  @After
+  public void tearDown() {
+    System.getProperties().remove("browser");
+  }
 
   @Test
-  public void testDriverInitializerExitence() {
-    DriverInitializerFactory factory = DriverInitializerFactoryImpl.getInstance();
-    for (Browser browser : Browser.values()) {
-      assertNotNull(factory.getDriverInitializer(browser));
-    }
+  public void default_to_phantomJs() {
+    Browser browser = CurrentWebDriver.getTargetBrowser();
+
+    assertThat(browser).isEqualTo(Browser.PHANTOM_JS);
+  }
+
+  @Test
+  public void chrome() {
+    System.setProperty("browser", "chrome");
+
+    Browser browser = CurrentWebDriver.getTargetBrowser();
+
+    assertThat(browser).isEqualTo(Browser.CHROME);
   }
 }

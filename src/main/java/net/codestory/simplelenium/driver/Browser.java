@@ -15,11 +15,27 @@
  */
 package net.codestory.simplelenium.driver;
 
+import net.codestory.simplelenium.driver.chrome.ChromeDriver;
+import net.codestory.simplelenium.driver.phantomjs.PhantomJSDriver;
+import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
+
 /**
  * Created by kag on 07/07/15.
  */
+// TODO: add other browsers
 public enum Browser {
-  PHANTOM_JS,
-  CHROME
-  // TODO: add other browsers
+  PHANTOM_JS {
+    @Override
+    public PhantomJSDriver createNewDriver() {
+      return new PhantomJsDownloader().createNewDriver();
+    }
+  },
+  CHROME {
+    @Override
+    public ChromeDriver createNewDriver() {
+      return new ChromeDriver();
+    }
+  };
+
+  public abstract SeleniumDriver createNewDriver();
 }

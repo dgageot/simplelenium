@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium.driver.initializers;
+package net.codestory.simplelenium.driver.phantomjs;
 
 import net.codestory.simplelenium.driver.*;
 import org.openqa.selenium.net.PortProber;
@@ -32,28 +32,23 @@ import java.util.zip.ZipFile;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class PhantomJsInitializer implements DriverInitializer {
+public class PhantomJsDownloader {
   private static final int DEFAULT_RETRY_DOWNLOAD = 4;
   private static final int DEFAULT_RETRY_CONNECT = 4;
 
   private final int retryDownload;
   private final int retryConnect;
 
-  public PhantomJsInitializer() {
+  public PhantomJsDownloader() {
     this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
   }
 
-  protected PhantomJsInitializer(int retryDownload, int retryConnect) {
+  protected PhantomJsDownloader(int retryDownload, int retryConnect) {
     this.retryDownload = retryDownload;
     this.retryConnect = retryConnect;
   }
 
-  @Override
-  public Browser getBrowser() {
-    return Browser.PHANTOM_JS;
-  }
-
-  public SeleniumDriver createNewDriver() {
+  public PhantomJSDriver createNewDriver() {
     System.out.println("Create a new PhantomJSDriver");
 
     File phantomJsExe = null;
