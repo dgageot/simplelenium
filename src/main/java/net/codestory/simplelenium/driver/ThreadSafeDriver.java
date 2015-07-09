@@ -24,39 +24,39 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ThreadSafeDriver {
-    private ThreadSafeDriver() {
-        // Static class
-    }
+  private ThreadSafeDriver() {
+    // Static class
+  }
 
-    public static SeleniumDriver makeThreadSafe(RemoteWebDriver driver) {
-        Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
+  public static SeleniumDriver makeThreadSafe(RemoteWebDriver driver) {
+    Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
 
-        return (SeleniumDriver) Proxy.newProxyInstance(
-                Thread.currentThread().getContextClassLoader(),
-                findInterfaces(driver),
-                (proxy, method, args) -> {
-                    if (method.getName().equals("quit")) {
-                        return null; // We don't want anybody to quit() our (per thread) driver
-                    }
-
-                    try {
-                        return method.invoke(driver, args);
-                    } catch (InvocationTargetException e) {
-                        throw e.getCause();
-                    }
-                });
-    }
-
-    private static Class[] findInterfaces(RemoteWebDriver driver) {
-        Set<Class<?>> interfaces = new LinkedHashSet<>();
-
-        interfaces.add(SeleniumDriver.class);
-
-        for (Class<?> parent = driver.getClass(); parent != null; ) {
-            Collections.addAll(interfaces, parent.getInterfaces());
-            parent = parent.getSuperclass();
+    return (SeleniumDriver) Proxy.newProxyInstance(
+      Thread.currentThread().getContextClassLoader(),
+      findInterfaces(driver),
+      (proxy, method, args) -> {
+        if (method.getName().equals("quit")) {
+          return null; // We don't want anybody to quit() our (per thread) driver
         }
 
-        return interfaces.toArray(new Class[interfaces.size()]);
+        try {
+          return method.invoke(driver, args);
+        } catch (InvocationTargetException e) {
+          throw e.getCause();
+        }
+      });
+  }
+
+  private static Class[] findInterfaces(RemoteWebDriver driver) {
+    Set<Class<?>> interfaces = new LinkedHashSet<>();
+
+    interfaces.add(SeleniumDriver.class);
+
+    for (Class<?> parent = driver.getClass(); parent != null; ) {
+      Collections.addAll(interfaces, parent.getInterfaces());
+      parent = parent.getSuperclass();
     }
+
+    return interfaces.toArray(new Class[interfaces.size()]);
+  }
 }
