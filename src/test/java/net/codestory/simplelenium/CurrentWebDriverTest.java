@@ -16,19 +16,29 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.driver.Browser;
-import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.RestoreSystemProperties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CurrentWebDriverTest {
-  @After
-  public void tearDown() {
-    System.getProperties().remove("browser");
-  }
+  @Rule
+  public final RestoreSystemProperties restoreSystemProperties = new RestoreSystemProperties();
 
   @Test
   public void default_to_phantomJs() {
+    System.clearProperty("browser");
+
+    Browser browser = CurrentWebDriver.getTargetBrowser();
+
+    assertThat(browser).isEqualTo(Browser.PHANTOM_JS);
+  }
+
+  @Test
+  public void phantomJs() {
+    System.setProperty("browser", "phantom_js");
+
     Browser browser = CurrentWebDriver.getTargetBrowser();
 
     assertThat(browser).isEqualTo(Browser.PHANTOM_JS);
