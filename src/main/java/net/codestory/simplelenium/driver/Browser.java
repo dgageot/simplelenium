@@ -16,6 +16,7 @@
 package net.codestory.simplelenium.driver;
 
 import net.codestory.simplelenium.driver.chrome.ChromeDriver;
+import net.codestory.simplelenium.driver.chrome.FirefoxDriver;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJSDriver;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
 
@@ -34,6 +35,12 @@ public enum Browser {
     @Override
     public ChromeDriver createNewDriver() {
       return new ChromeDriver();
+    }
+  },
+  FIREFOX {
+    @Override
+    public FirefoxDriver createNewDriver() {
+      return new FirefoxDriver();
     }
   };
 

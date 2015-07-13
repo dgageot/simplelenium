@@ -28,7 +28,7 @@ public class CurrentWebDriverTest {
 
   @Test
   public void default_to_phantomJs() {
-    System.clearProperty("browser");
+    System.setProperty("browser", "");
 
     Browser browser = CurrentWebDriver.getTargetBrowser();
 
@@ -51,5 +51,14 @@ public class CurrentWebDriverTest {
     Browser browser = CurrentWebDriver.getTargetBrowser();
 
     assertThat(browser).isEqualTo(Browser.CHROME);
+  }
+
+  @Test
+  public void firefox() {
+    System.setProperty("browser", "firefox");
+
+    Browser browser = CurrentWebDriver.getTargetBrowser();
+
+    assertThat(browser).isEqualTo(Browser.FIREFOX);
   }
 }

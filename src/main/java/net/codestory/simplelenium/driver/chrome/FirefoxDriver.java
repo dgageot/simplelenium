@@ -13,22 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium;
+package net.codestory.simplelenium.driver.chrome;
 
-import org.junit.Test;
+import net.codestory.simplelenium.driver.SeleniumDriver;
 
-import static net.codestory.simplelenium.driver.Browser.PHANTOM_JS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assume.assumeThat;
-
-public class ConsoleTest extends AbstractTest {
-  @Test
-  public void capture_console() {
-    assumeThat(CurrentWebDriver.get(), is(PHANTOM_JS));
-
-    goTo("/console");
-
-    assertThat(console()).containsExactly("Hello World");
-  }
+public class FirefoxDriver extends org.openqa.selenium.firefox.FirefoxDriver implements SeleniumDriver {
 }
