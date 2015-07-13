@@ -3,7 +3,10 @@ sudo: false
 jdk: oraclejdk8
 
 install: true
-script: mvn verify
+script: ./travis.sh
+env:
+  - BROWSER=PHANTOM_JS
+  - BROWSER=FIREFOX
 
 cache:
   directories:

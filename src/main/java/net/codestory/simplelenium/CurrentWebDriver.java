@@ -37,8 +37,11 @@ public class CurrentWebDriver {
 
   public static Browser getTargetBrowser() {
     String browserProperty = System.getProperty("browser");
+    if ((browserProperty == null) || ("".equals(browserProperty))) {
+      return Browser.PHANTOM_JS;
+    }
 
-    return of(Browser.values()).filter(browser -> browser.name().equalsIgnoreCase(browserProperty)).findFirst().orElse(Browser.PHANTOM_JS);
+    return of(Browser.values()).filter(browser -> browser.name().equalsIgnoreCase(browserProperty)).findFirst().orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserProperty));
   }
 
   public static SeleniumDriver get() {
