@@ -17,7 +17,10 @@ package net.codestory.simplelenium;
 
 import org.junit.Test;
 
+import java.io.File;
+
 import static java.util.stream.IntStream.range;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FluentTestTest {
   @Test
@@ -31,5 +34,14 @@ public class FluentTestTest {
         .find(".age").should().contain("42")
         .goTo("/list")
         .find("li").should().contain("Bob").and().contain("Joe"));
+  }
+
+  @Test
+  public void take_snapshot() {
+    String baseUrl = "http://localhost:" + new TestWebServer().port();
+
+    new FluentTest(baseUrl).goTo("/").takeSnapshot();
+
+    assertThat(new File("snapshots", "snapshot001.png")).exists();
   }
 }

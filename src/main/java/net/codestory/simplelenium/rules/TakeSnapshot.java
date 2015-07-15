@@ -22,10 +22,13 @@ import org.junit.runner.Description;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.openqa.selenium.OutputType.BYTES;
 
 public class TakeSnapshot extends TestWatcher {
+  private static AtomicLong nextId = new AtomicLong();
+
   private Class<?> testClass;
   private String methodName;
 
@@ -57,6 +60,14 @@ public class TakeSnapshot extends TestWatcher {
   }
 
   protected File snapshotPath(Class<?> testClass, String methodName) {
-    return new File("snapshots", testClass.getSimpleName() + "_" + methodName + ".png");
+    return new File("snapshots", filename(testClass, methodName));
+  }
+
+  protected String filename(Class<?> testClass, String methodName) {
+    if (testClass != null) {
+      return testClass.getSimpleName() + "_" + methodName + ".png";
+    }
+
+    return String.format("snapshot%03d.png", nextId.incrementAndGet());
   }
 }
