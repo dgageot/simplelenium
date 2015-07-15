@@ -25,7 +25,7 @@ import static org.junit.Assume.assumeThat;
 public class ConsoleTest extends AbstractTest {
   @Test
   public void capture_console() {
-    assumeThat(CurrentWebDriver.get(), is(PHANTOM_JS));
+    assumeThat(CurrentWebDriver.getTargetBrowser(), is(PHANTOM_JS));
 
     goTo("/console");
 
