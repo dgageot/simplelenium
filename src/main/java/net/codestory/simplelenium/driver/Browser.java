@@ -23,7 +23,6 @@ import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
 /**
  * Created by kag on 07/07/15.
  */
-// TODO: add other browsers
 public enum Browser {
   PHANTOM_JS {
     @Override
