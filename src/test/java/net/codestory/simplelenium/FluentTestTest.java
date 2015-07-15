@@ -24,14 +24,12 @@ public class FluentTestTest {
   public void parallel() {
     String baseUrl = "http://localhost:" + new TestWebServer().port();
 
-    range(0, 20).parallel().forEach(index -> {
-      new FluentTest(baseUrl)
+    range(0, 20).parallel().forEach(index -> new FluentTest(baseUrl)
         .goTo("/")
         .find("h1").should().contain("Hello World").and().not().contain("Unknowm")
         .find("h2").should().contain("SubTitle")
         .find(".age").should().contain("42")
         .goTo("/list")
-        .find("li").should().contain("Bob").and().contain("Joe");
-    });
+        .find("li").should().contain("Bob").and().contain("Joe"));
   }
 }
