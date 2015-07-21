@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.driver.CurrentWebDriver;
 import net.codestory.simplelenium.driver.SeleniumDriver;
 
 import java.net.URI;

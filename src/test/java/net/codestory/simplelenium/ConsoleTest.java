@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.driver.CurrentWebDriver;
 import org.junit.Test;
 
 import static net.codestory.simplelenium.driver.Browser.PHANTOM_JS;

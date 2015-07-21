@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium.driver;
+package net.codestory.simplelenium.driver.phantomjs;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,13 +24,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.util.Objects.requireNonNull;
 
-public class LockFile {
+class LockFile {
   private static final List<LockFile> LOCKS_TAKEN = new CopyOnWriteArrayList<>();
 
   private final File lockFile;
   private FileLock lock;
 
-  public LockFile(File lockFile) {
+  LockFile(File lockFile) {
     this.lockFile = lockFile;
   }
 

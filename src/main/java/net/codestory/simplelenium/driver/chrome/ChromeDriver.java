@@ -17,8 +17,5 @@ package net.codestory.simplelenium.driver.chrome;
 
 import net.codestory.simplelenium.driver.SeleniumDriver;
 
-/**
- * Created by kag on 08/07/15.
- */
 public class ChromeDriver extends org.openqa.selenium.chrome.ChromeDriver implements SeleniumDriver {
 }

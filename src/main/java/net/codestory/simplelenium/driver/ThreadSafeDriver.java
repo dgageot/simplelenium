@@ -23,12 +23,12 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class ThreadSafeDriver {
+class ThreadSafeDriver {
   private ThreadSafeDriver() {
     // Static class
   }
 
-  public static SeleniumDriver makeThreadSafe(RemoteWebDriver driver) {
+  static SeleniumDriver makeThreadSafe(RemoteWebDriver driver) {
     Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
 
     return (SeleniumDriver) Proxy.newProxyInstance(

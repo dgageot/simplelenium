@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium;
+package net.codestory.simplelenium.driver;
 
-import net.codestory.simplelenium.driver.Browser;
-import net.codestory.simplelenium.driver.SeleniumDriver;
-import net.codestory.simplelenium.driver.ThreadSafeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static java.util.stream.Stream.of;
 
-/**
- * Created by kag on 08/07/15.
- */
 public class CurrentWebDriver {
   private static final ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
     @Override

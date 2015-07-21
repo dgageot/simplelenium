@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium;
+package net.codestory.simplelenium.driver;
 
-import net.codestory.simplelenium.driver.Browser;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.RestoreSystemProperties;

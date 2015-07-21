@@ -15,7 +15,6 @@
  */
 package net.codestory.simplelenium.driver.phantomjs;
 
-import net.codestory.simplelenium.driver.*;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 

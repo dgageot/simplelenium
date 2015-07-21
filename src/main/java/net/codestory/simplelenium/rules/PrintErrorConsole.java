@@ -15,7 +15,7 @@
  */
 package net.codestory.simplelenium.rules;
 
-import net.codestory.simplelenium.CurrentWebDriver;
+import net.codestory.simplelenium.driver.CurrentWebDriver;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.logging.LogEntry;

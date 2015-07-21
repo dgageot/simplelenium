@@ -16,12 +16,9 @@
 package net.codestory.simplelenium.driver;
 
 import net.codestory.simplelenium.driver.chrome.ChromeDriver;
-import net.codestory.simplelenium.driver.chrome.FirefoxDriver;
+import net.codestory.simplelenium.driver.firefox.FirefoxDriver;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
 
-/**
- * Created by kag on 07/07/15.
- */
 public enum Browser {
   PHANTOM_JS {
     @Override
