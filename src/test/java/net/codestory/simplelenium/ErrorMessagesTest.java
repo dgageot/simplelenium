@@ -17,6 +17,7 @@ package net.codestory.simplelenium;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -31,10 +32,13 @@ public class ErrorMessagesTest extends AbstractTest {
   @Rule
   public ExpectedException thrown = none();
 
+  @Before
+  public void goToList() {
+    goTo("/list");
+  }
+
   @Test
   public void fail_on_contains() {
-    goTo("/list");
-
     expectError("Failed to verify that .name contains (Wrong name). It contains (Bob Morane;Joe l'Indien)");
 
     find(".name").should().within(1, MILLISECONDS).contain("Wrong name");
@@ -42,8 +46,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_matches() {
-    goTo("/list");
-
     expectError("Failed to verify that .name matches (a*). It contains (Bob Morane;Joe l'Indien)");
 
     find(".name").should().within(1, MILLISECONDS).match(Pattern.compile("a*"));
@@ -51,8 +53,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_empty() {
-    goTo("/");
-
     expectError("Failed to verify that h1 is empty. It contains (Hello World)");
 
     find("h1").should().within(1, MILLISECONDS).beEmpty();
@@ -60,8 +60,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_size() {
-    goTo("/list");
-
     expectError("Failed to verify that .name contains 1 element. It contains 2 elements");
 
     find(".name").should().within(1, MILLISECONDS).haveSize(1);
@@ -69,8 +67,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_size_less_than() {
-    goTo("/list");
-
     expectError("Failed to verify that .name contains less than 0 element. It contains 2 elements");
 
     find(".name").should().within(1, MILLISECONDS).haveLessItemsThan(0);
@@ -78,8 +74,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_size_more_than() {
-    goTo("/list");
-
     expectError("Failed to verify that .name contains more than 10 elements. It contains 2 elements");
 
     find(".name").should().within(1, MILLISECONDS).haveMoreItemsThan(10);
@@ -87,8 +81,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_not_exists() {
-    goTo("/list");
-
     expectError("Failed to verify that .name doesn't exist. It contains 2 elements");
 
     find(".name").should().within(1, MILLISECONDS).not().exist();
@@ -96,8 +88,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_exists() {
-    goTo("/list");
-
     expectError("Failed to verify that .unknown exists. It contains 0 element");
 
     find(".unknown").should().within(1, MILLISECONDS).exist();
@@ -105,8 +95,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_enabled() {
-    goTo("/list");
-
     expectError("Failed to verify that .name is not enabled. It is (enabled;enabled)");
 
     find(".name").should().within(1, MILLISECONDS).not().beEnabled();
@@ -114,8 +102,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_displayed() {
-    goTo("/list");
-
     expectError("Failed to verify that .name is not displayed. It is (displayed;displayed)");
 
     find(".name").should().within(1, MILLISECONDS).not().beDisplayed();
@@ -123,8 +109,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_on_selected() {
-    goTo("/list");
-
     expectError("Failed to verify that .name is selected. It is (not selectable;not selectable)");
 
     find(".name").should().within(1, MILLISECONDS).beSelected();
@@ -132,8 +116,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_with_filter_on_text() {
-    goTo("/list");
-
     expectError("Failed to verify that .name with text that contains [Any Text] exists. It contains 0 element");
 
     find(".name").withText("Any Text").should().within(1, MILLISECONDS).exist();
@@ -141,8 +123,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void fail_with_filter_on_name() {
-    goTo("/list");
-
     expectError("Failed to verify that .name with name that is equal to [wrongName] exists. It contains 0 element");
 
     find(".name").withName("wrongName").should().within(1, MILLISECONDS).exist();
@@ -150,8 +130,6 @@ public class ErrorMessagesTest extends AbstractTest {
 
   @Test
   public void stacktrace_should_not_mention_simplelenium() {
-    goTo("/list");
-
     thrown.expect(new TypeSafeDiagnosingMatcher<AssertionError>() {
       @Override
       protected boolean matchesSafely(AssertionError error, Description mismatchDescription) {

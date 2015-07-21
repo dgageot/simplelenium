@@ -15,13 +15,17 @@
  */
 package net.codestory.simplelenium;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class DragAndDropTest extends AbstractTest {
+  @Before
+  public void goToDragAndDrop() {
+    goTo("/dnd");
+  }
+
   @Test
   public void before_drag_and_drop() {
-    goTo("/dnd");
-
     find("#left ul li").should().haveSize(3);
     find("#left ul").should().contain("Bob", "John", "Jane");
 
@@ -30,8 +34,6 @@ public class DragAndDropTest extends AbstractTest {
 
   @Test
   public void after_drag_and_drop() {
-    goTo("/dnd");
-
     find("#left ul li").withText("Bob").dragAndDropTo("#right");
     find("#left ul li").should().haveSize(2);
     find("#left ul").should().contain("John", "Jane");
@@ -42,8 +44,6 @@ public class DragAndDropTest extends AbstractTest {
 
   @Test
   public void drag_all_items() {
-    goTo("/dnd");
-
     find("#left ul li").withText("Bob").dragAndDropTo("#right");
     find("#left ul li").withText("John").dragAndDropTo("#right");
     find("#left ul li").withText("Jane").dragAndDropTo("#right");

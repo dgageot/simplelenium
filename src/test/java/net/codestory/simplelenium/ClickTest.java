@@ -15,15 +15,19 @@
  */
 package net.codestory.simplelenium;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClickTest extends AbstractTest {
+  @Before
+  public void goToIndex() {
+    goTo("/");
+  }
+
   @Test
   public void click() {
-    goTo("/");
-
     find("a").click();
 
     assertThat(url()).isEqualTo(getDefaultBaseUrl() + "/");
@@ -32,8 +36,6 @@ public class ClickTest extends AbstractTest {
 
   @Test
   public void click_with_text() {
-    goTo("/");
-
     find("a").withText("First Link").click();
 
     assertThat(url()).isEqualTo(getDefaultBaseUrl() + "/");

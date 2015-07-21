@@ -15,13 +15,17 @@
  */
 package net.codestory.simplelenium;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class SelectTest extends AbstractTest {
+  @Before
+  public void goToSelect() {
+    goTo("/select");
+  }
+
   @Test
   public void find_selected_option_by_value() {
-    goTo("/select");
-
     find("select").should().beDisplayed();
     find("select option").with("value").equalTo("1").should().not().beSelected();
     find("select option").with("value").equalTo("2").should().beSelected();
@@ -30,8 +34,6 @@ public class SelectTest extends AbstractTest {
 
   @Test
   public void find_selected_option_by_text() {
-    goTo("/select");
-
     find("select").should().beDisplayed();
     find("select option").withText("FIRST").should().not().beSelected();
     find("select option").withText("SECOND").should().beSelected();
@@ -40,8 +42,6 @@ public class SelectTest extends AbstractTest {
 
   @Test
   public void change_selection() {
-    goTo("/select");
-
     find("select").selectByValue("1");
     find("select option").withText("FIRST").should().beSelected();
     find("select option").withText("SECOND").should().not().beSelected();

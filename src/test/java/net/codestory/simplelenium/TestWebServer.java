@@ -45,6 +45,7 @@ public class TestWebServer {
     );
 
     routes.get("/list",
+      "<h1>Hello World</h1>" +
       "<ul>" +
         "   <li id='bob' name='theBob' class='name man cartoon'>Bob Morane</li>" +
         "   <li id='joe' name='theJoe' class='name man tv'>Joe l'Indien</li>" +

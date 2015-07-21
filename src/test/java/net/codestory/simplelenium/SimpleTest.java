@@ -15,13 +15,17 @@
  */
 package net.codestory.simplelenium;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class SimpleTest extends AbstractTest {
+  @Before
+  public void goToIndex() {
+    goTo("/");
+  }
+
   @Test
   public void simple_page() {
-    goTo("/");
-
     find("h1").should().contain("Hello World");
     find("#name").should().contain("Bob");
     find(".age").should().contain("42");
@@ -32,8 +36,6 @@ public class SimpleTest extends AbstractTest {
 
   @Test
   public void find_with_text() {
-    goTo("/");
-
     find("h1").withText("Hello World").should().exist();
     find("h1").withText("UNKNOWN").should().not().exist();
 
@@ -45,8 +47,6 @@ public class SimpleTest extends AbstractTest {
 
   @Test
   public void find_with_tag_name() {
-    goTo("/");
-
     find("ul li .item").withTagName("em").should().exist();
     find("ul li .item").withTagName("object").should().not().exist();
 
@@ -56,8 +56,6 @@ public class SimpleTest extends AbstractTest {
 
   @Test
   public void negation_should_apply_to_next_check_only() {
-    goTo("/");
-
     find("h1").withText("Hello World")
       .should().exist()
       .and().should().not().haveSize(10)
