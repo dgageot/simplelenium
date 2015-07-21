@@ -15,21 +15,43 @@
  */
 package net.codestory.simplelenium;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class FormTest extends AbstractTest {
+  @Before
+  public void goToForm() {
+    goTo("/form");
+  }
+
   @Test
   public void input_text() {
-    goTo("/form");
-
     find("input#name").should().contain("The Name");
     find("input#name").withText("The Name").should().exist();
+
+    find("input#city").should().contain("The City");
+    find("input#city").withText().containing("City").should().exist();
+  }
+
+  @Test
+  public void find_by_id() {
+    find("#name").should().contain("The Name");
+    find("#city").should().contain("The City");
+  }
+
+  @Test
+  public void find_by_name() {
+    find("name").should().contain("The Name");
+    find("city").should().contain("The City");
+  }
+
+  @Test
+  public void find_by_tag_name() {
+    find("input").should().contain("The Name", "The City");
   }
 
   @Test
   public void clear() {
-    goTo("/form");
-
     find("input#name").clear();
 
     find("input#name").should().beEmpty();
@@ -37,11 +59,9 @@ public class FormTest extends AbstractTest {
 
   @Test
   public void chain() {
-    goTo("/form");
-
     find("input#name").fill("name")
-      .find("input#city").fill("Paris")
-      .find("input#name").should().contain("The Name")
-      .find("input#city").should().contain("Paris");
+    .find("input#city").fill("Paris")
+    .find("input#name").should().contain("The Name")
+    .find("input#city").should().contain("Paris");
   }
 }

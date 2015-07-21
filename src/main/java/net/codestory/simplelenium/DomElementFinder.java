@@ -16,11 +16,12 @@
 package net.codestory.simplelenium;
 
 import net.codestory.simplelenium.filters.LazyDomElement;
+import net.codestory.simplelenium.selectors.ByCssSelectorOrByName;
 import org.openqa.selenium.By;
 
 public interface DomElementFinder {
   default DomElement find(String selector) {
-    return new LazyDomElement(By.cssSelector(selector));
+    return new LazyDomElement(new ByCssSelectorOrByName(selector));
   }
 
   default DomElement find(By selector) {

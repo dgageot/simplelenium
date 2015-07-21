@@ -17,6 +17,7 @@ package net.codestory.simplelenium.filters;
 
 import net.codestory.simplelenium.DomElement;
 import net.codestory.simplelenium.Should;
+import net.codestory.simplelenium.selectors.ByCssSelectorOrByName;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -64,7 +65,7 @@ public class LazyDomElement implements DomElement {
   // Nested find
 
   public DomElement find(String selector) {
-    return new LazyDomElement(this, By.cssSelector(selector));
+    return new LazyDomElement(this, new ByCssSelectorOrByName(selector));
   }
 
   public DomElement find(By selector) {
@@ -328,7 +329,7 @@ public class LazyDomElement implements DomElement {
     // After an action, go back to root level for future finds
     return new LazyDomElement(parent, selector, filter, retry) {
       public DomElement find(String selector) {
-        return new LazyDomElement(By.cssSelector(selector));
+        return new LazyDomElement(new ByCssSelectorOrByName(selector));
       }
 
       public DomElement find(By selector) {

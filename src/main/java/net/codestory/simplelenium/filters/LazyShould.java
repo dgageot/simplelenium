@@ -17,6 +17,7 @@ package net.codestory.simplelenium.filters;
 
 import net.codestory.simplelenium.DomElement;
 import net.codestory.simplelenium.ShouldChain;
+import net.codestory.simplelenium.selectors.ByCssSelectorOrByName;
 import net.codestory.simplelenium.text.Text;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -54,7 +55,7 @@ class LazyShould implements ShouldChain {
     if (element.parent() != null) {
       return element.parent().find(selector);
     }
-    return new LazyDomElement(By.cssSelector(selector));
+    return new LazyDomElement(new ByCssSelectorOrByName(selector));
   }
 
   public DomElement find(By selector) {
