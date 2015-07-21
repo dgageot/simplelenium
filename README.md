@@ -4,6 +4,8 @@ A simple and robust layer on top of
 [Selenium](http://docs.seleniumhq.org/projects/webdriver/) and
 [PhantomJS](http://phantomjs.org/).
 
+It also supports Chrome and Firefox.
+
 ## Goal
 
 Testing web pages with Selenium can prove difficult. I've seen a lot
@@ -346,7 +348,7 @@ Sections are injected automatically into tests, page objects and other sections.
 Simplelenium is good at running tests in parallel. In fact without you doing
 anything on the code side, it should just work.
 
-Simplelenium keeps a distinct PhantomJS WebDriver for each thread. You don't
+Simplelenium keeps a distinct WebDriver for each thread. You don't
 have to think about it. Let's say you configure surefire to run tests in
 parallel at class or method level. Easy! You don't have to copy this
 configuration, with a different syntax, into your test framework. It will just
@@ -386,13 +388,16 @@ public class FluentTestTest {
 ```
 How cool is that?
 
+
+### Run tests with Chrome or Firefox
+
+Even if Simplelenium supports PhantomJs out of the box and by default,
+tests can be run on Chrome or Firefox.
+
+Run tests with '-Dbrowser=chrome',  '-Dbrowser=firefox',  '-Dbrowser=phantom_js' to
+choose which browser you want to use.
+
 ## What Simplelenium doesn't do
-
-### Support anything else than PhantomJS
-
-It's not difficult to add but that's not done. Pull request anyone?
-I rarely face the need to test on multiple browsers.
-This need clearly exists though.
 
 ### Support alerts, iframes and windows
 
