@@ -19,25 +19,20 @@ import net.codestory.simplelenium.driver.chrome.ChromeDriver;
 import net.codestory.simplelenium.driver.firefox.FirefoxDriver;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
 
-public enum Browser {
-  PHANTOM_JS {
-    @Override
-    public SeleniumDriver createNewDriver() {
-      return new PhantomJsDownloader().createNewDriver();
-    }
-  },
-  CHROME {
-    @Override
-    public SeleniumDriver createNewDriver() {
-      return new ChromeDriver();
-    }
-  },
-  FIREFOX {
-    @Override
-    public SeleniumDriver createNewDriver() {
-      return new FirefoxDriver();
-    }
-  };
+import java.util.function.Supplier;
 
-  public abstract SeleniumDriver createNewDriver();
+public enum Browser {
+  PHANTOM_JS(() -> new PhantomJsDownloader().createNewDriver()),
+  CHROME(ChromeDriver::new),
+  FIREFOX(FirefoxDriver::new);
+
+  private final Supplier<SeleniumDriver> driverSupplier;
+
+  Browser(Supplier<SeleniumDriver> driverSupplier) {
+    this.driverSupplier = driverSupplier;
+  }
+
+  public SeleniumDriver createNewDriver() {
+    return driverSupplier.get();
+  }
 }
