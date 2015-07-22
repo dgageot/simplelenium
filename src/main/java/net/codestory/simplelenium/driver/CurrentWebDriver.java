@@ -15,17 +15,14 @@
  */
 package net.codestory.simplelenium.driver;
 
-import org.openqa.selenium.remote.RemoteWebDriver;
-
 import static java.util.stream.Stream.of;
 
 public class CurrentWebDriver {
   private static final ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
     @Override
     protected SeleniumDriver initialValue() {
-      SeleniumDriver newDriver = getTargetBrowser().createNewDriver();
-
-      return ThreadSafeDriver.makeThreadSafe((RemoteWebDriver) newDriver);
+      SeleniumDriver driver = getTargetBrowser().createNewDriver();
+      return ThreadSafeDriver.makeThreadSafe(driver);
     }
   };
 
