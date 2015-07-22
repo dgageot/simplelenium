@@ -32,7 +32,10 @@ public class CurrentWebDriver {
       return Browser.PHANTOM_JS;
     }
 
-    return of(Browser.values()).filter(browser -> browser.name().equalsIgnoreCase(browserProperty)).findFirst().orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserProperty));
+    return of(Browser.values())
+        .filter(browser -> browser.name().equalsIgnoreCase(browserProperty))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserProperty));
   }
 
   public static SeleniumDriver get() {
