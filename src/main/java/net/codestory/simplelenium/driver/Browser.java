@@ -15,24 +15,49 @@
  */
 package net.codestory.simplelenium.driver;
 
-import net.codestory.simplelenium.driver.chrome.ChromeDriver;
-import net.codestory.simplelenium.driver.firefox.FirefoxDriver;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.function.Supplier;
+
+import static java.util.stream.Stream.of;
 
 public enum Browser {
   PHANTOM_JS(() -> new PhantomJsDownloader().createNewDriver()),
   CHROME(ChromeDriver::new),
   FIREFOX(FirefoxDriver::new);
 
-  private final Supplier<SeleniumDriver> driverSupplier;
+  private final Supplier<RemoteWebDriver> driverSupplier;
+  private final ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
+    @Override
+    protected SeleniumDriver initialValue() {
+      return ThreadSafeDriver.makeThreadSafe(driverSupplier.get());
+    }
+  };
 
-  Browser(Supplier<SeleniumDriver> driverSupplier) {
+  Browser(Supplier<RemoteWebDriver> driverSupplier) {
     this.driverSupplier = driverSupplier;
   }
 
-  public SeleniumDriver createNewDriver() {
-    return driverSupplier.get();
+  public static Browser getCurrentBrowser() {
+    String browserProperty = System.getProperty("browser");
+    if ((browserProperty == null) || ("".equals(browserProperty))) {
+      return Browser.PHANTOM_JS;
+    }
+
+    return of(Browser.values())
+        .filter(browser -> browser.name().equalsIgnoreCase(browserProperty))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserProperty));
+  }
+
+  public static SeleniumDriver getCurrentDriver() {
+    return getCurrentBrowser().getDriverForThread();
+  }
+
+  public SeleniumDriver getDriverForThread() {
+    return perThreadDriver.get();
   }
 }

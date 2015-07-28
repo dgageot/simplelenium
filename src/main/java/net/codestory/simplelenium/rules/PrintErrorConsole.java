@@ -15,7 +15,7 @@
  */
 package net.codestory.simplelenium.rules;
 
-import net.codestory.simplelenium.driver.CurrentWebDriver;
+import net.codestory.simplelenium.driver.Browser;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.logging.LogEntry;
@@ -25,7 +25,7 @@ import java.util.List;
 public class PrintErrorConsole extends TestWatcher {
   @Override
   protected void failed(Throwable e, Description description) {
-    List<LogEntry> logs = CurrentWebDriver.get().manage().logs().get("browser").getAll();
+    List<LogEntry> logs = Browser.getCurrentDriver().manage().logs().get("browser").getAll();
 
     System.err.println("Browser's console:");
     if (logs.isEmpty()) {

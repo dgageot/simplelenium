@@ -15,7 +15,7 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.driver.CurrentWebDriver;
+import net.codestory.simplelenium.driver.Browser;
 import org.junit.Test;
 
 import static net.codestory.simplelenium.driver.Browser.PHANTOM_JS;
@@ -26,7 +26,7 @@ import static org.junit.Assume.assumeThat;
 public class ConsoleTest extends AbstractTest {
   @Test
   public void capture_console() {
-    assumeThat(CurrentWebDriver.getTargetBrowser(), is(PHANTOM_JS));
+    assumeThat(Browser.getCurrentBrowser(), is(PHANTOM_JS));
 
     goTo("/console");
 

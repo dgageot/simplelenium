@@ -21,7 +21,7 @@ import org.junit.contrib.java.lang.system.RestoreSystemProperties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CurrentWebDriverTest {
+public class BrowserTest {
   @Rule
   public final RestoreSystemProperties restoreSystemProperties = new RestoreSystemProperties();
 
@@ -29,7 +29,7 @@ public class CurrentWebDriverTest {
   public void default_to_phantomJs() {
     System.setProperty("browser", "");
 
-    Browser browser = CurrentWebDriver.getTargetBrowser();
+    Browser browser = Browser.getCurrentBrowser();
 
     assertThat(browser).isEqualTo(Browser.PHANTOM_JS);
   }
@@ -38,7 +38,7 @@ public class CurrentWebDriverTest {
   public void phantomJs() {
     System.setProperty("browser", "phantom_js");
 
-    Browser browser = CurrentWebDriver.getTargetBrowser();
+    Browser browser = Browser.getCurrentBrowser();
 
     assertThat(browser).isEqualTo(Browser.PHANTOM_JS);
   }
@@ -47,7 +47,7 @@ public class CurrentWebDriverTest {
   public void chrome() {
     System.setProperty("browser", "chrome");
 
-    Browser browser = CurrentWebDriver.getTargetBrowser();
+    Browser browser = Browser.getCurrentBrowser();
 
     assertThat(browser).isEqualTo(Browser.CHROME);
   }
@@ -56,7 +56,7 @@ public class CurrentWebDriverTest {
   public void firefox() {
     System.setProperty("browser", "firefox");
 
-    Browser browser = CurrentWebDriver.getTargetBrowser();
+    Browser browser = Browser.getCurrentBrowser();
 
     assertThat(browser).isEqualTo(Browser.FIREFOX);
   }

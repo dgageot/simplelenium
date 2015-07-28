@@ -15,7 +15,7 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.driver.CurrentWebDriver;
+import net.codestory.simplelenium.driver.Browser;
 import net.codestory.simplelenium.driver.SeleniumDriver;
 
 import java.net.URI;
@@ -36,7 +36,7 @@ public interface Navigation extends DomElementFinder {
   }
 
   default SeleniumDriver driver() {
-    return CurrentWebDriver.get();
+    return Browser.getCurrentDriver();
   }
 
   default List<String> console() {

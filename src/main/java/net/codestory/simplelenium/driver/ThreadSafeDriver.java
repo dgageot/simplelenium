@@ -15,6 +15,8 @@
  */
 package net.codestory.simplelenium.driver;
 
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.util.Collections;
@@ -26,7 +28,7 @@ class ThreadSafeDriver {
     // Static class
   }
 
-  static SeleniumDriver makeThreadSafe(SeleniumDriver driver) {
+  static SeleniumDriver makeThreadSafe(RemoteWebDriver driver) {
     Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
 
     return (SeleniumDriver) Proxy.newProxyInstance(
@@ -45,7 +47,7 @@ class ThreadSafeDriver {
       });
   }
 
-  private static Class[] findInterfaces(SeleniumDriver driver) {
+  private static Class[] findInterfaces(Object driver) {
     Set<Class<?>> interfaces = new LinkedHashSet<>();
 
     interfaces.add(SeleniumDriver.class);

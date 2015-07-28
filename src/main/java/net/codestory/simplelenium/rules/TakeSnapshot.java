@@ -15,7 +15,7 @@
  */
 package net.codestory.simplelenium.rules;
 
-import net.codestory.simplelenium.driver.CurrentWebDriver;
+import net.codestory.simplelenium.driver.Browser;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
@@ -45,7 +45,7 @@ public class TakeSnapshot extends TestWatcher {
 
   public void takeSnapshot() {
     try {
-      byte[] image = CurrentWebDriver.get().getScreenshotAs(BYTES);
+      byte[] image = Browser.getCurrentDriver().getScreenshotAs(BYTES);
       File file = snapshotPath(testClass, methodName);
       write(image, file);
       System.err.println("   !! A snapshot was taken here [" + file.getAbsolutePath() + "] to help you debug");
