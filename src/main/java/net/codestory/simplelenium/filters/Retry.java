@@ -107,7 +107,7 @@ class Retry {
     return false;
   }
 
-  static enum Error {
+  enum Error {
     NOT_FOUND, KO
   }
 }
