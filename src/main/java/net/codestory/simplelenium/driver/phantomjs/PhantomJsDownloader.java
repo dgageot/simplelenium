@@ -15,12 +15,13 @@
  */
 package net.codestory.simplelenium.driver.phantomjs;
 
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -29,6 +30,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class PhantomJsDownloader {
@@ -147,7 +149,7 @@ public class PhantomJsDownloader {
       if (isWindows() || isMac()) {
         unzip(targetZip, phantomInstallDir);
       } else {
-        executeNative(phantomInstallDir, "tar", "xjvf", zipName);
+        untarbz2(targetZip, phantomInstallDir);
       }
     } catch (Exception e) {
       throw new IllegalStateException("Unable to unzip phantomjs from " + targetZip.getAbsolutePath(), e);
@@ -181,6 +183,19 @@ public class PhantomJsDownloader {
     }
   }
 
+  protected void untarbz2(File zip, File toDir) throws IOException {
+    File tar = new File(zip.getAbsolutePath().replace(".tar.bz2", ".tar"));
+
+    try (FileInputStream fin = new FileInputStream(zip);
+         BufferedInputStream bin = new BufferedInputStream(fin);
+         BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(bin)
+    ) {
+      Files.copy(bzIn, tar.toPath(), REPLACE_EXISTING);
+    }
+
+    untar(tar, toDir);
+  }
+
   protected void unzip(File zip, File toDir) throws IOException {
     try (ZipFile zipFile = new ZipFile(zip)) {
       Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -200,14 +215,35 @@ public class PhantomJsDownloader {
         }
 
         try (InputStream input = zipFile.getInputStream(entry)) {
-          Files.copy(input, to.toPath());
+          Files.copy(input, to.toPath(), REPLACE_EXISTING);
         }
       }
     }
   }
 
-  protected void executeNative(File workingDir, String... commands) throws IOException, InterruptedException {
-    new ProcessBuilder().command(commands).directory(workingDir).start().waitFor();
+  protected void untar(File tar, File toDir) throws IOException {
+    try (FileInputStream fin = new FileInputStream(tar);
+         BufferedInputStream bin = new BufferedInputStream(fin);
+         TarArchiveInputStream tarInput = new TarArchiveInputStream(bin)
+    ) {
+      TarArchiveEntry entry;
+      while (null != (entry = tarInput.getNextTarEntry())) {
+        if (entry.isDirectory()) {
+          continue;
+        }
+
+        File to = new File(toDir, entry.getName());
+
+        File parent = to.getParentFile();
+        if (!parent.exists()) {
+          if (!parent.mkdirs()) {
+            throw new IOException("Unable to create folder " + parent);
+          }
+        }
+
+        Files.copy(tarInput, to.toPath(), REPLACE_EXISTING);
+      }
+    }
   }
 
   protected boolean isWindows() {
