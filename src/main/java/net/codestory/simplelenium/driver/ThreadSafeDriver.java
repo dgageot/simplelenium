@@ -16,6 +16,7 @@
 package net.codestory.simplelenium.driver;
 
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
@@ -29,7 +30,13 @@ class ThreadSafeDriver {
   }
 
   static SeleniumDriver makeThreadSafe(RemoteWebDriver driver) {
-    Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        driver.quit();
+      } catch (UnreachableBrowserException e) {
+        // Ignore. The browser was killed properly
+      }
+    }));
 
     return (SeleniumDriver) Proxy.newProxyInstance(
       Thread.currentThread().getContextClassLoader(),
