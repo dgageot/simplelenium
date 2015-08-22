@@ -3,3 +3,6 @@
 target/
 snapshots/
 phantomjsdriver.log
+.gradle
+gradle
+build
