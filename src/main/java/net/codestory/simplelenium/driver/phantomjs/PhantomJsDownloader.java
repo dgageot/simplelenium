@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium.driver.phantomjs;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -160,11 +161,10 @@ public class PhantomJsDownloader {
 
   protected void downloadZip(String url, File targetZip) {
     if (targetZip.exists()) {
-      if (targetZip.length() == 0) {
-        targetZip.delete();
-      } else {
+      if (targetZip.length() > 0) {
         return;
       }
+      targetZip.delete();
     }
 
     System.out.printf("Downloading phantomjs from %s...%n", url);
@@ -200,7 +200,7 @@ public class PhantomJsDownloader {
     try (ZipFile zipFile = new ZipFile(zip)) {
       Enumeration<? extends ZipEntry> entries = zipFile.entries();
       while (entries.hasMoreElements()) {
-        final ZipEntry entry = entries.nextElement();
+        ZipEntry entry = entries.nextElement();
         if (entry.isDirectory()) {
           continue;
         }
@@ -226,7 +226,7 @@ public class PhantomJsDownloader {
          BufferedInputStream bin = new BufferedInputStream(fin);
          TarArchiveInputStream tarInput = new TarArchiveInputStream(bin)
     ) {
-      TarArchiveEntry entry;
+      ArchiveEntry entry;
       while (null != (entry = tarInput.getNextTarEntry())) {
         if (entry.isDirectory()) {
           continue;
