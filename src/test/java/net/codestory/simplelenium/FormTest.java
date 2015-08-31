@@ -67,10 +67,25 @@ public class FormTest extends AbstractTest {
 
   @Test
   public void append() {
-    find("input#name").fill("Will be replaced").fill("The Name")
-    .find("input#city").fill("Pa").append("ris")
-    .find("input#name").should().not().contain("Will be replaced")
-    .find("input#name").should().contain("The Name")
-    .find("input#city").should().contain("Paris");
+    find("input#name").fill("Will be replaced").fill("The Name");
+    find("input#city").fill("Pa").append("ris");
+
+    find("input#name").should().not().contain("Will be replaced");
+    find("input#name").should().contain("The Name");
+    find("input#city").should().contain("Paris");
+  }
+
+  @Test
+  public void support_name_with_underscored() {
+    find("#the_field_with_a_long_name").fill("It works");
+
+    find("#the_field_with_a_long_name").should().contain("It works");
+  }
+
+  @Test
+  public void support_name_with_dots() {
+    find("#the.field.with.a.long.name").fill("It works");
+
+    find("#the.field.with.a.long.name").should().contain("It works");
   }
 }

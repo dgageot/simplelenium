@@ -40,7 +40,7 @@ public class ByCssSelectorOrByNameOrById extends By implements Serializable {
     WebElement element;
 
     if (validCssSelector(selector)) {
-      element = ((FindsByCssSelector) context).findElementByCssSelector(selector);
+      element = ((FindsByCssSelector) context).findElementByCssSelector(quoteCss(selector));
       if (element != null) {
         return element;
       }
@@ -64,7 +64,7 @@ public class ByCssSelectorOrByNameOrById extends By implements Serializable {
     List<WebElement> elements;
 
     if (validCssSelector(selector)) {
-      elements = ((FindsByCssSelector) context).findElementsByCssSelector(selector);
+      elements = ((FindsByCssSelector) context).findElementsByCssSelector(quoteCss(selector));
       if ((elements != null) && (!elements.isEmpty())) {
         return elements;
       }
@@ -85,6 +85,16 @@ public class ByCssSelectorOrByNameOrById extends By implements Serializable {
 
   protected boolean validCssSelector(String selector) {
     return !selector.endsWith("[]");
+  }
+
+  protected String quoteCss(String selector) {
+    if (selector.startsWith(".")) {
+      return selector;
+    }
+    if (selector.startsWith("#")) {
+      return selector.replaceAll("(\\w)[.]", "$1\\\\.");
+    }
+    return selector;
   }
 
   @Override

@@ -55,7 +55,9 @@ public class TestWebServer {
 
     routes.get("/form",
       "<input id=\"name\" name=\"name\" type='text' value='The Name'>" +
-      "<input id=\"city\" name=\"city\" type='text' value='The City'>"
+      "<input id=\"city\" name=\"city\" type='text' value='The City'>" +
+      "<input id=\"the_field_with_a_long_name\" type='text' value=''>" +
+      "<input id=\"the.field.with.a.long.name\" type='text' value=''>"
     );
 
     routes.get("/nested",
