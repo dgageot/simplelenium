@@ -220,6 +220,24 @@ public class LazyDomElement implements DomElement {
   }
 
   @Override
+  public LazyDomElement check() {
+    return execute("check", element -> {
+      if (!element.isSelected()) {
+        element.click();
+      }
+    });
+  }
+
+  @Override
+  public LazyDomElement uncheck() {
+    return execute("uncheck", element -> {
+      if (element.isSelected()) {
+        element.click();
+      }
+    });
+  }
+
+  @Override
   public LazyDomElement click(int x, int y) {
     return executeActions("click(" + x + "," + y + ")", (element, actions) -> actions.moveToElement(element, x, y).click());
   }

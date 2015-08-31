@@ -105,6 +105,10 @@ public interface DomElement extends Navigation {
 
   DomElement submit();
 
+  DomElement check();
+
+  DomElement uncheck();
+
   DomElement click();
 
   DomElement click(int x, int y);
