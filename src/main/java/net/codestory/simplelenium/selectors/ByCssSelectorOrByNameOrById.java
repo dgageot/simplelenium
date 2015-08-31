@@ -19,18 +19,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.FindsByCssSelector;
+import org.openqa.selenium.internal.FindsById;
 import org.openqa.selenium.internal.FindsByName;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class ByCssSelectorOrByName extends By implements Serializable {
+public class ByCssSelectorOrByNameOrById extends By implements Serializable {
   private static final long serialVersionUID = -3910258723099459239L;
 
   private final String selector;
 
-  public ByCssSelectorOrByName(String selector) {
+  public ByCssSelectorOrByNameOrById(String selector) {
     this.selector = selector;
   }
 
@@ -46,6 +47,11 @@ public class ByCssSelectorOrByName extends By implements Serializable {
       return element;
     }
 
+    element = ((FindsById) context).findElementById(selector);
+    if (element != null) {
+      return element;
+    }
+
     return null;
   }
 
@@ -57,7 +63,12 @@ public class ByCssSelectorOrByName extends By implements Serializable {
     }
 
     elements = ((FindsByName) context).findElementsByName(selector);
-    if (elements != null) {
+    if ((elements != null) && (!elements.isEmpty())) {
+      return elements;
+    }
+
+    elements = ((FindsById) context).findElementsById(selector);
+    if ((elements != null) && (!elements.isEmpty())) {
       return elements;
     }
 
