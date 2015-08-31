@@ -37,9 +37,13 @@ public class ByCssSelectorOrByNameOrById extends By implements Serializable {
 
   @Override
   public WebElement findElement(SearchContext context) {
-    WebElement element = ((FindsByCssSelector) context).findElementByCssSelector(selector);
-    if (element != null) {
-      return element;
+    WebElement element;
+
+    if (validCssSelector(selector)) {
+      element = ((FindsByCssSelector) context).findElementByCssSelector(selector);
+      if (element != null) {
+        return element;
+      }
     }
 
     element = ((FindsByName) context).findElementByName(selector);
@@ -57,9 +61,13 @@ public class ByCssSelectorOrByNameOrById extends By implements Serializable {
 
   @Override
   public List<WebElement> findElements(SearchContext context) {
-    List<WebElement> elements = ((FindsByCssSelector) context).findElementsByCssSelector(selector);
-    if ((elements != null) && (!elements.isEmpty())) {
-      return elements;
+    List<WebElement> elements;
+
+    if (validCssSelector(selector)) {
+      elements = ((FindsByCssSelector) context).findElementsByCssSelector(selector);
+      if ((elements != null) && (!elements.isEmpty())) {
+        return elements;
+      }
     }
 
     elements = ((FindsByName) context).findElementsByName(selector);
@@ -73,6 +81,10 @@ public class ByCssSelectorOrByNameOrById extends By implements Serializable {
     }
 
     return Collections.emptyList();
+  }
+
+  protected boolean validCssSelector(String selector) {
+    return !selector.endsWith("[]");
   }
 
   @Override

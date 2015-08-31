@@ -55,6 +55,11 @@ public class SimpleTest extends AbstractTest {
   }
 
   @Test
+  public void support_finding_by_name_with_brackets() {
+    find("qualifiers[]").should().exist();
+  }
+
+  @Test
   public void negation_should_apply_to_next_check_only() {
     find("h1").withText("Hello World")
       .should().exist()

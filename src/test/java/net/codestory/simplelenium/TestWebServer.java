@@ -37,6 +37,7 @@ public class TestWebServer {
         "<h2>SubTitle</h2>" +
         "<div id='name'>Bob</div>" +
         "<div class='age'>42</div>" +
+        "<span name='qualifiers[]'></span>" +
         "<ul>" +
         "   <li><em class='item'>italic</em></li>" +
         "</ul>" +
