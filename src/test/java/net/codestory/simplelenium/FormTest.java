@@ -59,8 +59,17 @@ public class FormTest extends AbstractTest {
 
   @Test
   public void chain() {
-    find("input#name").fill("name")
+    find("input#name").fill("The Name")
     .find("input#city").fill("Paris")
+    .find("input#name").should().contain("The Name")
+    .find("input#city").should().contain("Paris");
+  }
+
+  @Test
+  public void append() {
+    find("input#name").fill("Will be replaced").fill("The Name")
+    .find("input#city").fill("Pa").append("ris")
+    .find("input#name").should().not().contain("Will be replaced")
     .find("input#name").should().contain("The Name")
     .find("input#city").should().contain("Paris");
   }

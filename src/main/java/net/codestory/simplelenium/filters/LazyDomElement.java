@@ -178,7 +178,15 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public LazyDomElement fill(CharSequence text) {
-    return execute("fill(" + text + ")", element -> element.sendKeys(text));
+    return execute("fill(" + text + ")", element -> {
+      element.clear();
+      element.sendKeys(text);
+    });
+  }
+
+  @Override
+  public LazyDomElement append(CharSequence text) {
+    return execute("append(" + text + ")", element -> element.sendKeys(text));
   }
 
   @Override

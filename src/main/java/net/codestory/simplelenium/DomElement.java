@@ -93,6 +93,8 @@ public interface DomElement extends Navigation {
 
   DomElement fill(CharSequence text);
 
+  DomElement append(CharSequence text);
+
   DomElement pressReturn();
 
   DomElement pressEnter();
