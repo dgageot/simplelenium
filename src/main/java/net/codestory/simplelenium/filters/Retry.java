@@ -50,6 +50,9 @@ class Retry {
         Optional<T> targetElement = target.get();
         if (targetElement.isPresent()) {
           action.accept(targetElement.get());
+          if (retried) {
+            System.out.println();
+          }
           return;
         }
       } catch (StaleElementReferenceException e) {
@@ -81,6 +84,9 @@ class Retry {
     while ((System.currentTimeMillis() - start) < timeoutInMs) {
       try {
         if (predicate.test(targetSupplier.get())) {
+          if (retried) {
+            System.out.println();
+          }
           return true;
         }
 
