@@ -50,8 +50,7 @@ public interface Navigation extends DomElementFinder {
   default Navigation goTo(String url) {
     requireNonNull(url, "The url cannot be null");
 
-    URI uri = URI.create(url);
-    if (!uri.isAbsolute()) {
+    if (!URI.create(url.replace(" ", "%20")).isAbsolute()) {
       url = getBaseUrl() + url;
     }
 
