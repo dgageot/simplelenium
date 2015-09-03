@@ -36,6 +36,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class PhantomJsDownloader {
   private static final int DEFAULT_RETRY_DOWNLOAD = 4;
   private static final int DEFAULT_RETRY_CONNECT = 4;
+  public static final String PHANTOMJS_URL = "PHANTOMJS_URL";
+  public static final String PHANTOMJS_EXE = "PHANTOMJS_EXE";
 
   private final int retryDownload;
   private final int retryConnect;
@@ -113,7 +115,11 @@ public class PhantomJsDownloader {
     try {
       String url;
       File phantomJsExe;
-      if (isWindows()) {
+      if (isCustomized()) {
+        System.out.println("Using custom url.");
+        url = System.getProperty(PHANTOMJS_URL);
+        phantomJsExe = new File(installDir, System.getProperty(PHANTOMJS_EXE));
+      } else if (isWindows()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip";
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-windows/phantomjs.exe");
       } else if (isMac()) {
@@ -133,6 +139,10 @@ public class PhantomJsDownloader {
     } finally {
       lock.release();
     }
+  }
+
+  protected boolean isCustomized() {
+    return System.getProperty(PHANTOMJS_URL) != null && System.getProperty(PHANTOMJS_EXE) != null;
   }
 
   protected void extractExe(String url, File phantomInstallDir, File phantomJsExe) {
