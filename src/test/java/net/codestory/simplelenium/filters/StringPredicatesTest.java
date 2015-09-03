@@ -15,11 +15,12 @@
  */
 package net.codestory.simplelenium.filters;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
 
 public class StringPredicatesTest {
   @Test
@@ -29,5 +30,78 @@ public class StringPredicatesTest {
     assertThat(pattern.test("word")).isTrue();
     assertThat(pattern.test("before word after")).isTrue();
     assertThat(pattern.test("noword")).isFalse();
+  }
+  
+  @Test
+  public void predicate_is_empty() {
+    Predicate<String> result = StringPredicates.isEmpty();
+
+    assertThat(result.test(null)).isTrue();
+    assertThat(result.test("")).isTrue();
+    assertThat(result.test("notEmpty")).isFalse();
+  }
+  
+  @Test
+  public void predicate_is_null() {
+    Predicate<String> result = StringPredicates.isNull();
+
+    assertThat(result.test(null)).isTrue();
+    assertThat(result.test("notNull")).isFalse();
+  }
+  
+  @Test
+  public void predicate_equals_to() {
+    Predicate<String> result = StringPredicates.equalsTo("something");
+
+    assertThat(result.test("something")).isTrue();
+    assertThat(result.test("anything")).isFalse();
+  }
+  
+  @Test
+  public void predicate_contains() {
+    Predicate<String> result = StringPredicates.contains("contains");
+
+    assertThat(result.test("contains")).isTrue();
+    assertThat(result.test("containsAndContainsAgain")).isTrue();
+    assertThat(result.test("cake")).isFalse();
+  }
+  
+  @Test
+  public void predicate_contains_with_regex() {
+    Pattern regex = Pattern.compile("\\w");
+    
+    Predicate<String> result = StringPredicates.contains(regex);
+
+    assertThat(result.test("abcde")).isTrue();
+    assertThat(result.test("!@#$%")).isFalse();
+  }
+  
+  @Test
+  public void predicate_starts_with() {
+    
+    Predicate<String> result = StringPredicates.startsWith("start");
+
+    assertThat(result.test("startWith")).isTrue();
+    assertThat(result.test("endWith")).isFalse();
+  }
+  
+  @Test
+  public void predicate_ends_with() {
+    
+    Predicate<String> result = StringPredicates.endsWith("end");
+
+    assertThat(result.test("trend")).isTrue();
+    assertThat(result.test("endurence")).isFalse();
+  }
+  
+  @Test
+  public void predicate_matches() {
+    Pattern regex = Pattern.compile(".*is.*");
+    
+    Predicate<String> result = StringPredicates.matches(regex);
+
+    assertThat(result.test("it is simple")).isTrue();
+    assertThat(result.test("they are complex")).isFalse();
+    
   }
 }
