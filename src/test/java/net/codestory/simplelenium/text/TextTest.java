@@ -20,6 +20,7 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TextTest {
+  
   @Test
   public void does() {
     assertThat(Text.doesOrNot(false, "start")).isEqualTo("starts");
@@ -32,5 +33,11 @@ public class TextTest {
     assertThat(Text.doesOrNot(true, "start")).isEqualTo("doesn't start");
     assertThat(Text.doesOrNot(true, "match")).isEqualTo("doesn't match");
     assertThat(Text.doesOrNot(true, "start with")).isEqualTo("doesn't start with");
+  }
+  
+  @Test
+  public void hasOrNot() {
+    assertThat(Text.hasOrNot(true, "start")).isEqualTo("has start");
+    assertThat(Text.hasOrNot(false, "start")).isEqualTo("hasn't start");
   }
 }
