@@ -20,4 +20,10 @@ FIREFOX)
   mvn -Dbrowser=firefox verify
   ;;
 
+CHROME)
+  echo "Testing CHROME"
+  startXvfb
+  mvn -Dbrowser=chrome verify
+  ;;
+
 esac

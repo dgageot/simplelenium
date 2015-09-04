@@ -7,6 +7,7 @@ script: ./travis.sh
 env:
   - BROWSER=PHANTOM_JS
   - BROWSER=FIREFOX
+  - BROWSER=CHROME
 
 cache:
   directories:
