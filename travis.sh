@@ -22,9 +22,9 @@ FIREFOX)
 
 CHROME)
   echo "Testing CHROME"
+	cd $HOME
   curl -Lo chrome.zip https://download-chromium.appspot.com/dl/Linux_x64 && unzip chrome.zip
-	ls chrome-linux
-	pwd
+	cd -
   startXvfb
   mvn -Dbrowser=chrome verify
   ;;
