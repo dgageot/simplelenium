@@ -15,40 +15,25 @@
  */
 package net.codestory.simplelenium.driver.phantomjs;
 
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import net.codestory.simplelenium.driver.Downloader;
+import net.codestory.simplelenium.driver.LockFile;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static java.util.concurrent.TimeUnit.SECONDS;
-
-public class PhantomJsDownloader {
-  private static final int DEFAULT_RETRY_DOWNLOAD = 4;
-  private static final int DEFAULT_RETRY_CONNECT = 4;
+public class PhantomJsDownloader extends Downloader {
   public static final String PHANTOMJS_URL = "phantomjs.url";
   public static final String PHANTOMJS_EXE = "phantomjs.exe";
-
-  private final int retryDownload;
-  private final int retryConnect;
 
   public PhantomJsDownloader() {
     this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
   }
 
   protected PhantomJsDownloader(int retryDownload, int retryConnect) {
-    this.retryDownload = retryDownload;
-    this.retryConnect = retryConnect;
+    super(retryConnect, retryDownload);
   }
 
   public PhantomJSDriver createNewDriver() {
@@ -98,14 +83,6 @@ public class PhantomJsDownloader {
     }
   }
 
-  private void pause(long timeout) {
-    try {
-      SECONDS.sleep(timeout);
-    } catch (InterruptedException ie) {
-      // Ignore
-    }
-  }
-
   protected synchronized File downloadAndExtract() {
     File installDir = new File(new File(System.getProperty("user.home")), ".phantomjstest");
     installDir.mkdirs();
@@ -132,7 +109,7 @@ public class PhantomJsDownloader {
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-linux-x86_64/bin/phantomjs");
       }
 
-      extractExe(url, installDir, phantomJsExe);
+      extractExe("phantomJs", url, installDir, phantomJsExe);
 
       return phantomJsExe;
     } finally {
@@ -144,125 +121,4 @@ public class PhantomJsDownloader {
     return System.getProperty(PHANTOMJS_URL) != null && System.getProperty(PHANTOMJS_EXE) != null;
   }
 
-  protected void extractExe(String url, File phantomInstallDir, File phantomJsExe) {
-    if (phantomJsExe.exists()) {
-      return;
-    }
-
-    String zipName = url.substring(url.lastIndexOf('/') + 1);
-    File targetZip = new File(phantomInstallDir, zipName);
-    downloadZip(url, targetZip);
-
-    System.out.println("Extracting phantomjs");
-    try {
-      if (isWindows() || isMac()) {
-        unzip(targetZip, phantomInstallDir);
-      } else {
-        untarbz2(targetZip, phantomInstallDir);
-      }
-    } catch (Exception e) {
-      throw new IllegalStateException("Unable to unzip phantomjs from " + targetZip.getAbsolutePath(), e);
-    }
-
-    phantomJsExe.setExecutable(true);
-  }
-
-  protected void downloadZip(String url, File targetZip) {
-    if (targetZip.exists()) {
-      if (targetZip.length() > 0) {
-        return;
-      }
-      targetZip.delete();
-    }
-
-    System.out.printf("Downloading phantomjs from %s...%n", url);
-
-    File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
-    zipTemp.getParentFile().mkdirs();
-
-    try (InputStream input = URI.create(url).toURL().openStream()) {
-      Files.copy(input, zipTemp.toPath());
-    } catch (IOException e) {
-      throw new IllegalStateException("Unable to download phantomjs from " + url + " to " + targetZip, e);
-    }
-
-    if (!zipTemp.renameTo(targetZip)) {
-      throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
-    }
-  }
-
-  protected void untarbz2(File zip, File toDir) throws IOException {
-    File tar = new File(zip.getAbsolutePath().replace(".tar.bz2", ".tar"));
-
-    try (FileInputStream fin = new FileInputStream(zip);
-         BufferedInputStream bin = new BufferedInputStream(fin);
-         BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(bin)
-    ) {
-      Files.copy(bzIn, tar.toPath(), REPLACE_EXISTING);
-    }
-
-    untar(tar, toDir);
-  }
-
-  protected void unzip(File zip, File toDir) throws IOException {
-    try (ZipFile zipFile = new ZipFile(zip)) {
-      Enumeration<? extends ZipEntry> entries = zipFile.entries();
-      while (entries.hasMoreElements()) {
-        ZipEntry entry = entries.nextElement();
-        if (entry.isDirectory()) {
-          continue;
-        }
-
-        File to = new File(toDir, entry.getName());
-
-        File parent = to.getParentFile();
-        if (!parent.exists()) {
-          if (!parent.mkdirs()) {
-            throw new IOException("Unable to create folder " + parent);
-          }
-        }
-
-        try (InputStream input = zipFile.getInputStream(entry)) {
-          Files.copy(input, to.toPath(), REPLACE_EXISTING);
-        }
-      }
-    }
-  }
-
-  protected void untar(File tar, File toDir) throws IOException {
-    try (FileInputStream fin = new FileInputStream(tar);
-         BufferedInputStream bin = new BufferedInputStream(fin);
-         TarArchiveInputStream tarInput = new TarArchiveInputStream(bin)
-    ) {
-      ArchiveEntry entry;
-      while (null != (entry = tarInput.getNextTarEntry())) {
-        if (entry.isDirectory()) {
-          continue;
-        }
-
-        File to = new File(toDir, entry.getName());
-
-        File parent = to.getParentFile();
-        if (!parent.exists()) {
-          if (!parent.mkdirs()) {
-            throw new IOException("Unable to create folder " + parent);
-          }
-        }
-
-        Files.copy(tarInput, to.toPath(), REPLACE_EXISTING);
-      }
-    }
-  }
-
-  protected boolean isWindows() {
-    return System.getProperty("os.name").startsWith("Windows");
-  }
-
-  protected boolean isMac() {
-    return System.getProperty("os.name").startsWith("Mac OS X");
-  }
-
-  protected boolean isLinux32() {
-    return System.getProperty("os.name").contains("x86");
-  }
 }

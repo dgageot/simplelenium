@@ -16,7 +16,6 @@
 package net.codestory.simplelenium.driver;
 
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -26,7 +25,7 @@ import static java.util.stream.Stream.of;
 
 public enum Browser {
   PHANTOM_JS(() -> new PhantomJsDownloader().createNewDriver()),
-  CHROME(ChromeDriver::new),
+  CHROME(() -> new ChromeDriverDownloader().createNewDriver()),
   FIREFOX(FirefoxDriver::new);
 
   private final Supplier<RemoteWebDriver> driverSupplier;
