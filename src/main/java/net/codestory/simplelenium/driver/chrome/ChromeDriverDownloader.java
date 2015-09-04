@@ -101,7 +101,6 @@ public class ChromeDriverDownloader extends Downloader {
       }
     } else if (isTravis()) {
       options.setBinary("/home/travis/chrome-linux/chrome");
-//      options.addArguments("--no-sandbox");
     }
 
     return options;
