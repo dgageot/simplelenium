@@ -100,8 +100,8 @@ public class ChromeDriverDownloader extends Downloader {
         options.setBinary(chromeInstalledByHomebrew);
       }
     } else if (isTravis()) {
-      options.setBinary("chromium-browser");
-      options.addArguments("--no-sandbox");
+      options.setBinary("/home/travis/chrome-linux/chrome");
+//      options.addArguments("--no-sandbox");
     }
 
     return options;
