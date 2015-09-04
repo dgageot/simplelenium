@@ -36,8 +36,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class PhantomJsDownloader {
   private static final int DEFAULT_RETRY_DOWNLOAD = 4;
   private static final int DEFAULT_RETRY_CONNECT = 4;
-  public static final String PHANTOMJS_URL = "PHANTOMJS_URL";
-  public static final String PHANTOMJS_EXE = "PHANTOMJS_EXE";
+  public static final String PHANTOMJS_URL = "phantomjs.url";
+  public static final String PHANTOMJS_EXE = "phantomjs.exe";
 
   private final int retryDownload;
   private final int retryConnect;
@@ -116,7 +116,6 @@ public class PhantomJsDownloader {
       String url;
       File phantomJsExe;
       if (isCustomized()) {
-        System.out.println("Using custom url.");
         url = System.getProperty(PHANTOMJS_URL);
         phantomJsExe = new File(installDir, System.getProperty(PHANTOMJS_EXE));
       } else if (isWindows()) {
