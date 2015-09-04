@@ -80,22 +80,28 @@ public class ChromeDriverDownloader extends Downloader {
   }
 
   protected ChromeDriver createNewChromeDriver(File chromeDriverExe) {
-    DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-
-    if (isMac()) {
-      // Try to use the chrome installed by homebrew cask
-      if (new File("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome").exists()) {
-        ChromeOptions options = new ChromeOptions();
-        options.setBinary("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome");
-        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
-      }
-    }
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
 
     return new ChromeDriver(new ChromeDriverService.Builder()
       .usingDriverExecutable(chromeDriverExe)
       .usingAnyFreePort()
       .build(),
-      desiredCapabilities);
+      capabilities);
+  }
+
+  protected ChromeOptions getChromeOptions() {
+    ChromeOptions options = new ChromeOptions();
+
+    if (isMac()) {
+      // Try to use the chrome installed by homebrew cask
+      File chromeInstalledByHomebrew = new File("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome");
+      if (chromeInstalledByHomebrew.exists()) {
+        options.setBinary(chromeInstalledByHomebrew);
+      }
+    }
+
+    return options;
   }
 
   protected synchronized File downloadAndExtract() {
