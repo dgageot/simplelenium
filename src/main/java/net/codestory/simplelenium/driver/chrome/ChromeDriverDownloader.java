@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-package net.codestory.simplelenium.driver;
+package net.codestory.simplelenium.driver.chrome;
 
+import net.codestory.simplelenium.driver.Downloader;
+import net.codestory.simplelenium.driver.LockFile;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 

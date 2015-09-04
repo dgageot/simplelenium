@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium.driver;
 
+import net.codestory.simplelenium.driver.chrome.ChromeDriverDownloader;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
