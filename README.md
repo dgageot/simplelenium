@@ -397,6 +397,14 @@ tests can be run on Chrome or Firefox.
 Run tests with '-Dbrowser=chrome',  '-Dbrowser=firefox',  '-Dbrowser=phantom_js' to
 choose which browser you want to use.
 
+### Custom Download URL
+
+If you can't access default download url from where you are (thank you corporate IT proxy). You can override them by providing
+the following System properties :
+
+* `phantomjs.url` : url where to download phantomjs ie: https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip 
+* `phantomjs.exe` : relative path where the executable is from the compressed archive. ie: phantomjs-1.9.8-windows/phantomjs.exe
+
 ## What Simplelenium doesn't do
 
 ### Support alerts, iframes and windows
