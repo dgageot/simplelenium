@@ -18,6 +18,9 @@ package net.codestory.simplelenium.driver.chrome;
 import net.codestory.simplelenium.driver.Downloader;
 import net.codestory.simplelenium.driver.LockFile;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.File;
@@ -77,9 +80,22 @@ public class ChromeDriverDownloader extends Downloader {
   }
 
   protected ChromeDriver createNewChromeDriver(File chromeDriverExe) {
-    // could probably be done with custom ChromeDriverService
-    System.setProperty("webdriver.chrome.driver", chromeDriverExe.toString());
-    return new ChromeDriver();
+    DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+
+    if (isMac()) {
+      // Try to use the chrome installed by homebrew cask
+      if (new File("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome").exists()) {
+        ChromeOptions options = new ChromeOptions();
+        options.setBinary("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome");
+        desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
+      }
+    }
+
+    return new ChromeDriver(new ChromeDriverService.Builder()
+      .usingDriverExecutable(chromeDriverExe)
+      .usingAnyFreePort()
+      .build(),
+      desiredCapabilities);
   }
 
   protected synchronized File downloadAndExtract() {
