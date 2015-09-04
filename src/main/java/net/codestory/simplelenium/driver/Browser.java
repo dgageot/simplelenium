@@ -47,9 +47,9 @@ public enum Browser {
     }
 
     return of(Browser.values())
-        .filter(browser -> browser.name().equalsIgnoreCase(browserProperty))
-        .findFirst()
-        .orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserProperty));
+      .filter(browser -> browser.name().equalsIgnoreCase(browserProperty))
+      .findFirst()
+      .orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserProperty));
   }
 
   public static SeleniumDriver getCurrentDriver() {

@@ -30,143 +30,143 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public abstract class Downloader {
-    protected static final int DEFAULT_RETRY_DOWNLOAD = 4;
-    protected static final int DEFAULT_RETRY_CONNECT = 4;
-    protected final int retryDownload;
-    protected final int retryConnect;
+  protected static final int DEFAULT_RETRY_DOWNLOAD = 4;
+  protected static final int DEFAULT_RETRY_CONNECT = 4;
+  protected final int retryDownload;
+  protected final int retryConnect;
 
-    public Downloader(int retryConnect, int retryDownload) {
-        this.retryConnect = retryConnect;
-        this.retryDownload = retryDownload;
+  public Downloader(int retryConnect, int retryDownload) {
+    this.retryConnect = retryConnect;
+    this.retryDownload = retryDownload;
+  }
+
+  protected void pause(long timeout) {
+    try {
+      SECONDS.sleep(timeout);
+    } catch (InterruptedException ie) {
+      // Ignore
+    }
+  }
+
+  protected void extractExe(String driverName, String url, File installDirectory, File executable) {
+    if (executable.exists()) {
+      return;
     }
 
-    protected void pause(long timeout) {
-      try {
-        SECONDS.sleep(timeout);
-      } catch (InterruptedException ie) {
-        // Ignore
+    String zipName = url.substring(url.lastIndexOf('/') + 1);
+    File targetZip = new File(installDirectory, zipName);
+    downloadZip(driverName, url, targetZip);
+
+    System.out.println("Extracting " + driverName);
+    try {
+      if (url.endsWith(".zip")) {
+        unzip(targetZip, installDirectory);
+      } else {
+        untarbz2(targetZip, installDirectory);
       }
+    } catch (Exception e) {
+      throw new IllegalStateException("Unable to uncompress " + driverName + " from " + targetZip.getAbsolutePath(), e);
     }
 
-    protected void extractExe(String driverName, String url, File installDirectory, File executable) {
-      if (executable.exists()) {
+    executable.setExecutable(true);
+  }
+
+  protected void downloadZip(String driverName, String url, File targetZip) {
+    if (targetZip.exists()) {
+      if (targetZip.length() > 0) {
         return;
       }
+      targetZip.delete();
+    }
 
-      String zipName = url.substring(url.lastIndexOf('/') + 1);
-      File targetZip = new File(installDirectory, zipName);
-      downloadZip(driverName, url, targetZip);
+    System.out.printf("Downloading %s from %s...%n", driverName, url);
 
-      System.out.println("Extracting " + driverName);
-      try {
-        if (url.endsWith(".zip")) {
-          unzip(targetZip, installDirectory);
-        } else {
-          untarbz2(targetZip, installDirectory);
+    File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
+    zipTemp.getParentFile().mkdirs();
+
+    try (InputStream input = URI.create(url).toURL().openStream()) {
+      Files.copy(input, zipTemp.toPath());
+    } catch (IOException e) {
+      throw new IllegalStateException("Unable to download " + driverName + " from " + url + " to " + targetZip, e);
+    }
+
+    if (!zipTemp.renameTo(targetZip)) {
+      throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
+    }
+  }
+
+  protected void untarbz2(File zip, File toDir) throws IOException {
+    File tar = new File(zip.getAbsolutePath().replace(".tar.bz2", ".tar"));
+
+    try (FileInputStream fin = new FileInputStream(zip);
+         BufferedInputStream bin = new BufferedInputStream(fin);
+         BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(bin)
+    ) {
+      Files.copy(bzIn, tar.toPath(), REPLACE_EXISTING);
+    }
+
+    untar(tar, toDir);
+  }
+
+  protected void unzip(File zip, File toDir) throws IOException {
+    try (ZipFile zipFile = new ZipFile(zip)) {
+      Enumeration<? extends ZipEntry> entries = zipFile.entries();
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = entries.nextElement();
+        if (entry.isDirectory()) {
+          continue;
         }
-      } catch (Exception e) {
-        throw new IllegalStateException("Unable to uncompress " + driverName + " from " + targetZip.getAbsolutePath(), e);
-      }
 
-      executable.setExecutable(true);
-    }
+        File to = new File(toDir, entry.getName());
 
-    protected void downloadZip(String driverName, String url, File targetZip) {
-      if (targetZip.exists()) {
-        if (targetZip.length() > 0) {
-          return;
+        File parent = to.getParentFile();
+        if (!parent.exists()) {
+          if (!parent.mkdirs()) {
+            throw new IOException("Unable to create folder " + parent);
+          }
         }
-        targetZip.delete();
-      }
 
-      System.out.printf("Downloading %s from %s...%n", driverName, url);
-
-      File zipTemp = new File(targetZip.getAbsolutePath() + ".temp");
-      zipTemp.getParentFile().mkdirs();
-
-      try (InputStream input = URI.create(url).toURL().openStream()) {
-        Files.copy(input, zipTemp.toPath());
-      } catch (IOException e) {
-        throw new IllegalStateException("Unable to download "+ driverName + " from " + url + " to " + targetZip, e);
-      }
-
-      if (!zipTemp.renameTo(targetZip)) {
-        throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
-      }
-    }
-
-    protected void untarbz2(File zip, File toDir) throws IOException {
-      File tar = new File(zip.getAbsolutePath().replace(".tar.bz2", ".tar"));
-
-      try (FileInputStream fin = new FileInputStream(zip);
-           BufferedInputStream bin = new BufferedInputStream(fin);
-           BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(bin)
-      ) {
-        Files.copy(bzIn, tar.toPath(), REPLACE_EXISTING);
-      }
-
-      untar(tar, toDir);
-    }
-
-    protected void unzip(File zip, File toDir) throws IOException {
-      try (ZipFile zipFile = new ZipFile(zip)) {
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        while (entries.hasMoreElements()) {
-          ZipEntry entry = entries.nextElement();
-          if (entry.isDirectory()) {
-            continue;
-          }
-
-          File to = new File(toDir, entry.getName());
-
-          File parent = to.getParentFile();
-          if (!parent.exists()) {
-            if (!parent.mkdirs()) {
-              throw new IOException("Unable to create folder " + parent);
-            }
-          }
-
-          try (InputStream input = zipFile.getInputStream(entry)) {
-            Files.copy(input, to.toPath(), REPLACE_EXISTING);
-          }
+        try (InputStream input = zipFile.getInputStream(entry)) {
+          Files.copy(input, to.toPath(), REPLACE_EXISTING);
         }
       }
     }
+  }
 
-    protected void untar(File tar, File toDir) throws IOException {
-      try (FileInputStream fin = new FileInputStream(tar);
-           BufferedInputStream bin = new BufferedInputStream(fin);
-           TarArchiveInputStream tarInput = new TarArchiveInputStream(bin)
-      ) {
-        ArchiveEntry entry;
-        while (null != (entry = tarInput.getNextTarEntry())) {
-          if (entry.isDirectory()) {
-            continue;
-          }
-
-          File to = new File(toDir, entry.getName());
-
-          File parent = to.getParentFile();
-          if (!parent.exists()) {
-            if (!parent.mkdirs()) {
-              throw new IOException("Unable to create folder " + parent);
-            }
-          }
-
-          Files.copy(tarInput, to.toPath(), REPLACE_EXISTING);
+  protected void untar(File tar, File toDir) throws IOException {
+    try (FileInputStream fin = new FileInputStream(tar);
+         BufferedInputStream bin = new BufferedInputStream(fin);
+         TarArchiveInputStream tarInput = new TarArchiveInputStream(bin)
+    ) {
+      ArchiveEntry entry;
+      while (null != (entry = tarInput.getNextTarEntry())) {
+        if (entry.isDirectory()) {
+          continue;
         }
+
+        File to = new File(toDir, entry.getName());
+
+        File parent = to.getParentFile();
+        if (!parent.exists()) {
+          if (!parent.mkdirs()) {
+            throw new IOException("Unable to create folder " + parent);
+          }
+        }
+
+        Files.copy(tarInput, to.toPath(), REPLACE_EXISTING);
       }
     }
+  }
 
-    protected boolean isWindows() {
-      return System.getProperty("os.name").startsWith("Windows");
-    }
+  protected boolean isWindows() {
+    return System.getProperty("os.name").startsWith("Windows");
+  }
 
-    protected boolean isMac() {
-      return System.getProperty("os.name").startsWith("Mac OS X");
-    }
+  protected boolean isMac() {
+    return System.getProperty("os.name").startsWith("Mac OS X");
+  }
 
-    protected boolean isLinux32() {
-      return System.getProperty("os.name").contains("x86");
-    }
+  protected boolean isLinux32() {
+    return System.getProperty("os.name").contains("x86");
+  }
 }
