@@ -89,6 +89,11 @@ public class ChromeDriverDownloader extends Downloader {
         options.setBinary("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome");
         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
       }
+    } else if (isTravis()) {
+      ChromeOptions options = new ChromeOptions();
+      options.setBinary("chromium-browser");
+      options.addArguments("--no-sandbox");
+      desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
     }
 
     return new ChromeDriver(new ChromeDriverService.Builder()

@@ -158,6 +158,10 @@ public abstract class Downloader {
     }
   }
 
+  protected boolean isTravis() {
+    return "true".equals(System.getenv("TRAVIS"));
+  }
+
   protected boolean isWindows() {
     return System.getProperty("os.name").startsWith("Windows");
   }
