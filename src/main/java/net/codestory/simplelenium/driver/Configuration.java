@@ -47,22 +47,15 @@ public enum Configuration {
   }
 
   public String get() {
-    String value = emptyToNull(System.getProperty(key));
-    if (value != null) {
-      return value;
-    }
+    String value = System.getProperty(key);
 
-    if (!required) {
+    if ((value == null) || value.trim().isEmpty()) {
+      if (required) {
+        throw new IllegalArgumentException("System property [" + key + "] cannot be null nor empty");
+      }
       return defaultValue;
     }
 
-    throw new IllegalArgumentException("System property [" + key + "] cannot be null nor empty");
-  }
-
-  private static String emptyToNull(String value) {
-    if (value == null) {
-      return null;
-    }
-    return value.isEmpty() ? null : value;
+    return value;
   }
 }
