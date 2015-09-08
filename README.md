@@ -4,7 +4,7 @@ A simple and robust layer on top of
 [Selenium](http://docs.seleniumhq.org/projects/webdriver/) and
 [PhantomJS](http://phantomjs.org/).
 
-It also supports Chrome and Firefox.
+It also supports Chrome and Firefox. SauceLabs support is ongoing.
 
 ## Goal
 
@@ -20,7 +20,7 @@ it served me well.
 Simplelenium deals properly and out-of-the-box with timing issues and
 `StaleElementReferenceExceptions`. It supports running tests in parallel
 without you thinking about it. It doesn't open annoying windows since it's
-using [PhantomJS](http://phantomjs.org/), a headless browser.
+default behaviour is to use [PhantomJS](http://phantomjs.org/), a headless browser.
 
 Give it a try and you'll be surprised at how Selenium testing can be fun again
 (was it ever?).
@@ -394,8 +394,18 @@ How cool is that?
 Even if Simplelenium supports PhantomJs out of the box and by default,
 tests can be run on Chrome or Firefox.
 
-Run tests with '-Dbrowser=chrome',  '-Dbrowser=firefox',  '-Dbrowser=phantom_js' to
+Run tests with '-Dbrowser=chrome',  '-Dbrowser=firefox', '-Dbrowser=phantom_js' to
 choose which browser you want to use.
+
+If you choose `chrome`, Simplelenium will download [chromedriver](https://code.google.com/p/selenium/wiki/ChromeDriver)
+automatically for you.
+
+If you don't choose `phantomjs`, then you have to manually install Firefox or Chrome. Make sure you install them
+where FirefoxDriver and ChromeDriver expect them to be. If you used [homewbrew](http://brew.sh/) to install Chrome,
+like I do, ChromeDriver will figure this out.
+
+If you need to set the port used by ChromeDriver, use the `chromedriver.port` system property. The default is to use
+a random free port.
 
 ### Custom Download URL
 
@@ -406,10 +416,6 @@ the following System properties :
 * `phantomjs.exe` : relative path where the executable is from the compressed archive. ie: phantomjs-1.9.8-windows/phantomjs.exe
 
 ## What Simplelenium doesn't do
-
-### Support alerts, iframes and windows
-
-Pull requests are your best friends.
 
 ### Reading properties from web elements
 
