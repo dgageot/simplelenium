@@ -33,6 +33,7 @@ import java.io.File;
 public class ChromeDriverDownloader extends Downloader {
   public static final String CHROMEDRIVER_URL = "chromedriver.url";
   public static final String CHROMEDRIVER_EXE = "chromedriver.exe";
+  public static final String CHROMEDRIVER_PORT = "chromedriver.port";
 
   public ChromeDriverDownloader() {
     this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
@@ -85,7 +86,8 @@ public class ChromeDriverDownloader extends Downloader {
 
     return new ChromeDriver(new ChromeDriverService.Builder()
       .usingDriverExecutable(chromeDriverExe)
-      .usingAnyFreePort()
+        // Use any port free or the one enforced by CHROME_DRIVER_PORT property
+      .usingPort(Integer.parseInt(System.getProperty(CHROMEDRIVER_PORT, "0")))
       .build(),
       capabilities);
   }
