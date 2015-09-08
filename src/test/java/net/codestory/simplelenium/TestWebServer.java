@@ -69,8 +69,8 @@ public class TestWebServer {
       "</div>"
     );
 
-    routes.get("/console",
-      "<script>console.log('Hello World');</script>"
+    routes.get("/error",
+      "<script>undefined.unknown();</script>"
     );
 
     routes.get("/select",

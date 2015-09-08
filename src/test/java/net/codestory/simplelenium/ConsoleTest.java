@@ -18,6 +18,8 @@ package net.codestory.simplelenium;
 import net.codestory.simplelenium.driver.Browser;
 import org.junit.Test;
 
+import java.util.List;
+
 import static net.codestory.simplelenium.driver.Browser.PHANTOM_JS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -25,11 +27,48 @@ import static org.junit.Assume.assumeThat;
 
 public class ConsoleTest extends AbstractTest {
   @Test
-  public void capture_console() {
+  public void capture_console_logs() {
     assumeThat(Browser.getCurrentBrowser(), is(PHANTOM_JS));
 
-    goTo("/console");
+    goTo("/");
+    executeJavascript("console.log('Hello World');");
 
     assertThat(console()).containsExactly("Hello World");
+  }
+
+  @Test
+  public void capture_console_errors() {
+    assumeThat(Browser.getCurrentBrowser(), is(PHANTOM_JS));
+
+    goTo("/");
+    executeJavascript("console.error('BUG');");
+
+    assertThat(console()).containsExactly("BUG");
+  }
+
+  @Test
+  public void capture_javascript_errors() {
+    goTo("/error");
+
+    List<String> console = console();
+    String lastLog = console.get(console.size() - 1);
+
+    String expectedError;
+    switch (Browser.getCurrentBrowser()) {
+      case PHANTOM_JS:
+        expectedError = "TypeError: 'undefined' is not an object (evaluating 'undefined.unknown')";
+        break;
+      case CHROME:
+        expectedError = "Uncaught TypeError: Cannot read property 'unknown' of undefined";
+        break;
+      case FIREFOX:
+        expectedError = "TypeError: undefined has no properties";
+        break;
+      default:
+        expectedError = "FAIL BECAUSE THIS IS NOT EXPECTED";
+        break;
+    }
+
+    assertThat(lastLog).contains(expectedError);
   }
 }
