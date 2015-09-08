@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium.driver.chrome;
 
+import net.codestory.simplelenium.driver.Configuration;
 import net.codestory.simplelenium.driver.Downloader;
 import net.codestory.simplelenium.driver.LockFile;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -31,10 +32,6 @@ import java.io.File;
 // by checking if it exists by looking at default installation of chrome :
 // https://code.google.com/p/selenium/wiki/ChromeDriver
 public class ChromeDriverDownloader extends Downloader {
-  public static final String CHROMEDRIVER_URL = "chromedriver.url";
-  public static final String CHROMEDRIVER_EXE = "chromedriver.exe";
-  public static final String CHROMEDRIVER_PORT = "chromedriver.port";
-
   public ChromeDriverDownloader() {
     this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
   }
@@ -87,9 +84,9 @@ public class ChromeDriverDownloader extends Downloader {
     return new ChromeDriver(new ChromeDriverService.Builder()
       .usingDriverExecutable(chromeDriverExe)
         // Use any port free or the one enforced by CHROME_DRIVER_PORT property
-      .usingPort(Integer.parseInt(System.getProperty(CHROMEDRIVER_PORT, "0")))
-      .build(),
-      capabilities);
+        .usingPort(Configuration.CHROMEDRIVER_PORT.getInt())
+        .build(),
+        capabilities);
   }
 
   protected ChromeOptions getChromeOptions() {
@@ -107,7 +104,7 @@ public class ChromeDriverDownloader extends Downloader {
   }
 
   protected synchronized File downloadAndExtract() {
-    File installDir = new File(new File(System.getProperty("user.home")), ".chromdrivertest");
+    File installDir = new File(Configuration.USER_HOME.get(), ".chromdrivertest");
     installDir.mkdirs();
 
     LockFile lock = new LockFile(new File(installDir, "lock"));
@@ -116,8 +113,8 @@ public class ChromeDriverDownloader extends Downloader {
       String url;
       File chromeDriverExe;
       if (isCustomized()) {
-        url = System.getProperty(CHROMEDRIVER_URL);
-        chromeDriverExe = new File(installDir, System.getProperty(CHROMEDRIVER_EXE));
+        url = Configuration.CHROMEDRIVER_URL.get();
+        chromeDriverExe = new File(installDir, Configuration.CHROMEDRIVER_EXE.get());
       } else if (isWindows()) {
         url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_win32.zip";
         chromeDriverExe = new File(installDir, "chromedriver.exe");
@@ -141,6 +138,7 @@ public class ChromeDriverDownloader extends Downloader {
   }
 
   protected boolean isCustomized() {
-    return System.getProperty(CHROMEDRIVER_URL) != null && System.getProperty(CHROMEDRIVER_EXE) != null;
+    return Configuration.CHROMEDRIVER_URL.get() != null
+        && Configuration.CHROMEDRIVER_EXE.get() != null;
   }
 }

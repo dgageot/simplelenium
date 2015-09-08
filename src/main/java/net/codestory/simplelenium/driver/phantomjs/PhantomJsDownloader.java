@@ -15,6 +15,7 @@
  */
 package net.codestory.simplelenium.driver.phantomjs;
 
+import net.codestory.simplelenium.driver.Configuration;
 import net.codestory.simplelenium.driver.Downloader;
 import net.codestory.simplelenium.driver.LockFile;
 import org.openqa.selenium.net.PortProber;
@@ -25,9 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class PhantomJsDownloader extends Downloader {
-  public static final String PHANTOMJS_URL = "phantomjs.url";
-  public static final String PHANTOMJS_EXE = "phantomjs.exe";
-
   public PhantomJsDownloader() {
     this(DEFAULT_RETRY_DOWNLOAD, DEFAULT_RETRY_CONNECT);
   }
@@ -84,7 +82,7 @@ public class PhantomJsDownloader extends Downloader {
   }
 
   protected synchronized File downloadAndExtract() {
-    File installDir = new File(new File(System.getProperty("user.home")), ".phantomjstest");
+    File installDir = new File(Configuration.USER_HOME.get(), ".phantomjstest");
     installDir.mkdirs();
 
     LockFile lock = new LockFile(new File(installDir, "lock"));
@@ -93,8 +91,8 @@ public class PhantomJsDownloader extends Downloader {
       String url;
       File phantomJsExe;
       if (isCustomized()) {
-        url = System.getProperty(PHANTOMJS_URL);
-        phantomJsExe = new File(installDir, System.getProperty(PHANTOMJS_EXE));
+        url = Configuration.PHANTOMJS_URL.get();
+        phantomJsExe = new File(installDir, Configuration.PHANTOMJS_EXE.get());
       } else if (isWindows()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip";
         phantomJsExe = new File(installDir, "phantomjs-1.9.8-windows/phantomjs.exe");
@@ -118,7 +116,8 @@ public class PhantomJsDownloader extends Downloader {
   }
 
   protected boolean isCustomized() {
-    return System.getProperty(PHANTOMJS_URL) != null && System.getProperty(PHANTOMJS_EXE) != null;
+    return Configuration.PHANTOMJS_URL.get() != null
+        && Configuration.PHANTOMJS_EXE.get() != null;
   }
 
 }

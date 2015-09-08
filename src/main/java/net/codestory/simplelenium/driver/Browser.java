@@ -42,15 +42,12 @@ public enum Browser {
   }
 
   public static Browser getCurrentBrowser() {
-    String browserProperty = System.getProperty("browser");
-    if ((browserProperty == null) || ("".equals(browserProperty))) {
-      return Browser.PHANTOM_JS;
-    }
+    String browserName = Configuration.BROWSER.get();
 
     return of(Browser.values())
-      .filter(browser -> browser.name().equalsIgnoreCase(browserProperty))
-      .findFirst()
-      .orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserProperty));
+      .filter(browser -> browser.name().equalsIgnoreCase(browserName))
+        .findFirst()
+      .orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserName));
   }
 
   public static SeleniumDriver getCurrentDriver() {

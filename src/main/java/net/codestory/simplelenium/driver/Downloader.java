@@ -159,14 +159,14 @@ public abstract class Downloader {
   }
 
   protected boolean isWindows() {
-    return System.getProperty("os.name").startsWith("Windows");
+    return Configuration.OS_NAME.get().startsWith("Windows");
   }
 
   protected boolean isMac() {
-    return System.getProperty("os.name").startsWith("Mac OS X");
+    return Configuration.OS_NAME.get().startsWith("Mac OS X");
   }
 
   protected boolean isLinux32() {
-    return System.getProperty("os.name").contains("x86");
+    return Configuration.OS_NAME.get().contains("x86");
   }
 }
