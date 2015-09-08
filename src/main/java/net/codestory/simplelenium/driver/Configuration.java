@@ -42,6 +42,10 @@ public enum Configuration {
     this.required = required;
   }
 
+  public int getInt() {
+    return Integer.parseInt(get());
+  }
+
   public String get() {
     String value = emptyToNull(System.getProperty(key));
     if (value != null) {
@@ -60,9 +64,5 @@ public enum Configuration {
       return null;
     }
     return value.isEmpty() ? null : value;
-  }
-
-  public int getInt() {
-    return Integer.parseInt(get());
   }
 }
