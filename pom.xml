@@ -88,16 +88,6 @@
               <message>Update version in the README.md</message>
             </configuration>
           </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0-alpha-2</version>
-            <configuration>
-              <files>
-                <file>${basedir}/release.properties</file>
-              </files>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
     </profile>
@@ -190,8 +180,8 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <releaseProfiles>release</releaseProfiles>
-          <arguments>-Psonatype-oss-release,readmeVersion</arguments>
-          <completionGoals>properties:read-project-properties replacer:replace scm:checkin</completionGoals>
+          <arguments>-PreadmeVersion</arguments>
+          <preparationGoals>replacer:replace scm:checkin</preparationGoals>
         </configuration>
       </plugin>
       <plugin>
