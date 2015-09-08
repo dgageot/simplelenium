@@ -180,7 +180,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <releaseProfiles>release</releaseProfiles>
-          <arguments>-Psonatype-oss-release,readmeVersion</arguments>
+          <arguments>-PreadmeVersion</arguments>
           <preparationGoals>replacer:replace scm:checkin</preparationGoals>
         </configuration>
       </plugin>
