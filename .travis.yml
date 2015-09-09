@@ -3,10 +3,7 @@ sudo: false
 jdk: oraclejdk8
 
 install: true
-script: ./travis.sh
-env:
-  - BROWSER=PHANTOM_JS
-  - BROWSER=FIREFOX
+script: netstat -atp tcp | grep -i "listen"
 
 cache:
   directories:
