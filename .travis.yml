@@ -1,10 +1,4 @@
 language: java
 sudo: false
-jdk: oraclejdk8
-
 install: true
-script: python -m SimpleHTTPServer 52157
-
-cache:
-  directories:
-    - '$HOME/.m2/repository'
+script: python server.py localhost:52157
