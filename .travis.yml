@@ -1,4 +1,4 @@
 language: java
-sudo: true
+sudo: false
 install: true
 script: nc
