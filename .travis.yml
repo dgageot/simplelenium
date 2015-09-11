@@ -1,4 +1,4 @@
 language: java
 sudo: false
 install: true
-script: python server.py localhost:52157
+script: lsof -i
