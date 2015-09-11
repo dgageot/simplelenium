@@ -1,4 +1,4 @@
 language: java
-sudo: false
+sudo: true
 install: true
-script: lsof
+script: sudo lsof -i
