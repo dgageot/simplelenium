@@ -46,7 +46,7 @@ public enum Browser {
 
     return of(Browser.values())
       .filter(browser -> browser.name().equalsIgnoreCase(browserName))
-        .findFirst()
+      .findFirst()
       .orElseThrow(() -> new IllegalStateException("No selenium driver for " + browserName));
   }
 
