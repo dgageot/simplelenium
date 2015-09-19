@@ -18,6 +18,7 @@ package net.codestory.simplelenium.driver.chrome;
 import net.codestory.simplelenium.driver.Configuration;
 import net.codestory.simplelenium.driver.Downloader;
 import net.codestory.simplelenium.driver.LockFile;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,6 +26,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.io.File;
+
+import static java.util.Collections.singletonMap;
 
 // This install chromedriver
 // but this is not the only piece of software we need,
@@ -40,7 +43,7 @@ public class ChromeDriverDownloader extends Downloader {
     super(retryConnect, retryDownload);
   }
 
-  public ChromeDriver createNewDriver() {
+  public ChromeDriver createNewDriver(Capabilities desiredCapabilities) {
     System.out.println("Create a new ChromeDriver");
 
     File chromeDriverExe = null;
@@ -64,7 +67,7 @@ public class ChromeDriverDownloader extends Downloader {
     UnreachableBrowserException connectError = null;
     for (int i = retryConnect; i >= 0; i--) {
       try {
-        return createNewChromeDriver(chromeDriverExe);
+        return createNewChromeDriver(chromeDriverExe, desiredCapabilities);
       } catch (UnreachableBrowserException e) {
         connectError = e;
         if (i != 0) {
@@ -77,16 +80,17 @@ public class ChromeDriverDownloader extends Downloader {
     throw new IllegalStateException("Unable to start ChromeDriver", connectError);
   }
 
-  protected ChromeDriver createNewChromeDriver(File chromeDriverExe) {
-    DesiredCapabilities capabilities = new DesiredCapabilities();
-    capabilities.setCapability(ChromeOptions.CAPABILITY, getChromeOptions());
-
-    return new ChromeDriver(new ChromeDriverService.Builder()
+  protected ChromeDriver createNewChromeDriver(File chromeDriverExe, Capabilities desiredCapabilities) {
+    ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
       .usingDriverExecutable(chromeDriverExe)
         // Use any port free or the one enforced by CHROME_DRIVER_PORT property
-        .usingPort(Configuration.CHROMEDRIVER_PORT.getInt())
-        .build(),
-        capabilities);
+      .usingPort(Configuration.CHROMEDRIVER_PORT.getInt())
+      .build();
+
+    DesiredCapabilities capabilities = new DesiredCapabilities(singletonMap(ChromeOptions.CAPABILITY, getChromeOptions()))
+      .merge(desiredCapabilities);
+
+    return new ChromeDriver(chromeDriverService, capabilities);
   }
 
   protected ChromeOptions getChromeOptions() {

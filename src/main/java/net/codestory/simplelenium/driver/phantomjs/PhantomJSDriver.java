@@ -16,6 +16,7 @@
 package net.codestory.simplelenium.driver.phantomjs;
 
 import net.codestory.simplelenium.driver.SeleniumDriver;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.UrlChecker;
 import org.openqa.selenium.os.CommandLine;
@@ -33,8 +34,8 @@ import static org.openqa.selenium.remote.DriverCommand.QUIT;
 import static org.openqa.selenium.remote.http.HttpMethod.POST;
 
 public class PhantomJSDriver extends RemoteWebDriver implements SeleniumDriver {
-  public PhantomJSDriver(File phantomJsExe, URL url, File logFile) {
-    super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), DesiredCapabilities.phantomjs());
+  public PhantomJSDriver(File phantomJsExe, URL url, File logFile, Capabilities desiredCapabilities) {
+    super(new PhantomJSHttpCommandExecutor(phantomJsExe, url, logFile), DesiredCapabilities.phantomjs().merge(desiredCapabilities));
   }
 
   static class PhantomJSHttpCommandExecutor extends HttpCommandExecutor {

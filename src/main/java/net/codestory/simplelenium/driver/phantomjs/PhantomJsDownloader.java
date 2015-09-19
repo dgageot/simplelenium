@@ -18,6 +18,7 @@ package net.codestory.simplelenium.driver.phantomjs;
 import net.codestory.simplelenium.driver.Configuration;
 import net.codestory.simplelenium.driver.Downloader;
 import net.codestory.simplelenium.driver.LockFile;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
@@ -34,7 +35,7 @@ public class PhantomJsDownloader extends Downloader {
     super(retryConnect, retryDownload);
   }
 
-  public PhantomJSDriver createNewDriver() {
+  public PhantomJSDriver createNewDriver(Capabilities desiredCapabilities) {
     System.out.println("Create a new PhantomJSDriver");
 
     File phantomJsExe = null;
@@ -58,7 +59,7 @@ public class PhantomJsDownloader extends Downloader {
     UnreachableBrowserException connectError = null;
     for (int i = retryConnect; i >= 0; i--) {
       try {
-        return createNewPhantomJsDriver(phantomJsExe);
+        return createNewPhantomJsDriver(phantomJsExe, desiredCapabilities);
       } catch (UnreachableBrowserException e) {
         connectError = e;
         if (i != 0) {
@@ -71,11 +72,11 @@ public class PhantomJsDownloader extends Downloader {
     throw new IllegalStateException("Unable to start PhantomJS", connectError);
   }
 
-  protected PhantomJSDriver createNewPhantomJsDriver(File phantomJsExe) {
+  protected PhantomJSDriver createNewPhantomJsDriver(File phantomJsExe, Capabilities desiredCapabilities) {
     try {
       URL url = new URL("http://localhost:" + PortProber.findFreePort());
 
-      return new PhantomJSDriver(phantomJsExe, url, new File("target/phantomjs.log"));
+      return new PhantomJSDriver(phantomJsExe, url, new File("target/phantomjs.log"), desiredCapabilities);
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }

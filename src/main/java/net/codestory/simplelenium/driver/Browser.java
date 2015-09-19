@@ -26,8 +26,8 @@ import java.util.function.Function;
 import static java.util.stream.Stream.of;
 
 public enum Browser {
-  PHANTOM_JS(capabilities -> new PhantomJsDownloader().createNewDriver()),
-  CHROME(capabilities -> new ChromeDriverDownloader().createNewDriver()),
+  PHANTOM_JS(capabilities -> new PhantomJsDownloader().createNewDriver(capabilities)),
+  CHROME(capabilities -> new ChromeDriverDownloader().createNewDriver(capabilities)),
   FIREFOX(capabilities -> new FirefoxDriver(capabilities));
 
   private final Function<Capabilities, RemoteWebDriver> driverSupplier;
