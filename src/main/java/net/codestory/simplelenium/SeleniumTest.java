@@ -15,25 +15,14 @@
  */
 package net.codestory.simplelenium;
 
-import net.codestory.simplelenium.rules.InjectPageObjects;
-import net.codestory.simplelenium.rules.PrintErrorConsole;
-import net.codestory.simplelenium.rules.PrintTestName;
-import net.codestory.simplelenium.rules.TakeSnapshot;
+import net.codestory.simplelenium.rules.SeleniumRule;
 import org.junit.Rule;
-import org.junit.rules.RuleChain;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
-import static org.junit.rules.RuleChain.outerRule;
-
 public abstract class SeleniumTest implements SectionObject {
-  private final PrintTestName printTestName = new PrintTestName();
-  private final InjectPageObjects injectPageObjects = new InjectPageObjects(this);
-  private final TakeSnapshot takeSnapshot = new TakeSnapshot();
-  private final PrintErrorConsole printErrorConsole = new PrintErrorConsole();
-
   @Rule
-  public RuleChain ruleChain = outerRule(printTestName).around(injectPageObjects).around(printErrorConsole).around(takeSnapshot);
+  public final SeleniumRule seleniumRule = new SeleniumRule(this);
 
   protected SeleniumTest() {
     configureWebDriver(driver());
@@ -46,7 +35,7 @@ public abstract class SeleniumTest implements SectionObject {
   protected abstract String getDefaultBaseUrl();
 
   public SeleniumTest takeSnapshot() {
-    takeSnapshot.takeSnapshot();
+    seleniumRule.takeSnapshot();
     return this;
   }
 
