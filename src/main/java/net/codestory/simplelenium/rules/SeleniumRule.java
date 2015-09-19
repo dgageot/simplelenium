@@ -15,10 +15,6 @@
  */
 package net.codestory.simplelenium.rules;
 
-import net.codestory.simplelenium.rules.InjectPageObjects;
-import net.codestory.simplelenium.rules.PrintErrorConsole;
-import net.codestory.simplelenium.rules.PrintTestName;
-import net.codestory.simplelenium.rules.TakeSnapshot;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
