@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.openqa.selenium.OutputType.BYTES;
 
 public class TakeSnapshot extends TestWatcher {
-  private static AtomicLong nextId = new AtomicLong();
+  private static final AtomicLong NEXT_ID = new AtomicLong();
 
   private Class<?> testClass;
   private String methodName;
@@ -68,6 +68,6 @@ public class TakeSnapshot extends TestWatcher {
       return testClass.getSimpleName() + "_" + methodName + ".png";
     }
 
-    return String.format("snapshot%03d.png", nextId.incrementAndGet());
+    return String.format("snapshot%03d.png", NEXT_ID.incrementAndGet());
   }
 }
