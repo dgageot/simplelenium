@@ -17,28 +17,45 @@ package net.codestory.simplelenium.driver;
 
 import net.codestory.simplelenium.driver.chrome.ChromeDriverDownloader;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import static java.util.stream.Stream.of;
 
 public enum Browser {
-  PHANTOM_JS(() -> new PhantomJsDownloader().createNewDriver()),
-  CHROME(() -> new ChromeDriverDownloader().createNewDriver()),
-  FIREFOX(FirefoxDriver::new);
+  PHANTOM_JS(capabilities -> new PhantomJsDownloader().createNewDriver()),
+  CHROME(capabilities -> new ChromeDriverDownloader().createNewDriver()),
+  FIREFOX(capabilities -> new FirefoxDriver(capabilities));
 
-  private final Supplier<RemoteWebDriver> driverSupplier;
+  private final Function<Capabilities, RemoteWebDriver> driverSupplier;
   private final ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {
     @Override
     protected SeleniumDriver initialValue() {
-      return ThreadSafeDriver.makeThreadSafe(driverSupplier.get());
+      Capabilities capabilities = getDesiredCapabilities();
+      RemoteWebDriver webDriver = driverSupplier.apply(capabilities);
+
+      return ThreadSafeDriver.makeThreadSafe(webDriver);
     }
   };
+  private Capabilities desiredCapabilities;
 
-  Browser(Supplier<RemoteWebDriver> driverSupplier) {
+  Browser(Function<Capabilities, RemoteWebDriver> driverSupplier) {
     this.driverSupplier = driverSupplier;
+  }
+
+  public void setDesiredCapabilities(Capabilities desiredCapabilities) {
+    this.desiredCapabilities = desiredCapabilities;
+  }
+
+  public Capabilities getDesiredCapabilities() {
+    return desiredCapabilities;
+  }
+
+  public SeleniumDriver getDriverForThread() {
+    return perThreadDriver.get();
   }
 
   public static Browser getCurrentBrowser() {
@@ -52,9 +69,5 @@ public enum Browser {
 
   public static SeleniumDriver getCurrentDriver() {
     return getCurrentBrowser().getDriverForThread();
-  }
-
-  public SeleniumDriver getDriverForThread() {
-    return perThreadDriver.get();
   }
 }
