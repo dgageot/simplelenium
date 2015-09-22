@@ -34,7 +34,7 @@ set to go. **Simplelenium requires java 8**.
 <dependency>
   <groupId>net.code-story</groupId>
   <artifactId>simplelenium</artifactId>
-  <version>2.0</version>
+  <version>2.1</version>
   <scope>test</scope>
 </dependency>
 ```
