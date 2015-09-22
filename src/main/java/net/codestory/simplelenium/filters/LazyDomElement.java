@@ -171,7 +171,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public Should should() {
-    return new LazyShould(this, Retry._5_SECONDS, true);
+    return new LazyShould(this, Retry._30_SECONDS, true);
   }
 
   // Actions

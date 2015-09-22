@@ -30,7 +30,6 @@ import java.util.function.Supplier;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 class Retry {
-  public static final Retry _5_SECONDS = new Retry(5, SECONDS);
   public static final Retry _30_SECONDS = new Retry(30, SECONDS);
 
   private final long timeoutInMs;
