@@ -30,7 +30,7 @@ public class JavascriptTest extends AbstractTest {
 
   @Test
   public void basic_javascript() {
-    assertThat((Long) executeJavascript("return 3+1")).isEqualTo(4);
+    assertThat(executeJavascript("return 3+1")).isInstanceOf(Long.class).isEqualTo(4L);
   }
 
   @Test
@@ -40,6 +40,6 @@ public class JavascriptTest extends AbstractTest {
 
   @Test
   public void arguments() {
-    assertThat((Long) executeJavascript("return arguments[0]+arguments[1]", 3, 1)).isEqualTo(4);
+    assertThat(executeJavascript("return arguments[0]+arguments[1]", 3, 1)).isInstanceOf(Long.class).isEqualTo(4L);
   }
 }
