@@ -415,6 +415,26 @@ the following System properties :
 * `phantomjs.url` : url where to download phantomjs ie: https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip 
 * `phantomjs.exe` : relative path where the executable is from the compressed archive. ie: phantomjs-1.9.8-windows/phantomjs.exe
 
+
+### Take snapshot on every test success
+
+You may want to take a snapshot of the current site under test for each successfull test, to be able to compare and observe visually regression and the like
+Everytime a test will be successfull a snapshot will be written in the `successfull_snapshots` directory relative to the root of your project.
+There is an optional rule you can add to your test:
+
+```
+public class FooTest {
+    @Rule
+    public TakeSnapshotOnSuccess takeSnapshotOnSuccess = new TakeSnapshotOnSuccess();
+
+    @Test
+    public void goToIndex() {
+        goTo("/foo");
+    }
+    
+    .../...
+```
+
 ## What Simplelenium doesn't do
 
 ### Reading properties from web elements
