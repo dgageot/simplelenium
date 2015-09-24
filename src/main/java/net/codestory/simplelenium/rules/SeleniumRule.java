@@ -28,7 +28,7 @@ public class SeleniumRule implements TestRule {
   public SeleniumRule(Object target) {
     this.printTestName = new PrintTestName();
     this.injectPageObjects = new InjectPageObjects(target);
-    this.takeSnapshot = new TakeSnapshot();
+    this.takeSnapshot = new TakeSnapshotOnFailure();
     this.printErrorConsole = new PrintErrorConsole();
   }
 
