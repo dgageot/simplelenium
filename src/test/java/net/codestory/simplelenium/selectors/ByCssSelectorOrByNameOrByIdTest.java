@@ -15,157 +15,104 @@
  */
 package net.codestory.simplelenium.selectors;
 
+import net.codestory.simplelenium.driver.SeleniumDriver;
+import org.junit.Test;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.FindsByCssSelector;
-import org.openqa.selenium.internal.FindsById;
-import org.openqa.selenium.internal.FindsByName;
 
 public class ByCssSelectorOrByNameOrByIdTest {
+  WebElement expectedElement = mock(WebElement.class);
+  WebElement anotherElement = mock(WebElement.class);
+  SeleniumDriver driver = mock(SeleniumDriver.class);
 
-  private WebElement mockElement;
-  private SearchContext searchContext;
-  private List<WebElement> fakeElements;
+  WebElement find(String selector) {
+    ByCssSelectorOrByNameOrById finder = new ByCssSelectorOrByNameOrById(selector);
+    return finder.findElement(driver);
+  }
 
-  @Before
-  public void setUp() {
-    mockElement = mock(WebElement.class);
-    searchContext = mock(
-        SearchContext.class,
-        withSettings().extraInterfaces(WebDriver.class, FindsByName.class, FindsByCssSelector.class,
-            FindsById.class));
-    fakeElements = Arrays.asList(mockElement, mock(WebElement.class), mock(WebElement.class));
+  List<WebElement> findElements(String selector) {
+    ByCssSelectorOrByNameOrById finder = new ByCssSelectorOrByNameOrById(selector);
+    return finder.findElements(driver);
+  }
+
+  @Test
+  public void shouldNotFindUnknownElement() {
+    WebElement element = find("unknown[]");
+
+    assertThat(element).isNull();
   }
 
   @Test
   public void shouldFindElementByCssSelector() {
-    String selector = ".class";
-    ByCssSelectorOrByNameOrById cssSelector = new ByCssSelectorOrByNameOrById(selector);
+    when(driver.findElementByCssSelector(".class")).thenReturn(expectedElement);
 
-    when(((FindsByCssSelector) searchContext).findElementByCssSelector(selector)).thenReturn(mockElement);
+    WebElement element = find(".class");
 
-    WebElement element = cssSelector.findElement(searchContext);
-
-    assertThat(element).isEqualTo(mockElement);
+    assertThat(element).isSameAs(expectedElement);
   }
 
   @Test
   public void shouldFindElementByNameSelector() {
-    String selector = "name";
-    ByCssSelectorOrByNameOrById nameSelector = new ByCssSelectorOrByNameOrById(selector);
+    when(driver.findElementByName("name")).thenReturn(expectedElement);
 
-    when(((FindsByName) searchContext).findElementByName(selector)).thenReturn(mockElement);
+    WebElement element = find("name");
 
-    WebElement element = nameSelector.findElement(searchContext);
-
-    assertThat(element).isEqualTo(mockElement);
+    assertThat(element).isSameAs(expectedElement);
   }
 
   @Test
   public void shouldFindElementByIdSelector() {
-    String selector = "#id";
-    ByCssSelectorOrByNameOrById nameSelector = new ByCssSelectorOrByNameOrById(selector);
+    when(driver.findElementById("#id")).thenReturn(expectedElement);
 
-    when(((FindsById) searchContext).findElementById(selector)).thenReturn(mockElement);
+    WebElement element = find("#id");
 
-    WebElement element = nameSelector.findElement(searchContext);
-
-    assertThat(element).isEqualTo(mockElement);
+    assertThat(element).isSameAs(expectedElement);
   }
-  
+
   @Test
-  public void shouldNotFindElementWithBrakets() {
-    String selector = "anything[]";
-    ByCssSelectorOrByNameOrById nameSelector = new ByCssSelectorOrByNameOrById(selector);
+  public void shouldFindElementsByCssSelector() {
+    when(driver.findElementsByCssSelector(".class")).thenReturn(asList(expectedElement, anotherElement));
 
-    when(((FindsByCssSelector) searchContext).findElementByCssSelector(selector)).thenReturn(null);
+    List<WebElement> elements = findElements(".class");
 
-    WebElement element = nameSelector.findElement(searchContext);
-
-    assertThat(element).isNull();
+    assertThat(elements).containsExactly(expectedElement, anotherElement);
   }
-  
+
   @Test
-  public void shouldFindElementsListWithByCssSelector() {
-    String selector = ".class";
-    ByCssSelectorOrByNameOrById cssSelector = new ByCssSelectorOrByNameOrById(selector);
-    
-    when(((FindsByCssSelector) searchContext).findElementsByCssSelector(selector)).thenReturn(fakeElements);
+  public void shouldFindElementsByNameSelector() {
+    when(driver.findElementsByName("name")).thenReturn(asList(expectedElement, anotherElement));
 
-    List<WebElement> elements = cssSelector.findElements(searchContext);
+    List<WebElement> elements = findElements("name");
 
-    assertThat(elements).hasSize(3);
+    assertThat(elements).containsExactly(expectedElement, anotherElement);
   }
-  
+
   @Test
-  public void shouldFindElementsListWithByNameSelector() {
-    String selector = "name";
-    ByCssSelectorOrByNameOrById cssSelector = new ByCssSelectorOrByNameOrById(selector);
-    
-    List<WebElement> fakeElements = Arrays.asList(mockElement, mock(WebElement.class));
+  public void shouldFindElementsByIdSelector() {
+    when(driver.findElementsById("#id")).thenReturn(asList(expectedElement, anotherElement));
 
-    when(((FindsByName) searchContext).findElementsByName(selector)).thenReturn(fakeElements);
+    List<WebElement> elements = findElements("#id");
 
-    List<WebElement> elements = cssSelector.findElements(searchContext);
-
-    assertThat(elements).hasSize(2);
+    assertThat(elements).containsExactly(expectedElement, anotherElement);
   }
-  
+
   @Test
-  public void shouldFindElementsListWithByIdSelector() {
-    String selector = "#Id";
-    ByCssSelectorOrByNameOrById cssSelector = new ByCssSelectorOrByNameOrById(selector);
-    
-    List<WebElement> fakeElements = Arrays.asList(mockElement);
-
-    when(((FindsById) searchContext).findElementsById(selector)).thenReturn(fakeElements);
-
-    List<WebElement> elements = cssSelector.findElements(searchContext);
-
-    assertThat(elements).hasSize(1);
-  }
-  
-  @Test
-  public void shouldNotFindElementsThenReturnAEmptyList() {
-    String selector = "empty";
-    ByCssSelectorOrByNameOrById nameSelector = new ByCssSelectorOrByNameOrById(selector);
-
-    when(((FindsByCssSelector) searchContext).findElementsByCssSelector(selector)).thenReturn(Collections.emptyList());
-
-    List<WebElement> elements = nameSelector.findElements(searchContext);
+  public void shouldNotFindElementsThenReturnAnEmptyList() {
+    List<WebElement> elements = findElements("empty");
 
     assertThat(elements).isEmpty();
   }
-  
+
   @Test
-  public void shouldNotFindElementsThenReturnNull() {
-    String selector = "null";
-    ByCssSelectorOrByNameOrById nameSelector = new ByCssSelectorOrByNameOrById(selector);
+  public void shouldPrintToString() {
+    ByCssSelectorOrByNameOrById selector = new ByCssSelectorOrByNameOrById("to-print");
 
-    when(((FindsByCssSelector) searchContext).findElementsByCssSelector(selector)).thenReturn(null);
-
-    List<WebElement> elements = nameSelector.findElements(searchContext);
-
-    assertThat(elements).isEmpty();
-  }
-  
-  @Test
-  public void shouldPrintAToStringElement() {
-    String printable = "to-print";
-    ByCssSelectorOrByNameOrById nameSelector = new ByCssSelectorOrByNameOrById(printable);
-
-    assertThat(nameSelector.toString()).isEqualTo(printable);
+    assertThat(selector.toString()).isEqualTo("to-print");
   }
 }
