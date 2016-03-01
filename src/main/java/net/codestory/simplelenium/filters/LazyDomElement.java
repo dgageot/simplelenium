@@ -40,7 +40,7 @@ public class LazyDomElement implements DomElement {
   private final Retry retry;
 
   public LazyDomElement(By selector) {
-    this(selector, Retry._30_SECONDS);
+    this(selector, Retry.DEFAULT_TIMEOUT);
   }
 
   public LazyDomElement(By selector, Retry retry) {
@@ -48,7 +48,7 @@ public class LazyDomElement implements DomElement {
   }
 
   public LazyDomElement(LazyDomElement parent, By selector) {
-    this(parent, selector, Retry._30_SECONDS);
+    this(parent, selector, Retry.DEFAULT_TIMEOUT);
   }
 
   public LazyDomElement(LazyDomElement parent, By selector, Retry retry) {
@@ -171,7 +171,7 @@ public class LazyDomElement implements DomElement {
 
   @Override
   public Should should() {
-    return new LazyShould(this, Retry._30_SECONDS, true);
+    return new LazyShould(this, Retry.DEFAULT_TIMEOUT, true);
   }
 
   // Actions
