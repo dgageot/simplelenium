@@ -114,5 +114,6 @@ public class ByCssSelectorOrByNameOrByIdTest {
     ByCssSelectorOrByNameOrById selector = new ByCssSelectorOrByNameOrById("to-print");
 
     assertThat(selector.toString()).isEqualTo("to-print");
+    assertThat(selector).hasToString("to-print");
   }
 }

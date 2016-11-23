@@ -40,7 +40,12 @@ public interface Navigation extends DomElementFinder {
   }
 
   default List<String> console() {
-    return driver().manage().logs().get("browser").getAll().stream().map(log -> log.getMessage().replace(" (undefined:undefined)", "")).collect(toList());
+    return driver().manage().logs().get("browser").getAll().stream()
+      .map(log -> log.getMessage()
+        .replace(" (undefined:undefined)", "")
+        .replace(" (:)", "")
+        .replace("\n  anonymous (:1)", ""))
+      .collect(toList());
   }
 
   default Object executeJavascript(String javascriptCode, Object... args) {

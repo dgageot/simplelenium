@@ -56,7 +56,7 @@ public class ConsoleTest extends AbstractTest {
     String expectedError;
     switch (Browser.getCurrentBrowser()) {
       case PHANTOM_JS:
-        expectedError = "TypeError: 'undefined' is not an object (evaluating 'undefined.unknown')";
+        expectedError = "TypeError: undefined is not an object (evaluating 'undefined.unknown')";
         break;
       case CHROME:
         expectedError = "Uncaught TypeError: Cannot read property 'unknown' of undefined";
