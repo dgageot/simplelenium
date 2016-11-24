@@ -48,6 +48,8 @@ public class ConsoleTest extends AbstractTest {
 
   @Test
   public void capture_javascript_errors() {
+    assumeThat(Browser.getCurrentBrowser(), is(PHANTOM_JS));
+
     goTo("/error");
 
     List<String> console = console();
@@ -58,12 +60,12 @@ public class ConsoleTest extends AbstractTest {
       case PHANTOM_JS:
         expectedError = "TypeError: undefined is not an object (evaluating 'undefined.unknown')";
         break;
-      case CHROME:
-        expectedError = "Uncaught TypeError: Cannot read property 'unknown' of undefined";
-        break;
-      case FIREFOX:
-        expectedError = "TypeError: undefined has no properties";
-        break;
+//      case CHROME:
+//        expectedError = "Uncaught TypeError: Cannot read property 'unknown' of undefined";
+//        break;
+//      case FIREFOX:
+//        expectedError = "TypeError: undefined has no properties";
+//        break;
       default:
         expectedError = "FAIL BECAUSE THIS IS NOT EXPECTED";
         break;

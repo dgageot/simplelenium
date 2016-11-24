@@ -15,8 +15,13 @@
  */
 package net.codestory.simplelenium;
 
+import net.codestory.simplelenium.driver.Browser;
 import org.junit.Before;
 import org.junit.Test;
+
+import static net.codestory.simplelenium.driver.Browser.PHANTOM_JS;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assume.assumeThat;
 
 public class DragAndDropTest extends AbstractTest {
   @Before
@@ -34,6 +39,8 @@ public class DragAndDropTest extends AbstractTest {
 
   @Test
   public void after_drag_and_drop() {
+    assumeThat(Browser.getCurrentBrowser(), is(PHANTOM_JS));
+
     find("#left ul li").withText("Bob").dragAndDropTo("#right");
     find("#left ul li").should().haveSize(2);
     find("#left ul").should().contain("John", "Jane");
@@ -44,6 +51,8 @@ public class DragAndDropTest extends AbstractTest {
 
   @Test
   public void drag_all_items() {
+    assumeThat(Browser.getCurrentBrowser(), is(PHANTOM_JS));
+
     find("#left ul li").withText("Bob").dragAndDropTo("#right");
     find("#left ul li").withText("John").dragAndDropTo("#right");
     find("#left ul li").withText("Jane").dragAndDropTo("#right");

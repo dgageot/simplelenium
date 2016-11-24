@@ -29,7 +29,7 @@ import java.io.File;
 
 import static java.util.Collections.singletonMap;
 
-// This install chromedriver
+// This installs chromedriver
 // but this is not the only piece of software we need,
 // we also need chrome itself. Maybe we can check if chrome is installed
 // by checking if it exists by looking at default installation of chrome :
@@ -96,7 +96,7 @@ public class ChromeDriverDownloader extends Downloader {
   protected ChromeOptions getChromeOptions() {
     ChromeOptions options = new ChromeOptions();
 
-    if (isMac()) {
+    if (Configuration.isMac()) {
       // Try to use the chrome installed by homebrew cask
       File chromeInstalledByHomebrew = new File("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome");
       if (chromeInstalledByHomebrew.exists()) {
@@ -119,13 +119,13 @@ public class ChromeDriverDownloader extends Downloader {
       if (isCustomized()) {
         url = Configuration.CHROMEDRIVER_URL.get();
         chromeDriverExe = new File(installDir, Configuration.CHROMEDRIVER_EXE.get());
-      } else if (isWindows()) {
+      } else if (Configuration.isWindows()) {
         url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_win32.zip";
         chromeDriverExe = new File(installDir, "chromedriver.exe");
-      } else if (isMac()) {
+      } else if (Configuration.isMac()) {
         url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_mac32.zip";
         chromeDriverExe = new File(installDir, "chromedriver");
-      } else if (isLinux32()) {
+      } else if (Configuration.isLinux32()) {
         url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_linux32.zip";
         chromeDriverExe = new File(installDir, "chromedriver");
       } else {

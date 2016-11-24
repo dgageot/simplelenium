@@ -94,13 +94,13 @@ public class PhantomJsDownloader extends Downloader {
       if (isCustomized()) {
         url = Configuration.PHANTOMJS_URL.get();
         phantomJsExe = new File(installDir, Configuration.PHANTOMJS_EXE.get());
-      } else if (isWindows()) {
+      } else if (Configuration.isWindows()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-windows.zip";
         phantomJsExe = new File(installDir, "phantomjs-2.1.1-windows/phantomjs.exe");
-      } else if (isMac()) {
+      } else if (Configuration.isMac()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-macosx.zip";
         phantomJsExe = new File(installDir, "phantomjs-2.1.1-macosx/bin/phantomjs");
-      } else if (isLinux32()) {
+      } else if (Configuration.isLinux32()) {
         url = "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2";
         phantomJsExe = new File(installDir, "phantomjs-2.1.1-linux-i686/bin/phantomjs");
       } else {
@@ -120,5 +120,4 @@ public class PhantomJsDownloader extends Downloader {
     return Configuration.PHANTOMJS_URL.get() != null
         && Configuration.PHANTOMJS_EXE.get() != null;
   }
-
 }

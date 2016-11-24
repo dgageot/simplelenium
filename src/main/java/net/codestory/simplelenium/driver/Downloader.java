@@ -18,6 +18,7 @@ package net.codestory.simplelenium.driver;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
 import java.io.*;
 import java.net.URI;
@@ -61,6 +62,8 @@ public abstract class Downloader {
     try {
       if (url.endsWith(".zip")) {
         unzip(targetZip, installDirectory);
+      } else if (url.endsWith(".tar.gz")) {
+        untargz(targetZip, installDirectory);
       } else {
         untarbz2(targetZip, installDirectory);
       }
@@ -93,6 +96,19 @@ public abstract class Downloader {
     if (!zipTemp.renameTo(targetZip)) {
       throw new IllegalStateException(String.format("Unable to rename %s to %s", zipTemp.getAbsolutePath(), targetZip.getAbsolutePath()));
     }
+  }
+
+  protected void untargz(File zip, File toDir) throws IOException {
+    File tar = new File(zip.getAbsolutePath().replace(".tar.gz", ".tar"));
+
+    try (FileInputStream fin = new FileInputStream(zip);
+         BufferedInputStream bin = new BufferedInputStream(fin);
+         GzipCompressorInputStream gzIn = new GzipCompressorInputStream(bin)
+    ) {
+      Files.copy(gzIn, tar.toPath(), REPLACE_EXISTING);
+    }
+
+    untar(tar, toDir);
   }
 
   protected void untarbz2(File zip, File toDir) throws IOException {
@@ -156,17 +172,5 @@ public abstract class Downloader {
         Files.copy(tarInput, to.toPath(), REPLACE_EXISTING);
       }
     }
-  }
-
-  protected boolean isWindows() {
-    return Configuration.OS_NAME.get().startsWith("Windows");
-  }
-
-  protected boolean isMac() {
-    return Configuration.OS_NAME.get().startsWith("Mac OS X");
-  }
-
-  protected boolean isLinux32() {
-    return Configuration.OS_NAME.get().contains("x86");
   }
 }

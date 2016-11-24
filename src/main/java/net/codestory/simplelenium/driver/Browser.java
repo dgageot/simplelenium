@@ -16,6 +16,7 @@
 package net.codestory.simplelenium.driver;
 
 import net.codestory.simplelenium.driver.chrome.ChromeDriverDownloader;
+import net.codestory.simplelenium.driver.firefox.FirefoxDownloader;
 import net.codestory.simplelenium.driver.phantomjs.PhantomJsDownloader;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -28,7 +29,7 @@ import static java.util.stream.Stream.of;
 public enum Browser {
   PHANTOM_JS(capabilities -> new PhantomJsDownloader().createNewDriver(capabilities)),
   CHROME(capabilities -> new ChromeDriverDownloader().createNewDriver(capabilities)),
-  FIREFOX(capabilities -> new FirefoxDriver(capabilities));
+  FIREFOX(capabilities -> new FirefoxDownloader().createNewDriver(capabilities));
 
   private final Function<Capabilities, RemoteWebDriver> driverSupplier;
   private final ThreadLocal<SeleniumDriver> perThreadDriver = new ThreadLocal<SeleniumDriver>() {

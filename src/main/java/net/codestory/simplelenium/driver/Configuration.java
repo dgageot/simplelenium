@@ -28,6 +28,11 @@ public enum Configuration {
   PHANTOMJS_URL("phantomjs.url", null, false),
   PHANTOMJS_EXE("phantomjs.exe", null, false),
 
+  // Firefox specific configuration
+  GECKODRIVER_URL("geckodriver.url", null, false),
+  GECKODRIVER_EXE("geckodriver.exe", null, false),
+  FIREFOXDRIVER_PORT("geckodriver.port", "0", false),
+
   // Standard system properties
   USER_HOME("user.home", null, true),
   OS_NAME("os.name", null, true);
@@ -57,5 +62,17 @@ public enum Configuration {
     }
 
     return value;
+  }
+
+  public static boolean isWindows() {
+    return Configuration.OS_NAME.get().startsWith("Windows");
+  }
+
+  public static boolean isMac() {
+    return Configuration.OS_NAME.get().startsWith("Mac OS X");
+  }
+
+  public static boolean isLinux32() {
+    return Configuration.OS_NAME.get().contains("x86");
   }
 }
