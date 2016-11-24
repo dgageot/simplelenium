@@ -97,8 +97,7 @@ public class ChromeDriverDownloader extends Downloader {
     ChromeOptions options = new ChromeOptions();
 
     if (Configuration.isMac()) {
-      // Try to use the chrome installed by homebrew cask
-      File chromeInstalledByHomebrew = new File("/opt/homebrew-cask/Caskroom/google-chrome/latest/Google Chrome.app/Contents/MacOS/Google Chrome");
+      File chromeInstalledByHomebrew = new File("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
       if (chromeInstalledByHomebrew.exists()) {
         options.setBinary(chromeInstalledByHomebrew);
       }
@@ -108,7 +107,7 @@ public class ChromeDriverDownloader extends Downloader {
   }
 
   protected synchronized File downloadAndExtract() {
-    File installDir = new File(Configuration.USER_HOME.get(), ".chromdrivertest");
+    File installDir = new File(Configuration.USER_HOME.get(), ".chromedrivertest/2.25");
     installDir.mkdirs();
 
     LockFile lock = new LockFile(new File(installDir, "lock"));
@@ -120,16 +119,16 @@ public class ChromeDriverDownloader extends Downloader {
         url = Configuration.CHROMEDRIVER_URL.get();
         chromeDriverExe = new File(installDir, Configuration.CHROMEDRIVER_EXE.get());
       } else if (Configuration.isWindows()) {
-        url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_win32.zip";
+        url = "https://chromedriver.storage.googleapis.com/2.25/chromedriver_win32.zip";
         chromeDriverExe = new File(installDir, "chromedriver.exe");
       } else if (Configuration.isMac()) {
-        url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_mac32.zip";
+        url = "https://chromedriver.storage.googleapis.com/2.25/chromedriver_mac64.zip";
         chromeDriverExe = new File(installDir, "chromedriver");
       } else if (Configuration.isLinux32()) {
-        url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_linux32.zip";
+        url = "https://chromedriver.storage.googleapis.com/2.25/chromedriver_linux32.zip";
         chromeDriverExe = new File(installDir, "chromedriver");
       } else {
-        url = "https://chromedriver.storage.googleapis.com/2.19/chromedriver_linux64.zip";
+        url = "https://chromedriver.storage.googleapis.com/2.25/chromedriver_linux64.zip";
         chromeDriverExe = new File(installDir, "chromedriver");
       }
 

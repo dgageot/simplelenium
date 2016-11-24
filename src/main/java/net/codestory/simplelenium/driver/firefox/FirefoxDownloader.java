@@ -82,7 +82,7 @@ public class FirefoxDownloader  extends Downloader {
   }
 
   protected synchronized File downloadAndExtract() {
-    File installDir = new File(Configuration.USER_HOME.get(), ".firefoxdrivertest");
+    File installDir = new File(Configuration.USER_HOME.get(), ".firefoxdrivertest/0.11.1");
     installDir.mkdirs();
 
     LockFile lock = new LockFile(new File(installDir, "lock"));
