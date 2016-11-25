@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static org.openqa.selenium.OutputType.BYTES;
 
-public class TakeSnapshot extends TestWatcher {
+public abstract class TakeSnapshot extends TestWatcher {
   private static final AtomicLong NEXT_ID = new AtomicLong();
 
   private Class<?> testClass;
@@ -38,29 +38,26 @@ public class TakeSnapshot extends TestWatcher {
     this.methodName = description.getMethodName();
   }
 
-  @Override
-  protected void failed(Throwable e, Description description) {
-    takeSnapshot();
-  }
-
-  public void takeSnapshot() {
+  public File takeSnapshot() {
     try {
       byte[] image = Browser.getCurrentDriver().getScreenshotAs(BYTES);
       File file = snapshotPath(testClass, methodName);
       write(image, file);
-      System.err.println("   !! A snapshot was taken here [" + file.getAbsolutePath() + "] to help you debug");
+      return file;
     } catch (IOException ioe) {
       throw new RuntimeException("Unable to take snapshot", ioe);
     }
   }
+
+  protected abstract String snapshotDirectory();
 
   protected void write(byte[] snapshotData, File to) throws IOException {
     to.getParentFile().mkdirs();
     Files.write(to.toPath(), snapshotData);
   }
 
-  protected File snapshotPath(Class<?> testClass, String methodName) {
-    return new File("snapshots", filename(testClass, methodName));
+  protected  File snapshotPath(Class<?> testClass, String methodName) {
+    return new File(snapshotDirectory(), filename(testClass, methodName));
   }
 
   protected String filename(Class<?> testClass, String methodName) {
