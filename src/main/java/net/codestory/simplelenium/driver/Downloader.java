@@ -135,6 +135,10 @@ public abstract class Downloader {
 
         File to = new File(toDir, entry.getName());
 
+        if (!to.toPath().normalize().startsWith(toDir.toPath().normalize())) {
+          throw new IOException("Bad zip entry");
+        }
+
         File parent = to.getParentFile();
         if (!parent.exists()) {
           if (!parent.mkdirs()) {
